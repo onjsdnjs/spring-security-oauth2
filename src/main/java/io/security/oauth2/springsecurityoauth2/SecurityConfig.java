@@ -13,8 +13,8 @@ public class SecurityConfig {
     @Order(SecurityProperties.BASIC_AUTH_ORDER)
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests().anyRequest().authenticated();
-        http.formLogin();
-        http.exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint());
+        http.httpBasic().authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                .realmName("myRealm");
         return http.build();
     }
 
