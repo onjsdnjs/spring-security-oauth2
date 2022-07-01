@@ -18,5 +18,4 @@ public class SecurityConfig {
         http.apply(new CustomSecurityConfigurer()).setFlag(true);
         return http.build();
     }
-
 }
