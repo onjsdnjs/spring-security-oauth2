@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.ClientRegistrations;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
@@ -13,7 +14,8 @@ public class OAuth2ClientConfig {
 
         @Bean
         public ClientRegistrationRepository clientRegistrationRepository() {
-            return new InMemoryClientRegistrationRepository(this.keycloakClientRegistration());
+//            return new InMemoryClientRegistrationRepository(this.keycloakClientRegistration());
+            return new InMemoryClientRegistrationRepository(clientRegistration());
         }
 
         private ClientRegistration keycloakClientRegistration() {
@@ -32,4 +34,17 @@ public class OAuth2ClientConfig {
                     .clientName("Keycloak")
                     .build();
         }
+
+
+    @Bean
+    public ClientRegistration clientRegistration() {
+
+        return ClientRegistrations
+                                    .fromIssuerLocation("http://localhost:8080/realms/oauth2")
+                                    .clientId("oauth2-client-app")
+                                    .clientSecret("CQueEWXZYmv7IIZVxbvh2uwxptXVaRcX")
+                                    .clientName("keycloak")
+                                    .registrationId("keycloak")
+                                    .build();
+    }
 }
