@@ -19,10 +19,10 @@ public class OAuth2ClientConfig {
         private ClientRegistration keycloakClientRegistration() {
             return ClientRegistration.withRegistrationId("keycloak")
                     .clientId("oauth2-client-app")
-                    .clientSecret("dddddddd")
+                    .clientSecret("CQueEWXZYmv7IIZVxbvh2uwxptXVaRcX")
                     .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                     .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                    .redirectUri("http://localhost:8081/login/oauth2/code/{registrationId}")
+                    .redirectUri("http://localhost:8081/login/oauth2/code/keycloak")
                     .scope("openid", "profile", "email", "address", "phone")
                     .authorizationUri("http://localhost:8080/realms/oauth2/protocol/openid-connect/auth")
                     .tokenUri("http://localhost:8080/realms/oauth2/protocol/openid-connect/token")
