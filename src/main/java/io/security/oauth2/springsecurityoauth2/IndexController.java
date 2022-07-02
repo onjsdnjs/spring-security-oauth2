@@ -39,8 +39,9 @@ public class IndexController {
         OAuth2UserRequest oAuth2UserRequest = new OAuth2UserRequest(clientRegistration, auth2AccessToken);
 
         DefaultOAuth2UserService defaultOAuth2UserService = new DefaultOAuth2UserService();
+        OAuth2User oAuth2User = defaultOAuth2UserService.loadUser(oAuth2UserRequest);
 
-        return defaultOAuth2UserService.loadUser(oAuth2UserRequest);
+        return oAuth2User;
     }
 
     @GetMapping("/oidc")
@@ -56,7 +57,8 @@ public class IndexController {
 
         OidcUserService oidcUserService = new OidcUserService();
         oidcUserService.setOauth2UserService(new DefaultOAuth2UserService());
+        OidcUser oidcUser = oidcUserService.loadUser(new OidcUserRequest(clientRegistration, auth2AccessToken, oidcIdToken));
 
-        return oidcUserService.loadUser(new OidcUserRequest(clientRegistration, auth2AccessToken, oidcIdToken));
+        return oidcUser;
     }
 }
