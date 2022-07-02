@@ -8,6 +8,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration(proxyBeanMethods = false)
 public class OAuth2ClientConfig {
+
     @Bean
     SecurityFilterChain oauth2SecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests((requests) -> requests.anyRequest().authenticated());
@@ -15,5 +16,4 @@ public class OAuth2ClientConfig {
         http.oauth2Client();
         return http.build();
    }
-
 }
