@@ -34,10 +34,4 @@ public class OAuth2ClientConfig {
                     .build();
         }
 
-
-    @Bean
-    public ClientRegistration clientRegistration() {
-
-        return ClientRegistrations.fromIssuerLocation("http://localhost:8080/realms/oauth2").build();
-    }
 }
