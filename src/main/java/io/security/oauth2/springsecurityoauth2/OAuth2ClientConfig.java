@@ -14,8 +14,7 @@ public class OAuth2ClientConfig {
 
         @Bean
         public ClientRegistrationRepository clientRegistrationRepository() {
-//            return new InMemoryClientRegistrationRepository(this.keycloakClientRegistration());
-            return new InMemoryClientRegistrationRepository(clientRegistration());
+            return new InMemoryClientRegistrationRepository(this.keycloakClientRegistration());
         }
 
         private ClientRegistration keycloakClientRegistration() {
@@ -39,12 +38,6 @@ public class OAuth2ClientConfig {
     @Bean
     public ClientRegistration clientRegistration() {
 
-        return ClientRegistrations
-                                    .fromIssuerLocation("http://localhost:8080/realms/oauth2")
-                                    .clientId("oauth2-client-app")
-                                    .clientSecret("CQueEWXZYmv7IIZVxbvh2uwxptXVaRcX")
-                                    .clientName("keycloak")
-                                    .registrationId("keycloak")
-                                    .build();
+        return ClientRegistrations.fromIssuerLocation("http://localhost:8080/realms/oauth2").build();
     }
 }
