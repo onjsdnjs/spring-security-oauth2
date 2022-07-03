@@ -17,6 +17,7 @@ public class OAuth2ClientConfig {
         http.authorizeRequests((requests) -> requests.anyRequest().authenticated());
         http
                 .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/login")
                         .authorizationEndpoint(authorization -> authorization
                                 .baseUri("/oauth2/login/authorization").and()
                                 .redirectionEndpoint(redirection -> redirection
