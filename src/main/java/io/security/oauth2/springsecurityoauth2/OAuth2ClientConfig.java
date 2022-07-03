@@ -30,7 +30,7 @@ public class OAuth2ClientConfig {
 
     private OidcClientInitiatedLogoutSuccessHandler oidcLogoutSuccessHandler() {
         OidcClientInitiatedLogoutSuccessHandler successHandler = new OidcClientInitiatedLogoutSuccessHandler(clientRegistrationRepository);
-        successHandler.setPostLogoutRedirectUri("http://localhost:8081/login/oauth2/code/keycloak");
+        successHandler.setPostLogoutRedirectUri("http://localhost:8081/login");
         return successHandler;
     }
 }
