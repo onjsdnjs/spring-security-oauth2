@@ -15,7 +15,15 @@ public class OAuth2ClientConfig {
     @Bean
     SecurityFilterChain oauth2SecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests((requests) -> requests.anyRequest().authenticated());
-        http.oauth2Login(Customizer.withDefaults());
+        http
+                .oauth2Login(oauth2 -> oauth2
+                        .authorizationEndpoint(authorization -> authorization
+                                .baseUri("/oauth2/login/authorization").and()
+                                .redirectionEndpoint(redirection -> redirection
+                                        .baseUri("/login/oauth2/callback/*")
+                                )
+                        )
+                );
 
         return http.build();
 
