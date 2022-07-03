@@ -18,5 +18,9 @@ public class OAuth2ClientConfig {
         http.oauth2Login(Customizer.withDefaults());
 
         return http.build();
+
+
     }
+
+
 }
