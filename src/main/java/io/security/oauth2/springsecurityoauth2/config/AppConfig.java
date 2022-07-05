@@ -23,16 +23,15 @@ import java.util.function.Function;
 public class AppConfig {
 
     @Bean
-    public DefaultOAuth2AuthorizedClientManager authorizedClientManager(
-            ClientRegistrationRepository clientRegistrationRepository,
-            OAuth2AuthorizedClientRepository authorizedClientRepository) {
+    public DefaultOAuth2AuthorizedClientManager authorizedClientManager(ClientRegistrationRepository clientRegistrationRepository,
+                                                                        OAuth2AuthorizedClientRepository authorizedClientRepository) {
 
         OAuth2AuthorizedClientProvider authorizedClientProvider =
                 OAuth2AuthorizedClientProviderBuilder.builder()
                         .authorizationCode()
                         .clientCredentials()
-                        .password(passwordGrantBuilder -> passwordGrantBuilder.clockSkew(Duration.ofSeconds(3600)))
-                        .refreshToken(refreshTokenGrantBuilder -> refreshTokenGrantBuilder.clockSkew(Duration.ofSeconds(3600)))
+                        .password()
+                        .refreshToken()
                         .build();
 
         DefaultOAuth2AuthorizedClientManager authorizedClientManager =
