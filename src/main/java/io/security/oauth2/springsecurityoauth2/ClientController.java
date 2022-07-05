@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
@@ -29,7 +30,7 @@ public class ClientController {
     private HttpSecurity httpSecurity;
 
     @GetMapping("/client")
-    public String client(Authentication authentication, HttpServletRequest request){
+    public OAuth2User client(Authentication authentication, HttpServletRequest request){
 
         OAuth2AuthenticationToken oAuth2AuthenticationToken = (OAuth2AuthenticationToken) authentication;
         String clientRegistrationId = oAuth2AuthenticationToken.getAuthorizedClientRegistrationId();
@@ -42,11 +43,11 @@ public class ClientController {
 
         OAuth2AccessToken accessToken = oAuth2AuthorizedClient.getAccessToken();
 
-        OAuth2UserService oAuth2UserService = httpSecurity.getSharedObject(OAuth2UserService.class);
-//		OAuth2UserService oAuth2UserService = new DefaultOAuth2UserService();
+//        OAuth2UserService oAuth2UserService = httpSecurity.getSharedObject(OAuth2UserService.class);
+		OAuth2UserService oAuth2UserService = new DefaultOAuth2UserService();
         OAuth2User oauth2User = oAuth2UserService.loadUser(new OAuth2UserRequest(oAuth2AuthorizedClient.getClientRegistration(), accessToken));
 
-        return "oauth2User";
+        return oauth2User;
     }
 
 }
