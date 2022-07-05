@@ -90,7 +90,7 @@ public class LoginController {
             model.addAttribute("oAuth2AuthenticationToken",oAuth2AuthenticationToken);
         }
 
-        return "login succeed";
+        return "home";
     }
 
     private static Map<String, Object> createAttributes(HttpServletRequest servletRequest, HttpServletResponse servletResponse) {
