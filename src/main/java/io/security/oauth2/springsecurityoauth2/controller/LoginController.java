@@ -22,6 +22,7 @@ import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2RefreshToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -98,5 +99,12 @@ public class LoginController {
         attributes.put(HttpServletRequest.class.getName(), servletRequest);
         attributes.put(HttpServletResponse.class.getName(), servletResponse);
         return attributes;
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest servletRequest, HttpServletResponse servletResponse, Authentication authentication){
+        SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
+        logoutHandler.logout(servletRequest, servletResponse, authentication);
+        return "index";
     }
 }

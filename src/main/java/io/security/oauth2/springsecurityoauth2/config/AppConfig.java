@@ -38,8 +38,26 @@ public class AppConfig {
                 new DefaultOAuth2AuthorizedClientManager(
                         clientRegistrationRepository, authorizedClientRepository);
         authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);
+        authorizedClientManager.setContextAttributesMapper(contextAttributesMapper());
 
         return authorizedClientManager;
+    }
+
+    private Function<OAuth2AuthorizeRequest, Map<String, Object>> contextAttributesMapper() {
+        return authorizeRequest -> {
+            Map<String, Object> contextAttributes = Collections.emptyMap();
+            HttpServletRequest servletRequest = authorizeRequest.getAttribute(HttpServletRequest.class.getName());
+            String username = servletRequest.getParameter(OAuth2ParameterNames.USERNAME);
+            String password = servletRequest.getParameter(OAuth2ParameterNames.PASSWORD);
+            if (StringUtils.hasText(username) && StringUtils.hasText(password)) {
+                contextAttributes = new HashMap<>();
+
+                // `PasswordOAuth2AuthorizedClientProvider` requires both attributes
+                contextAttributes.put(OAuth2AuthorizationContext.USERNAME_ATTRIBUTE_NAME, username);
+                contextAttributes.put(OAuth2AuthorizationContext.PASSWORD_ATTRIBUTE_NAME, password);
+            }
+            return contextAttributes;
+        };
     }
 
 }
