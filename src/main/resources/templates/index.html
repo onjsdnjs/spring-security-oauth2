@@ -1,10 +1,13 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
-<div> <a href="/oauth2Login">Login</a> </div>
+<div>OAuth2.0 Client</div>
+<div sec:authorize="isAnonymous()"><a th:href="@{/oauth2Login}">Login</a></div>
 </body>
 </html>
