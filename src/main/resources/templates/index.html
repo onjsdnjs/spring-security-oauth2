@@ -8,6 +8,6 @@
 </head>
 <body>
 <div>OAuth2.0 Client</div>
-<div sec:authorize="isAnonymous()"><a th:href="@{/oauth2Login}">Login</a></div>
+<div sec:authorize="isAnonymous()"><a th:href="@{/oauth2Login(username='user',password='1234')}">Login</a></div>
 </body>
 </html>
