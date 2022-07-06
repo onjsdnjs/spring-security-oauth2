@@ -21,6 +21,7 @@ import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepo
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2RefreshToken;
+import org.springframework.security.oauth2.core.OAuth2Token;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
@@ -30,6 +31,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.Clock;
+import java.time.Duration;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,6 +45,10 @@ public class LoginController {
 
     @Autowired
     OAuth2AuthorizedClientRepository authorizedClientRepository;
+
+    private Duration clockSkew = Duration.ofSeconds(3600);
+
+    private Clock clock = Clock.systemUTC();
 
     @GetMapping("/oauth2Login")
     public String oauth2Login(Model model, HttpServletResponse servletResponse, HttpServletRequest servletRequest) throws IOException {
@@ -67,6 +74,12 @@ public class LoginController {
         authorizedClientManager.setAuthorizationSuccessHandler(authorizationSuccessHandler);
 
         OAuth2AuthorizedClient oAuth2AuthorizedClient = authorizedClientManager.authorize(authorizeRequest);
+
+        if (oAuth2AuthorizedClient != null && hasTokenExpired(oAuth2AuthorizedClient.getAccessToken())
+                && oAuth2AuthorizedClient.getRefreshToken() != null) {
+            ClientRegistration.withClientRegistration(oAuth2AuthorizedClient.getClientRegistration()).authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN);
+            oAuth2AuthorizedClient = authorizedClientManager.authorize(authorizeRequest);
+        }
 
         if(oAuth2AuthorizedClient != null) {
 
@@ -106,5 +119,9 @@ public class LoginController {
         SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
         logoutHandler.logout(servletRequest, servletResponse, authentication);
         return "index";
+    }
+
+    private boolean hasTokenExpired(OAuth2Token token) {
+        return this.clock.instant().isAfter(token.getExpiresAt().minus(this.clockSkew));
     }
 }
