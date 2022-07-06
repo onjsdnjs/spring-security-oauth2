@@ -59,5 +59,4 @@ public class AppConfig {
             return contextAttributes;
         };
     }
-
 }
