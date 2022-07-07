@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
@@ -27,9 +28,6 @@ public class OAuth2ClientConfig {
     @Autowired
     private OAuth2AuthorizedClientRepository authorizedClientRepository;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
     @Bean
     SecurityFilterChain oauth2SecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests((requests) -> requests.antMatchers("/","/oauth2Login","/logout").permitAll().anyRequest().authenticated());
@@ -44,7 +42,6 @@ public class OAuth2ClientConfig {
     public CustomOAuth2LoginAuthenticationFilter customOAuth2LoginAuthenticationFilter() throws Exception {
         CustomOAuth2LoginAuthenticationFilter customOAuth2LoginAuthenticationFilter =
                 new CustomOAuth2LoginAuthenticationFilter(authorizedClientManager,authorizedClientRepository);
-        customOAuth2LoginAuthenticationFilter.setAuthenticationManager(authenticationManager);
         customOAuth2LoginAuthenticationFilter.setAuthenticationSuccessHandler((request, response, authentication) -> {
             response.sendRedirect("/home");
         });
