@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.OAuth2AuthorizationSuccessHandler;
 import org.springframework.security.oauth2.client.OAuth2AuthorizeRequest;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -41,67 +42,37 @@ import java.util.Map;
 public class LoginController {
 
     @Autowired
-    DefaultOAuth2AuthorizedClientManager authorizedClientManager;
-
+    private DefaultOAuth2AuthorizedClientManager authorizedClientManager;
     @Autowired
-    OAuth2AuthorizedClientRepository authorizedClientRepository;
-
-    private Duration clockSkew = Duration.ofSeconds(3600);
-
-    private Clock clock = Clock.systemUTC();
+    private OAuth2AuthorizedClientRepository authorizedClientRepository;
 
     @GetMapping("/oauth2Login")
-    public String oauth2Login(Model model, HttpServletResponse servletResponse, HttpServletRequest servletRequest) throws IOException {
-
-        Authentication principal = SecurityContextHolder.getContext().getAuthentication();
-
-        if (principal == null) {
-            principal = new AnonymousAuthenticationToken("anonymous","anonymousUser", AuthorityUtils.createAuthorityList("ROLE_ANONYMOUS"));
-        }
-
-        OAuth2AuthorizeRequest authorizeRequest = OAuth2AuthorizeRequest
-                .withClientRegistrationId("keycloak")
-                .principal(principal)
-                .attribute(HttpServletRequest.class.getName(), servletRequest)
-                .attribute(HttpServletResponse.class.getName(), servletResponse)
-                .build();
-
-        OAuth2AuthorizationSuccessHandler authorizationSuccessHandler = (authorizedClient, authentication, attributes) ->
-                authorizedClientRepository
-                        .saveAuthorizedClient(authorizedClient, authentication,
-                                (HttpServletRequest) attributes.get(HttpServletRequest.class.getName()),
-                                (HttpServletResponse) attributes.get(HttpServletResponse.class.getName()));
-        authorizedClientManager.setAuthorizationSuccessHandler(authorizationSuccessHandler);
-
-        OAuth2AuthorizedClient oAuth2AuthorizedClient = authorizedClientManager.authorize(authorizeRequest);
-
-        if (oAuth2AuthorizedClient != null && hasTokenExpired(oAuth2AuthorizedClient.getAccessToken())
-                && oAuth2AuthorizedClient.getRefreshToken() != null) {
-            ClientRegistration.withClientRegistration(oAuth2AuthorizedClient.getClientRegistration()).authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN);
-            oAuth2AuthorizedClient = authorizedClientManager.authorize(authorizeRequest);
-        }
+    public String oauth2Login(Model model, @RegisteredOAuth2AuthorizedClient("keycloak") OAuth2AuthorizedClient oAuth2AuthorizedClient,
+                              HttpServletResponse servletResponse, HttpServletRequest servletRequest) throws IOException {
 
         if(oAuth2AuthorizedClient != null) {
 
+            OAuth2AuthorizationSuccessHandler authorizationSuccessHandler = (authorizedClient, authentication, attributes) ->
+                    authorizedClientRepository
+                            .saveAuthorizedClient(authorizedClient, authentication,
+                                    (HttpServletRequest) attributes.get(HttpServletRequest.class.getName()),
+                                    (HttpServletResponse) attributes.get(HttpServletResponse.class.getName()));
+            authorizedClientManager.setAuthorizationSuccessHandler(authorizationSuccessHandler);
+
             ClientRegistration clientRegistration = oAuth2AuthorizedClient.getClientRegistration();
             OAuth2AccessToken accessToken = oAuth2AuthorizedClient.getAccessToken();
-            OAuth2RefreshToken refreshToken = oAuth2AuthorizedClient.getRefreshToken();
 
-            OAuth2UserService oAuth2UserService = new DefaultOAuth2UserService();
-            OAuth2User oauth2User = oAuth2UserService.loadUser(new OAuth2UserRequest(
-                    oAuth2AuthorizedClient.getClientRegistration(), accessToken));
+			OAuth2UserService oAuth2UserService = new DefaultOAuth2UserService();
+            OAuth2User oauth2User = oAuth2UserService.loadUser(new OAuth2UserRequest(oAuth2AuthorizedClient.getClientRegistration(), accessToken));
 
             SimpleAuthorityMapper simpleAuthorityMapper = new SimpleAuthorityMapper();
-            simpleAuthorityMapper.setPrefix("");
             Collection<? extends GrantedAuthority> authorities = simpleAuthorityMapper.mapAuthorities(oauth2User.getAuthorities());
             OAuth2AuthenticationToken oAuth2AuthenticationToken = new OAuth2AuthenticationToken(oauth2User, authorities, clientRegistration.getRegistrationId());
-
-            SecurityContext context = SecurityContextHolder.createEmptyContext();
-            context.setAuthentication(oAuth2AuthenticationToken);
-            SecurityContextHolder.setContext(context);
+            SecurityContextHolder.getContext().setAuthentication(oAuth2AuthenticationToken);
 
             authorizationSuccessHandler.onAuthorizationSuccess(oAuth2AuthorizedClient, oAuth2AuthenticationToken, createAttributes(servletRequest, servletResponse));
             model.addAttribute("oAuth2AuthenticationToken",oAuth2AuthenticationToken);
+
         }
 
         return "home";
@@ -119,9 +90,5 @@ public class LoginController {
         SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
         logoutHandler.logout(servletRequest, servletResponse, authentication);
         return "index";
-    }
-
-    private boolean hasTokenExpired(OAuth2Token token) {
-        return this.clock.instant().isAfter(token.getExpiresAt().minus(this.clockSkew));
     }
 }
