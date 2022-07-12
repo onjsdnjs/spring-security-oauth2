@@ -25,13 +25,4 @@ public class OAuth2ResourceServer {
         return http.build();
     }
 
-    /*@Bean
-    public JwtDecoder jwtDecoder1() {
-        return JwtDecoders.fromIssuerLocation(properties.getJwt().getIssuerUri());
-    }*/
-
-    @Bean
-    public JwtDecoder jwtDecoder2() {
-        return NimbusJwtDecoder.withJwkSetUri(properties.getJwt().getJwkSetUri()).jwsAlgorithm(SignatureAlgorithm.RS512).build();}
-
 }
