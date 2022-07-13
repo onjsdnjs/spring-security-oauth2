@@ -13,6 +13,7 @@ public class OAuth2ResourceServer {
         http.authorizeRequests((requests) -> requests.antMatchers("/").permitAll().anyRequest().authenticated());
         http.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
         http.formLogin().permitAll();
+
         return http.build();
     }
 
