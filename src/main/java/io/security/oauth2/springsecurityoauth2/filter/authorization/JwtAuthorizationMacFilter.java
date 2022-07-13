@@ -35,6 +35,7 @@ public class JwtAuthorizationMacFilter extends OncePerRequestFilter {
             chain.doFilter(request, response);
             return;
         }
+
         System.out.println("header : " + header);
         String token = request.getHeader("Authorization").replace("Bearer ", "");
 
