@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationFilter;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
@@ -23,14 +24,17 @@ public class OAuth2ResourceServer {
         http.authorizeRequests((requests) -> requests.antMatchers("/").permitAll().anyRequest().authenticated());
         http.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
         http.formLogin().permitAll();
-
-        User user = new User("user", "{noop}1234", Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
-
-        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setUserDetailsService(new InMemoryUserDetailsManager(user));
-        http.authenticationProvider(daoAuthenticationProvider);
+        http.userDetailsService(getUserDetailsService());
 
         return http.build();
+    }
+
+    private UserDetailsService getUserDetailsService() {
+
+        User user = new User("user", "{noop}1234", Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
+        InMemoryUserDetailsManager userDetailsManager = new InMemoryUserDetailsManager(user);
+
+        return userDetailsManager;
     }
 
 }
