@@ -1,4 +1,4 @@
-package io.security.oauth2.springsecurityoauth2;
+package io.security.oauth2.springsecurityoauth2.configs;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
