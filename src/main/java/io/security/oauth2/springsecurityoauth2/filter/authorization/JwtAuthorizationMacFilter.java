@@ -49,7 +49,7 @@ public class JwtAuthorizationMacFilter extends OncePerRequestFilter {
 
 			if (username != null) {
 				UserDetails user = User.builder().username(username)
-						.password("1234")
+						.password("")
 						.authorities(authority.get(0))
 						.build();
 				Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
