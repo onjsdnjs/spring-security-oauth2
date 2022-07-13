@@ -18,6 +18,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 public class JwtAuthorizationMacFilter extends OncePerRequestFilter {
     private OctetSequenceKey jwk;
@@ -44,11 +45,12 @@ public class JwtAuthorizationMacFilter extends OncePerRequestFilter {
 			signedJWT.verify(macVerifier);
 
 			String username = signedJWT.getJWTClaimsSet().getClaim("username").toString();
-			String authority = signedJWT.getJWTClaimsSet().getClaim("authority").toString();
+			List<String> authority = (List)signedJWT.getJWTClaimsSet().getClaim("authority");
 
 			if (username != null) {
 				UserDetails user = User.builder().username(username)
-						.authorities(authority)
+						.password("1234")
+						.authorities(authority.get(0))
 						.build();
 				Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 				SecurityContextHolder.getContext().setAuthentication(authentication);

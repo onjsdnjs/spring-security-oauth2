@@ -36,7 +36,6 @@ public class OAuth2ResourceServer {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeRequests((requests) -> requests.antMatchers("/login","/").permitAll().anyRequest().authenticated());
-        http.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
         http.userDetailsService(getUserDetailsService());
         http.addFilterBefore(new JwtAuthenticationFilter(http,macSecuritySigner, octetSequenceKey), UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(new JwtAuthorizationMacFilter(octetSequenceKey), UsernamePasswordAuthenticationFilter.class);
