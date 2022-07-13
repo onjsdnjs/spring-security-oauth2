@@ -1,7 +1,9 @@
 package io.security.oauth2.springsecurityoauth2.filter.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nimbusds.jose.jwk.OctetSequenceKey;
 import io.security.oauth2.springsecurityoauth2.dto.LoginDto;
+import io.security.oauth2.springsecurityoauth2.signature.MacSecuritySigner;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,9 +21,13 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private HttpSecurity httpSecurity;
+    private MacSecuritySigner macSecuritySigner;
+    private OctetSequenceKey octetSequenceKey;
 
-    public JwtAuthenticationFilter(HttpSecurity httpSecurity) {
+    public JwtAuthenticationFilter(HttpSecurity httpSecurity, MacSecuritySigner macSecuritySigner, OctetSequenceKey octetSequenceKey) {
         this.httpSecurity = httpSecurity;
+        this.macSecuritySigner = macSecuritySigner;
+        this.octetSequenceKey = octetSequenceKey;
     }
 
     @Override
