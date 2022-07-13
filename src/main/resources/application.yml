@@ -7,3 +7,7 @@ spring:
       resourceserver:
         jwt:
           jwk-set-uri: http://localhost:8080/realms/oauth2/protocol/openid-connect/certs
+
+    user:
+      name: user
+      password: 1234
