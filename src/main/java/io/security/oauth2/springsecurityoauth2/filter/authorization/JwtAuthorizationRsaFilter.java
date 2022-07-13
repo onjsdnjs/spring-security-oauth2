@@ -1,16 +1,13 @@
 package io.security.oauth2.springsecurityoauth2.filter.authorization;
 
-import com.nimbusds.jose.crypto.MACVerifier;
-import com.nimbusds.jose.jwk.OctetSequenceKey;
+import com.nimbusds.jose.crypto.RSASSAVerifier;
+import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jwt.SignedJWT;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -20,10 +17,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-public class JwtAuthorizationMacFilter extends OncePerRequestFilter {
-    private OctetSequenceKey jwk;
+public class JwtAuthorizationRsaFilter extends OncePerRequestFilter {
+	private RSAKey jwk;
 
-    public JwtAuthorizationMacFilter(OctetSequenceKey jwk) {
+    public JwtAuthorizationRsaFilter(RSAKey jwk) {
         this.jwk = jwk;
     }
 
@@ -42,8 +39,8 @@ public class JwtAuthorizationMacFilter extends OncePerRequestFilter {
 		SignedJWT signedJWT;
 		try {
 			signedJWT = SignedJWT.parse(token);
-			MACVerifier macVerifier = new MACVerifier(jwk.toSecretKey());
-			signedJWT.verify(macVerifier);
+			RSASSAVerifier rsassaVerifier = new RSASSAVerifier(jwk.toRSAPublicKey());
+			signedJWT.verify(rsassaVerifier);
 
 			String username = signedJWT.getJWTClaimsSet().getClaim("username").toString();
 			List<String> authority = (List)signedJWT.getJWTClaimsSet().getClaim("authority");

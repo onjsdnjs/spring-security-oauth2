@@ -1,14 +1,15 @@
 package io.security.oauth2.springsecurityoauth2.configs;
 
 import com.nimbusds.jose.jwk.OctetSequenceKey;
+import com.nimbusds.jose.jwk.RSAKey;
 import io.security.oauth2.springsecurityoauth2.filter.authentication.JwtAuthenticationFilter;
-import io.security.oauth2.springsecurityoauth2.filter.authorization.JwtAuthorizationMacFilter;
+import io.security.oauth2.springsecurityoauth2.filter.authorization.JwtAuthorizationRsaFilter;
 import io.security.oauth2.springsecurityoauth2.signature.MacSecuritySigner;
+import io.security.oauth2.springsecurityoauth2.signature.RSASecuritySigner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -16,7 +17,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import java.util.Arrays;
 
@@ -24,10 +24,10 @@ import java.util.Arrays;
 public class OAuth2ResourceServer {
 
     @Autowired
-    private MacSecuritySigner macSecuritySigner;
+    private RSASecuritySigner rsaSecuritySigner;
 
     @Autowired
-    private OctetSequenceKey octetSequenceKey;
+    private RSAKey rsaKey;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -37,8 +37,8 @@ public class OAuth2ResourceServer {
 
         http.authorizeRequests((requests) -> requests.antMatchers("/login","/").permitAll().anyRequest().authenticated());
         http.userDetailsService(getUserDetailsService());
-        http.addFilterBefore(new JwtAuthenticationFilter(http,macSecuritySigner, octetSequenceKey), UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(new JwtAuthorizationMacFilter(octetSequenceKey), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtAuthenticationFilter(http,rsaSecuritySigner, rsaKey), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtAuthorizationRsaFilter(rsaKey), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
