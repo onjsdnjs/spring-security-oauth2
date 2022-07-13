@@ -1,10 +1,8 @@
 package io.security.oauth2.springsecurityoauth2.configs;
 
-import com.nimbusds.jose.jwk.OctetSequenceKey;
 import com.nimbusds.jose.jwk.RSAKey;
 import io.security.oauth2.springsecurityoauth2.filter.authentication.JwtAuthenticationFilter;
 import io.security.oauth2.springsecurityoauth2.filter.authorization.JwtAuthorizationRsaFilter;
-import io.security.oauth2.springsecurityoauth2.signature.MacSecuritySigner;
 import io.security.oauth2.springsecurityoauth2.signature.RSASecuritySigner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
