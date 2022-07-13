@@ -9,8 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class MacSecuritySigner extends SecuritySigner {
 
     @Override
-    protected String getJwtToken(UserDetails user, JWK jwk) throws JOSEException {
-
+    public String getJwtToken(UserDetails user, JWK jwk) throws JOSEException {
         MACSigner jwsSigner = new MACSigner(((OctetSequenceKey)jwk).toSecretKey());
         return getJwtTokenInternal(jwsSigner, user, jwk);
     }

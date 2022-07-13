@@ -47,8 +47,7 @@ public class JwtAuthorizationMacFilter extends OncePerRequestFilter {
 				UserDetails user = User.builder().username(username)
 						.authorities(authority)
 						.build();
-				Authentication authentication =
-						new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+				Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 			}
 
