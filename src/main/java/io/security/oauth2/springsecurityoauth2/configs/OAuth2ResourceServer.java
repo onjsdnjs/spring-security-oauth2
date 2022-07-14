@@ -1,14 +1,17 @@
 package io.security.oauth2.springsecurityoauth2.configs;
 
+import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.OctetSequenceKey;
+import com.nimbusds.jose.jwk.RSAKey;
 import io.security.oauth2.springsecurityoauth2.filter.authentication.JwtAuthenticationFilter;
-import io.security.oauth2.springsecurityoauth2.filter.authorization.JwtAuthorizationMacFilter;
 import io.security.oauth2.springsecurityoauth2.signature.MacSecuritySigner;
+import io.security.oauth2.springsecurityoauth2.signature.RSASecuritySigner;
+import io.security.oauth2.springsecurityoauth2.signature.SecuritySigner;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -16,7 +19,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import java.util.Arrays;
 
@@ -24,10 +26,19 @@ import java.util.Arrays;
 public class OAuth2ResourceServer {
 
     @Autowired
+    private OAuth2ResourceServerProperties properties;
+
+    @Autowired
     private MacSecuritySigner macSecuritySigner;
 
     @Autowired
     private OctetSequenceKey octetSequenceKey;
+
+    @Autowired
+    private RSASecuritySigner rsaSecuritySigner;
+
+    @Autowired
+    private RSAKey rsaKey;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -37,7 +48,7 @@ public class OAuth2ResourceServer {
 
         http.authorizeRequests((requests) -> requests.antMatchers("/login","/").permitAll().anyRequest().authenticated());
         http.userDetailsService(getUserDetailsService());
-        http.addFilterBefore(new JwtAuthenticationFilter(http,macSecuritySigner, octetSequenceKey), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtAuthenticationFilter(http,securitySigner(), jwk()), UsernamePasswordAuthenticationFilter.class);
         http.oauth2ResourceServer().jwt();
 
         return http.build();
@@ -49,5 +60,26 @@ public class OAuth2ResourceServer {
         InMemoryUserDetailsManager userDetailsManager = new InMemoryUserDetailsManager(user);
 
         return userDetailsManager;
+    }
+
+    private SecuritySigner securitySigner() {
+        if(properties.getJwt().getJwsAlgorithms().get(0).equals("RS512")){
+            return rsaSecuritySigner;
+
+        }else if(properties.getJwt().getJwsAlgorithms().get(0).equals("HS256")){
+            return macSecuritySigner;
+        }
+        return null;
+    }
+
+    private JWK jwk() {
+
+        if(properties.getJwt().getJwsAlgorithms().get(0).equals("RS512")){
+            return rsaKey;
+
+        }else if(properties.getJwt().getJwsAlgorithms().get(0).equals("HS256")){
+            return octetSequenceKey;
+        }
+        return null;
     }
 }
