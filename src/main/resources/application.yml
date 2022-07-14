@@ -6,6 +6,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-#          jws-algorithms: HS256
-#          jws-algorithms: RS512
-          public-key-location: classpath:certs/publicKey.txt
+          jws-algorithms:
+            - RS256
+            - RS512
+            - HS256
+#          public-key-location: classpath:certs/publicKey.txt

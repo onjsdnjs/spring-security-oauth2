@@ -8,6 +8,7 @@ import com.nimbusds.jose.jwk.gen.OctetSequenceKeyGenerator;
 import com.nimbusds.jose.jwk.gen.RSAKeyGenerator;
 import io.security.oauth2.springsecurityoauth2.signature.MacSecuritySigner;
 import io.security.oauth2.springsecurityoauth2.signature.RSASecuritySigner;
+import io.security.oauth2.springsecurityoauth2.signature.RsaPublicKeySecuritySigner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.context.annotation.Bean;
@@ -39,5 +40,10 @@ public class SignatureConfig {
                 .algorithm(JWSAlgorithm.RS512)
                 .generate();
         return rsaKey;
+    }
+
+    @Bean
+    public RsaPublicKeySecuritySigner rsaPublicKeySecuritySigner(){
+        return new RsaPublicKeySecuritySigner();
     }
 }
