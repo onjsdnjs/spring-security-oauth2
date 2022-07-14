@@ -49,5 +49,4 @@ public class OAuth2ResourceServer {
         InMemoryUserDetailsManager userDetailsManager = new InMemoryUserDetailsManager(user);
         return userDetailsManager;
     }
-
 }
