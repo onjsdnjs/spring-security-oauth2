@@ -6,4 +6,4 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jws-algorithm: HS256
+          jws-algorithms: HS256
