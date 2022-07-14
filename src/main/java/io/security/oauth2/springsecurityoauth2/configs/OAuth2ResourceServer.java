@@ -6,6 +6,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import io.security.oauth2.springsecurityoauth2.filter.authentication.JwtAuthenticationFilter;
 import io.security.oauth2.springsecurityoauth2.signature.MacSecuritySigner;
 import io.security.oauth2.springsecurityoauth2.signature.RSASecuritySigner;
+import io.security.oauth2.springsecurityoauth2.signature.RsaPublicKeySecuritySigner;
 import io.security.oauth2.springsecurityoauth2.signature.SecuritySigner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
@@ -40,6 +41,9 @@ public class OAuth2ResourceServer {
     @Autowired
     private RSAKey rsaKey;
 
+    @Autowired
+    private RsaPublicKeySecuritySigner rsaPublicKeySecuritySigner;
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -48,7 +52,7 @@ public class OAuth2ResourceServer {
 
         http.authorizeRequests((requests) -> requests.antMatchers("/login","/").permitAll().anyRequest().authenticated());
         http.userDetailsService(getUserDetailsService());
-        http.addFilterBefore(new JwtAuthenticationFilter(http,securitySigner(), jwk()), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtAuthenticationFilter(http, securitySigner(), jwk()), UsernamePasswordAuthenticationFilter.class);
         http.oauth2ResourceServer().jwt();
 
         return http.build();
@@ -63,7 +67,10 @@ public class OAuth2ResourceServer {
     }
 
     private SecuritySigner securitySigner() {
-        if(properties.getJwt().getJwsAlgorithms().get(0).equals("RS512")){
+        if (properties.getJwt().getJwsAlgorithms().get(0).equals("RS256")){
+            return rsaPublicKeySecuritySigner;
+
+        }else if(properties.getJwt().getJwsAlgorithms().get(0).equals("RS512")){
             return rsaSecuritySigner;
 
         }else if(properties.getJwt().getJwsAlgorithms().get(0).equals("HS256")){

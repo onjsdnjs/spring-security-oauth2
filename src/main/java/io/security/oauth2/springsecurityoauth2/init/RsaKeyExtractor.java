@@ -28,7 +28,7 @@ public class RsaKeyExtractor implements ApplicationRunner {
 
         if (properties.getJwt().getJwsAlgorithms().get(0).equals("RS256")) {
             String path = "E:\\project\\spring-security-oauth2\\src\\main\\resources\\certs\\";
-            FileInputStream is = new FileInputStream(path);
+            FileInputStream is = new FileInputStream(path+"apiKey.jks");
             KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
             keystore.load(is, "pass1234".toCharArray());
             String alias = "apiKey";
