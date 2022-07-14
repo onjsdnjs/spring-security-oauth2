@@ -69,7 +69,5 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         } catch (JOSEException e) {
             e.printStackTrace();
         }
-
-
     }
 }
