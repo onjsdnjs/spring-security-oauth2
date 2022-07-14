@@ -60,5 +60,4 @@ public class JwtAuthorizationRsaFilter extends OncePerRequestFilter {
 
         chain.doFilter(request, response);
     }
-
 }
