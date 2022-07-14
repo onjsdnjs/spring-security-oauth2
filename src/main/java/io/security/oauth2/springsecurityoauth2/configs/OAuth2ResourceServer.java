@@ -47,7 +47,6 @@ public class OAuth2ResourceServer {
 
         User user = new User("user", "{noop}1234", Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
         InMemoryUserDetailsManager userDetailsManager = new InMemoryUserDetailsManager(user);
-
         return userDetailsManager;
     }
 
