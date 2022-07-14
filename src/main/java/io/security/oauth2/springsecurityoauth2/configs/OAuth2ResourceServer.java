@@ -50,5 +50,4 @@ public class OAuth2ResourceServer {
 
         return userDetailsManager;
     }
-
 }
