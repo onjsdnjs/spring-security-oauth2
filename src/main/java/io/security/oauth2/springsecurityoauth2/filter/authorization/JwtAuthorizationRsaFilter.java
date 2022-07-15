@@ -28,19 +28,5 @@ public class JwtAuthorizationRsaFilter extends JwtAuthorizationFilter {
 	@Override
 	protected void executeDecoding(HttpServletRequest request, JWSVerifier jwsVerifier, String token) {
 
-		if(jwtDecoder != null) {
-			Jwt jwt = jwtDecoder.decode(token);
-			String username = jwt.getClaimAsString("username");
-			List<String> authority = jwt.getClaimAsStringList("authority");
-
-			if (username != null) {
-				UserDetails user = User.builder().username(username)
-						.password("")
-						.authorities(authority.get(0))
-						.build();
-				Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-				SecurityContextHolder.getContext().setAuthentication(authentication);
-			}
-		}
 	}
 }
