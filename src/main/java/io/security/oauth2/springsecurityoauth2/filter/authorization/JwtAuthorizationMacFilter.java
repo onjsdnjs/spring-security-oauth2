@@ -7,14 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 
 public class JwtAuthorizationMacFilter extends JwtAuthorizationFilter {
 	private OctetSequenceKey jwk;
-
-    public JwtAuthorizationMacFilter(OctetSequenceKey jwk, JWSVerifier jwsVerifier) {
-		super(jwk, jwsVerifier);
+    public JwtAuthorizationMacFilter(JWSVerifier jwsVerifier) {
+		super(jwsVerifier,null);
     }
-
-	@Override
-	protected void executeDecoding(HttpServletRequest request, JWSVerifier jwsVerifier, String token) {
-
-	}
 
 }

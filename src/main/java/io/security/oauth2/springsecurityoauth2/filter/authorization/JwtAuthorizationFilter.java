@@ -19,18 +19,8 @@ import java.io.IOException;
 import java.util.List;
 
 public abstract class JwtAuthorizationFilter extends OncePerRequestFilter {
-
-	private JWK jwk;
 	private JWSVerifier jwsVerifier;
-	protected JwtDecoder jwtDecoder;
-
-	public JwtAuthorizationFilter(JWK jwk, JwtDecoder jwtDecoder) {
-		this.jwk = jwk;
-		this.jwtDecoder = jwtDecoder;
-	}
-
-	public JwtAuthorizationFilter(JWK jwk, JWSVerifier jwsVerifier) {
-        this.jwk = jwk;
+	public JwtAuthorizationFilter(JWSVerifier jwsVerifier) {
 		this.jwsVerifier = jwsVerifier;
 	}
 
@@ -65,12 +55,8 @@ public abstract class JwtAuthorizationFilter extends OncePerRequestFilter {
 			e.printStackTrace();
 		}
 
-		executeDecoding(request, jwsVerifier, token);
-
 		chain.doFilter(request, response);
     }
-
-	protected abstract void executeDecoding(HttpServletRequest request, JWSVerifier jwsVerifier, String token);
 
 	private boolean tokenResolve(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
 		String header = request.getHeader("Authorization");
@@ -79,5 +65,4 @@ public abstract class JwtAuthorizationFilter extends OncePerRequestFilter {
 		}
 		return true;
 	}
-
 }

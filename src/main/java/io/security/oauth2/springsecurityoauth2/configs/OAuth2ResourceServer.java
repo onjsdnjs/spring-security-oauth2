@@ -1,5 +1,7 @@
 package io.security.oauth2.springsecurityoauth2.configs;
 
+import com.nimbusds.jose.crypto.MACVerifier;
+import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.OctetSequenceKey;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -42,12 +44,6 @@ public class OAuth2ResourceServer {
     @Autowired
     private RSAKey rsaKey;
 
-    @Autowired
-    private RsaPublicKeySecuritySigner rsaPublicKeySecuritySigner;
-
-    @Autowired
-    private JwtDecoder jwtDecoder;
-
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -57,7 +53,7 @@ public class OAuth2ResourceServer {
         http.authorizeRequests((requests) -> requests.antMatchers("/login","/").permitAll().anyRequest().authenticated());
         http.userDetailsService(getUserDetailsService());
         http.addFilterBefore(new JwtAuthenticationFilter(http,securitySigner(), jwk()), UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(new JwtAuthorizationRsaFilter(jwk()), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtAuthorizationRsaFilter(jwk(), new RSASSAVerifier(rsaKey.toRSAPublicKey())), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
