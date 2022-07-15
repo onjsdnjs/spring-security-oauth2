@@ -63,23 +63,27 @@ public class OAuth2ResourceServer {
     }
 
     private SecuritySigner securitySigner() {
-        if(properties.getJwt().getJwsAlgorithms().get(0).equals("RS512")){
+
+        if(isAlg("RS512")){
             return rsaSecuritySigner;
 
-        }else if(properties.getJwt().getJwsAlgorithms().get(0).equals("HS256")){
+        }else if(isAlg("HS256")){
             return macSecuritySigner;
         }
         return null;
     }
-
     private JWK jwk() {
 
-        if(properties.getJwt().getJwsAlgorithms().get(0).equals("RS512")){
+        if(isAlg("RS512")){
             return rsaKey;
 
-        }else if(properties.getJwt().getJwsAlgorithms().get(0).equals("HS256")){
+        }else if(isAlg("HS256")){
             return octetSequenceKey;
         }
         return null;
+    }
+
+    private boolean isAlg(String alg) {
+        return properties.getJwt().getJwsAlgorithms().get(0).equals(alg);
     }
 }
