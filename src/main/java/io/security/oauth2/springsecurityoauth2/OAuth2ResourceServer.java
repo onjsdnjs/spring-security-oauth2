@@ -11,7 +11,7 @@ public class OAuth2ResourceServer {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests((requests) -> requests.anyRequest().authenticated());
-        http.oauth2ResourceServer().jwt();
+        http.formLogin().permitAll();
         return http.build();
     }
 
