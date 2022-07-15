@@ -4,6 +4,7 @@ import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.OctetSequenceKey;
 import com.nimbusds.jose.jwk.RSAKey;
 import io.security.oauth2.springsecurityoauth2.filter.authentication.JwtAuthenticationFilter;
+import io.security.oauth2.springsecurityoauth2.filter.authorization.JwtAuthorizationRsaFilter;
 import io.security.oauth2.springsecurityoauth2.signature.MacSecuritySigner;
 import io.security.oauth2.springsecurityoauth2.signature.RSASecuritySigner;
 import io.security.oauth2.springsecurityoauth2.signature.RsaPublicKeySecuritySigner;
@@ -17,6 +18,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -44,6 +46,9 @@ public class OAuth2ResourceServer {
     @Autowired
     private RsaPublicKeySecuritySigner rsaPublicKeySecuritySigner;
 
+    @Autowired
+    private JwtDecoder jwtDecoder;
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -53,7 +58,7 @@ public class OAuth2ResourceServer {
         http.authorizeRequests((requests) -> requests.antMatchers("/login","/").permitAll().anyRequest().authenticated());
         http.userDetailsService(getUserDetailsService());
         http.addFilterBefore(new JwtAuthenticationFilter(http, securitySigner(), jwk()), UsernamePasswordAuthenticationFilter.class);
-        http.oauth2ResourceServer().jwt();
+        http.addFilterBefore(new JwtAuthorizationRsaFilter(jwk(),jwtDecoder), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
