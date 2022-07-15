@@ -7,6 +7,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
@@ -26,14 +27,16 @@ public class RsaKeyExtractor implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        if (properties.getJwt().getJwsAlgorithms().get(0).equals("RS256")) {
-            String path = "E:\\project\\spring-security-oauth2\\src\\main\\resources\\certs\\";
-            FileInputStream is = new FileInputStream(path+"apiKey.jks");
+        String path = "E:\\project\\spring-security-oauth2\\src\\main\\resources\\certs\\";
+        File file = new File(path+"publicKey.txt");
+
+        if (!file.exists()) {
+
+            FileInputStream is = new FileInputStream(file);
             KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
             keystore.load(is, "pass1234".toCharArray());
             String alias = "apiKey";
             Key key = keystore.getKey(alias, "pass1234".toCharArray());
-
             if (key instanceof PrivateKey) {
 
                 Certificate certificate = keystore.getCertificate(alias);
@@ -47,6 +50,7 @@ public class RsaKeyExtractor implements ApplicationRunner {
                 OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(path + "publicKey.txt"), Charset.defaultCharset());
                 writer.write(publicStr);
                 writer.close();
+                is.close();
             }
         }
     }

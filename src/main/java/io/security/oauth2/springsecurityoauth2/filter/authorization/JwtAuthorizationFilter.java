@@ -1,7 +1,6 @@
 package io.security.oauth2.springsecurityoauth2.filter.authorization;
 
 import com.nimbusds.jose.JWSVerifier;
-import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jwt.SignedJWT;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,29 +18,19 @@ import java.io.IOException;
 import java.util.List;
 
 public abstract class JwtAuthorizationFilter extends OncePerRequestFilter {
-
-	private JWK jwk;
-	private JWSVerifier jwsVerifier;
-	protected JwtDecoder jwtDecoder;
-
-	public JwtAuthorizationFilter(JWK jwk, JwtDecoder jwtDecoder) {
-		this.jwk = jwk;
-		this.jwtDecoder = jwtDecoder;
-	}
-
-	public JwtAuthorizationFilter(JWK jwk, JWSVerifier jwsVerifier) {
-        this.jwk = jwk;
+	private final JWSVerifier jwsVerifier;
+	public JwtAuthorizationFilter(JWSVerifier jwsVerifier) {
 		this.jwsVerifier = jwsVerifier;
 	}
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
 
-		if (!tokenResolve(request, response, chain)){
+		if (tokenResolve(request, response, chain)){
 			chain.doFilter(request,response);
 			return;
 		}
-		String token = request.getHeader("Authorization").replace("Bearer ", "");
+		String token = getToken(request);
 
 		SignedJWT signedJWT;
 		try {
@@ -65,19 +54,15 @@ public abstract class JwtAuthorizationFilter extends OncePerRequestFilter {
 			e.printStackTrace();
 		}
 
-		executeDecoding(request, jwsVerifier, token);
-
 		chain.doFilter(request, response);
     }
 
-	protected abstract void executeDecoding(HttpServletRequest request, JWSVerifier jwsVerifier, String token);
-
-	private boolean tokenResolve(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-		String header = request.getHeader("Authorization");
-		if (header == null || !header.startsWith("Bearer ")) {
-			return false;
-		}
-		return true;
+	protected String getToken(HttpServletRequest request) {
+		return request.getHeader("Authorization").replace("Bearer ", "");
 	}
 
+	protected boolean tokenResolve(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+		String header = request.getHeader("Authorization");
+		return header == null || !header.startsWith("Bearer ");
+	}
 }

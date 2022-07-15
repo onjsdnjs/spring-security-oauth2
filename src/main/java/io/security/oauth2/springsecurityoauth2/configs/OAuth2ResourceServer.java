@@ -5,6 +5,7 @@ import com.nimbusds.jose.jwk.OctetSequenceKey;
 import com.nimbusds.jose.jwk.RSAKey;
 import io.security.oauth2.springsecurityoauth2.filter.authentication.JwtAuthenticationFilter;
 import io.security.oauth2.springsecurityoauth2.filter.authorization.JwtAuthorizationRsaFilter;
+import io.security.oauth2.springsecurityoauth2.filter.authorization.JwtAuthorizationRsaPublicKeyFilter;
 import io.security.oauth2.springsecurityoauth2.signature.MacSecuritySigner;
 import io.security.oauth2.springsecurityoauth2.signature.RSASecuritySigner;
 import io.security.oauth2.springsecurityoauth2.signature.RsaPublicKeySecuritySigner;
@@ -58,7 +59,7 @@ public class OAuth2ResourceServer {
         http.authorizeRequests((requests) -> requests.antMatchers("/login","/").permitAll().anyRequest().authenticated());
         http.userDetailsService(getUserDetailsService());
         http.addFilterBefore(new JwtAuthenticationFilter(http, securitySigner(), jwk()), UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(new JwtAuthorizationRsaFilter(jwk(),jwtDecoder), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtAuthorizationRsaPublicKeyFilter(jwtDecoder), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
