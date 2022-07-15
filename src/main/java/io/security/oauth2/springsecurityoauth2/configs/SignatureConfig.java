@@ -22,11 +22,10 @@ public class SignatureConfig {
     }
     @Bean
     public OctetSequenceKey octetSequenceKey() throws JOSEException {
-        OctetSequenceKey octetSequenceKey = new OctetSequenceKeyGenerator(256)
+        return new OctetSequenceKeyGenerator(256)
                 .keyID("macKey")
                 .algorithm(JWSAlgorithm.HS256)
                 .generate();
-        return octetSequenceKey;
     }
 
     @Bean
@@ -34,12 +33,19 @@ public class SignatureConfig {
         return new RSASecuritySigner();
     }
     @Bean
-    public RSAKey rsaKey() throws JOSEException {
-        RSAKey rsaKey = new RSAKeyGenerator(2048)
+    public RSAKey rsaKey512() throws JOSEException {
+        return new RSAKeyGenerator(2048)
                 .keyID("rsaKey")
                 .algorithm(JWSAlgorithm.RS512)
                 .generate();
-        return rsaKey;
+    }
+
+    @Bean
+    public RSAKey rsaKey256() throws JOSEException {
+        return new RSAKeyGenerator(2048)
+                .keyID("rsaKey")
+                .algorithm(JWSAlgorithm.RS256)
+                .generate();
     }
 
     @Bean

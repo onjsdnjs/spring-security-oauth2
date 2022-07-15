@@ -4,7 +4,6 @@ import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.OctetSequenceKey;
 import com.nimbusds.jose.jwk.RSAKey;
 import io.security.oauth2.springsecurityoauth2.filter.authentication.JwtAuthenticationFilter;
-import io.security.oauth2.springsecurityoauth2.filter.authorization.JwtAuthorizationRsaFilter;
 import io.security.oauth2.springsecurityoauth2.filter.authorization.JwtAuthorizationRsaPublicKeyFilter;
 import io.security.oauth2.springsecurityoauth2.signature.MacSecuritySigner;
 import io.security.oauth2.springsecurityoauth2.signature.RSASecuritySigner;
@@ -42,7 +41,10 @@ public class OAuth2ResourceServer {
     private RSASecuritySigner rsaSecuritySigner;
 
     @Autowired
-    private RSAKey rsaKey;
+    private RSAKey rsaKey256;
+
+    @Autowired
+    private RSAKey rsaKey512;
 
     @Autowired
     private RsaPublicKeySecuritySigner rsaPublicKeySecuritySigner;
@@ -73,26 +75,32 @@ public class OAuth2ResourceServer {
     }
 
     private SecuritySigner securitySigner() {
-        if (properties.getJwt().getJwsAlgorithms().get(0).equals("RS256")){
+        if (isAlg("RS256")){
             return rsaPublicKeySecuritySigner;
 
-        }else if(properties.getJwt().getJwsAlgorithms().get(0).equals("RS512")){
+        }else if(isAlg("RS512")){
             return rsaSecuritySigner;
 
-        }else if(properties.getJwt().getJwsAlgorithms().get(0).equals("HS256")){
+        }else if(isAlg("HS256")){
             return macSecuritySigner;
         }
         return null;
     }
-
     private JWK jwk() {
 
-        if(properties.getJwt().getJwsAlgorithms().get(0).equals("RS512")){
-            return rsaKey;
+        if(isAlg("RS256")){
+            return rsaKey256;
 
-        }else if(properties.getJwt().getJwsAlgorithms().get(0).equals("HS256")){
+        }else if(isAlg("RS512")){
+            return rsaKey512;
+
+        }else if(isAlg("HS256")){
             return octetSequenceKey;
         }
         return null;
+    }
+
+    private boolean isAlg(String alg) {
+        return properties.getJwt().getJwsAlgorithms().get(0).equals(alg);
     }
 }
