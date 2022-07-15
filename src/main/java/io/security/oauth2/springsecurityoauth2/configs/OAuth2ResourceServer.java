@@ -53,7 +53,7 @@ public class OAuth2ResourceServer {
         http.authorizeRequests((requests) -> requests.antMatchers("/login","/").permitAll().anyRequest().authenticated());
         http.userDetailsService(getUserDetailsService());
         http.addFilterBefore(new JwtAuthenticationFilter(http,securitySigner(), jwk()), UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(new JwtAuthorizationRsaFilter(jwk(), new RSASSAVerifier(rsaKey.toRSAPublicKey())), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtAuthorizationRsaFilter(new RSASSAVerifier(rsaKey.toRSAPublicKey())), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
