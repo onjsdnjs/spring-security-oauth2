@@ -6,15 +6,9 @@ import com.nimbusds.jose.jwk.OctetSequenceKey;
 import javax.servlet.http.HttpServletRequest;
 
 public class JwtAuthorizationMacFilter extends JwtAuthorizationFilter {
-	private OctetSequenceKey jwk;
 
-    public JwtAuthorizationMacFilter(OctetSequenceKey jwk, JWSVerifier jwsVerifier) {
-		super(jwk, jwsVerifier);
+    public JwtAuthorizationMacFilter(JWSVerifier jwsVerifier) {
+		super(jwsVerifier);
     }
-
-	@Override
-	protected void executeDecoding(HttpServletRequest request, JWSVerifier jwsVerifier, String token) {
-
-	}
 
 }

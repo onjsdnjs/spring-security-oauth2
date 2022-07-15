@@ -15,18 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public class JwtAuthorizationRsaFilter extends JwtAuthorizationFilter {
-
-    public JwtAuthorizationRsaFilter(RSAKey jwk, JWSVerifier jwsVerifier) {
-		super(jwk, jwsVerifier);
+    public JwtAuthorizationRsaFilter(JWSVerifier jwsVerifier) {
+		super(jwsVerifier);
     }
-
-	public JwtAuthorizationRsaFilter(JWK jwk, JwtDecoder jwtDecoder) {
-		super(jwk, jwtDecoder);
-
-	}
-
-	@Override
-	protected void executeDecoding(HttpServletRequest request, JWSVerifier jwsVerifier, String token) {
-
-	}
 }
