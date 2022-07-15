@@ -9,7 +9,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class OAuth2ResourceServer {
 
     @Bean
-    SecurityFilterChain jwtSecurityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests((requests) -> requests.anyRequest().authenticated());
         http.formLogin().permitAll();
         return http.build();
