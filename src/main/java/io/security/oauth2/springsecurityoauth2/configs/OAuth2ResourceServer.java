@@ -67,7 +67,7 @@ public class OAuth2ResourceServer {
     }
     private SecuritySigner securitySigner() {
 
-        if(properties.getJwt().getJwsAlgorithms().get(0).equals("RS512")){
+        if(properties.getJwt().getJwsAlgorithms().get(0).equals("RS256")){
             return rsaSecuritySigner;
 
         }else if(properties.getJwt().getJwsAlgorithms().get(0).equals("HS256")){
@@ -78,7 +78,7 @@ public class OAuth2ResourceServer {
 
     private JWK jwk() {
 
-        if(properties.getJwt().getJwsAlgorithms().get(0).equals("RS512")){
+        if(properties.getJwt().getJwsAlgorithms().get(0).equals("RS256")){
             return rsaKey;
 
         }else if(properties.getJwt().getJwsAlgorithms().get(0).equals("HS256")){
