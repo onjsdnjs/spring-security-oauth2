@@ -17,5 +17,4 @@ public class OAuth2ResourceServer {
         http.oauth2ResourceServer().jwt();
         return http.build();
     }
-
 }
