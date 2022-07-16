@@ -1,8 +1,6 @@
 package io.security.oauth2.springsecurityoauth2;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,21 +10,30 @@ import java.util.List;
 @RestController
 public class PhotoController {
 
-    @GetMapping("/photos")
-    public List<Photo> index(Authentication authentication, @AuthenticationPrincipal Jwt principal){
+    @GetMapping("/photos/1")
+    public List<Photo> photos1(){
 
-        Photo photo1 = new Photo();
-        photo1.setUserId("user");
-        photo1.setPhotoId("1");
-        photo1.setPhotoTitle("Photo 1 title");
-        photo1.setPhotoDescription("Photo 1 description");
-
-        Photo photo2 = new Photo();
-        photo2.setUserId("user");
-        photo2.setPhotoId("2");
-        photo2.setPhotoTitle("Photo 2 title");
-        photo2.setPhotoDescription("Photo 2 description");
+        Photo photo1 = getPhoto("1", "Photo 1 title", "Photo 1 description");
+        Photo photo2 = getPhoto("2", "Photo 2 title", "Photo 2 description");
 
         return Arrays.asList(photo1, photo2);
+    }
+
+    @GetMapping("/photos/2")
+    @PreAuthorize("hasAuthority('SCOPE_photo')")
+    public List<Photo> photos2(){
+
+        Photo photo1 = getPhoto("1", "Photo 1 title", "Photo 1 description");
+        Photo photo2 = getPhoto("2", "Photo 2 title", "Photo 2 description");
+
+        return Arrays.asList(photo1, photo2);
+    }
+    private Photo getPhoto(String photoId, String photoTitle, String photoDescription) {
+        Photo photo = new Photo();
+        photo.setUserId("user");
+        photo.setPhotoId(photoId);
+        photo.setPhotoTitle(photoTitle);
+        photo.setPhotoDescription(photoDescription);
+        return photo;
     }
 }
