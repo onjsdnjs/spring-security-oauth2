@@ -13,10 +13,19 @@ import org.springframework.security.web.SecurityFilterChain;
 public class OAuth2ResourceServer {
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeRequests((requests) -> requests.antMatchers(HttpMethod.GET, "/photos/**")
+    SecurityFilterChain securityFilterChain1(HttpSecurity http) throws Exception {
+        http.antMatcher("/photos/1").authorizeRequests(
+                (requests) -> requests.antMatchers(HttpMethod.GET, "/photos/1")
                 .hasAuthority("SCOPE_photo")
                 .anyRequest().authenticated());
+        http.oauth2ResourceServer().jwt();
+        return http.build();
+    }
+
+    @Bean
+    SecurityFilterChain securityFilterChain2(HttpSecurity http) throws Exception {
+        http.antMatcher("/photos/2").authorizeRequests(
+                (requests) -> requests.antMatchers(HttpMethod.GET, "/photos/2").permitAll());
         http.oauth2ResourceServer().jwt();
         return http.build();
     }

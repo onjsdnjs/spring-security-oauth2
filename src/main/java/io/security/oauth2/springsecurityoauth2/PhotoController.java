@@ -11,7 +11,7 @@ import java.util.List;
 public class PhotoController {
 
     @GetMapping("/photos/1")
-    public List<Photo> photos1(){
+    public List<Photo> photosUrl(){
 
         Photo photo1 = getPhoto("1", "Photo 1 title", "Photo 1 description");
         Photo photo2 = getPhoto("2", "Photo 2 title", "Photo 2 description");
@@ -21,7 +21,7 @@ public class PhotoController {
 
     @GetMapping("/photos/2")
     @PreAuthorize("hasAuthority('SCOPE_photo')")
-    public List<Photo> photos2(){
+    public List<Photo> photosMethod(){
 
         Photo photo1 = getPhoto("1", "Photo 1 title", "Photo 1 description");
         Photo photo2 = getPhoto("2", "Photo 2 title", "Photo 2 description");
