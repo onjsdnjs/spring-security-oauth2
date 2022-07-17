@@ -12,7 +12,6 @@ import java.util.Map;
 
 @RestController
 public class IndexController {
-
     @GetMapping("/")
     public OpaqueDto index(Authentication authentication, @AuthenticationPrincipal OAuth2AuthenticatedPrincipal principal){
         BearerTokenAuthentication bearerTokenAuthentication =  (BearerTokenAuthentication)authentication;
