@@ -6,6 +6,6 @@ spring:
     oauth2:
       resourceserver:
         opaquetoken:
-          introspection-uri: http://localhost:8080/realms/oauth2/protocol/openid-connect/introspect
+          introspection-uri: http://localhost:8080/realms/oauth2/protocol/openid-connect/token/introspect
           client-id: oauth2-client-app
           client-secret: CQueEWXZYmv7IIZVxbvh2uwxptXVaRcX
