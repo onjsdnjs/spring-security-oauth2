@@ -14,7 +14,7 @@ public class IndexController {
     public String index(Model model, @RegisteredOAuth2AuthorizedClient("keycloak") OAuth2AuthorizedClient oAuth2AuthorizedClient){
 
         OAuth2AccessToken accessToken = oAuth2AuthorizedClient.getAccessToken();
-        model.addAttribute("access token", accessToken.getTokenValue());
+        model.addAttribute("access_token", accessToken.getTokenValue());
 
         return "index";
     }

@@ -1,0 +1,26 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+    <script>
+        function token(){
+            fetch("/token")
+                .then(response => response.json())
+                .then(response => {
+                    console.log(response.data);
+                    window.localStorage.setItem("access_token", response);
+                })
+        }
+    </script>
+</head>
+<body>
+<div>OAuth2.0 Client</div>
+<div sec:authorize="isAnonymous()"><a th:href="@{/oauth2Login(username='user',password='1234')}">Login</a></div>
+<form action="#">
+    <p><input type="button" onclick="token()" value="access token" />
+</form>
+</body>
+</html>
