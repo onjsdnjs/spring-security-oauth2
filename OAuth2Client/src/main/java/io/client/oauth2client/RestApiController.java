@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -31,14 +32,13 @@ public class RestApiController {
     }
 
     @PostMapping("/photos")
-    public List<Photo> client(String accessToken){
+    public List<Photo> client(@RequestBody AccessToken accessToken){
 
         HttpHeaders header = new HttpHeaders();
         header.add("Authorization", "Bearer " + accessToken);
         HttpEntity<?> entity = new HttpEntity<>(header);
         String url = "http://localhost:8082/photos";
-        ResponseEntity<List<Photo>> response =
-                restTemplate.exchange(url, HttpMethod.GET, entity, new ParameterizedTypeReference<>(){});
+        ResponseEntity<List<Photo>> response = restTemplate.exchange(url, HttpMethod.GET, entity, new ParameterizedTypeReference<>(){});
         return response.getBody();
     }
 }

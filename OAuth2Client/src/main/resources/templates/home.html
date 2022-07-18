@@ -7,12 +7,31 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
     <script>
-        function photos(){
+        /*function photos(){
             fetch("http://localhost:8082/photos",{
                 method : "POST",
                 headers : {
                     Authorization : "Bearer "+ localStorage.getItem("access_token")
                 }
+            })
+                .then(response => {
+                    response.json().then(function(data){
+                        for(var prop in data) {
+                            document.querySelector("#photos").innerHTML = data[prop];
+                        }
+                    })
+                })
+        }*/
+
+        function photos(){
+            fetch("http://localhost:8081/photos",{
+                method : "POST",
+                headers : {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    token: localStorage.getItem("access_token")
+                })
             })
                 .then(response => {
                     response.json().then(function(data){
