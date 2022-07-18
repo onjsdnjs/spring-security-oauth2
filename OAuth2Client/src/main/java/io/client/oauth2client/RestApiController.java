@@ -12,6 +12,7 @@ import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2Aut
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -29,7 +30,7 @@ public class RestApiController {
         return oAuth2AuthorizedClient.getAccessToken();
     }
 
-    @GetMapping("/photos")
+    @PostMapping("/photos")
     public List<Photo> client(String accessToken){
 
         HttpHeaders header = new HttpHeaders();

@@ -8,15 +8,16 @@
 <title>Insert title here</title>
     <script>
         function photos(){
-            fetch("/photos",{
+            fetch("http://localhost:8082/photos",{
                 method : "POST",
                 headers : {
                     Authorization : "Bearer "+ localStorage.getItem("access_token")
                 }
             })
-                .then(response => response.json())
                 .then(response => {
-                    console.log(response.data);
+                    response.json().then(function(data){
+                        document.querySelector("#photos").innerHTML = data;
+                    })
                 })
         }
 
@@ -28,5 +29,8 @@
 <form action="#">
     <p><input type="button" onclick="photos()" value="사진 가져오기" />
 </form>
+<div id="photos">
+
+</div>
 </body>
 </html>

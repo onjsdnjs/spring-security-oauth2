@@ -8,11 +8,10 @@
     <script>
         function token(){
             fetch("/token")
-                // .then(response => response.json())
                 .then(response => {
                     response.json().then(function(data){
                         console.log("text 안에 데이터 = " + data.tokenValue);
-                        window.localStorage.setItem("access_token", response);
+                        window.localStorage.setItem("access_token", data.tokenValue);
                         location.href = "/home";
                     })
                 })
