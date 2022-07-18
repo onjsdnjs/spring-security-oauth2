@@ -1,17 +1,21 @@
 package io.client.oauth2client;
 
+import io.security.oauth2.springsecurityoauth2.Photo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,14 +30,14 @@ public class RestApiController {
     }
 
     @GetMapping("/photos")
-    public String client(String accessToken){
+    public List<Photo> client(String accessToken){
 
         HttpHeaders header = new HttpHeaders();
         header.add("Authorization", "Bearer " + accessToken);
         HttpEntity<?> entity = new HttpEntity<>(header);
-
-        restTemplate.exchange("http://localhost:8082/photos", HttpMethod.GET, entity, List<Photo>.class);
-
-        return "client";
+        String url = "http://localhost:8082/photos";
+        ResponseEntity<List<Photo>> response =
+                restTemplate.exchange(url, HttpMethod.GET, entity, new ParameterizedTypeReference<>(){});
+        return response.getBody();
     }
 }

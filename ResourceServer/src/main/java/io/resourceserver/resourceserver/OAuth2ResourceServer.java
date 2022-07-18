@@ -13,7 +13,8 @@ public class OAuth2ResourceServer {
     SecurityFilterChain securityFilterChain1(HttpSecurity http) throws Exception {
 
         http.authorizeRequests(
-                (requests) -> requests.antMatchers("/photos").access("SCOPE_photo")
+                (requests) -> requests
+                        //.antMatchers("/photos").access("SCOPE_photo")
                         .anyRequest().authenticated());
         http.oauth2ResourceServer().jwt();
         return http.build();

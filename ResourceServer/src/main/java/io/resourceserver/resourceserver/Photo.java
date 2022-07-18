@@ -1,4 +1,4 @@
-package io.security.oauth2.springsecurityoauth2;
+package io.resourceserver.resourceserver;
 
 import lombok.Data;
 
