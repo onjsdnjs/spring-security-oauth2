@@ -8,9 +8,11 @@
     <script>
         function token(){
             fetch("/token")
-                .then(response => response.json())
+                // .then(response => response.json())
                 .then(response => {
-                    console.log(response.data);
+                    response.text().then(function(data){
+                        console.log("text 안에 데이터 = " + data.tokenValue);
+                    })
                     window.localStorage.setItem("access_token", response);
                 })
         }
@@ -18,9 +20,11 @@
 </head>
 <body>
 <div>OAuth2.0 Client</div>
-<div sec:authorize="isAnonymous()"><a th:href="@{/oauth2Login(username='user',password='1234')}">Login</a></div>
+<div sec:authorize="isAnonymous()"><a th:href="@{/oauth2/authorization/keycloak}">Login</a></div>
+<div sec:authorize="isAuthenticated()">
 <form action="#">
     <p><input type="button" onclick="token()" value="access token" />
 </form>
+</div>
 </body>
 </html>

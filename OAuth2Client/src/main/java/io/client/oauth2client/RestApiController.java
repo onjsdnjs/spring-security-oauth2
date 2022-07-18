@@ -8,13 +8,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Controller
-public class IndexController {
+@RestController
+public class RestApiController {
 
-    @GetMapping("/")
-    public String index(){
-        return "index";
+    @GetMapping("/token")
+    public OAuth2AccessToken token(Model model, @RegisteredOAuth2AuthorizedClient("keycloak") OAuth2AuthorizedClient oAuth2AuthorizedClient){
+
+        return oAuth2AuthorizedClient.getAccessToken();
     }
 
+    @GetMapping("/photos")
+    public String client(String accessToken){
 
+        return "client";
+    }
 }
