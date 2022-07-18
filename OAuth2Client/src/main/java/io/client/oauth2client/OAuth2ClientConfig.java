@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.client.RestTemplate;
 
 @Configuration(proxyBeanMethods = false)
 public class OAuth2ClientConfig {
@@ -14,5 +15,10 @@ public class OAuth2ClientConfig {
         http.authorizeRequests((requests) -> requests.antMatchers("/").permitAll().anyRequest().authenticated());
         http.oauth2Login(Customizer.withDefaults());
         return http.build();
+   }
+
+   @Bean
+    public RestTemplate restTemplate(){
+       return new RestTemplate();
    }
 }
