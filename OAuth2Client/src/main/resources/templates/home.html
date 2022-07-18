@@ -7,21 +7,24 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
     <script>
-        /*function photos(){
-            fetch("http://localhost:8082/photos",{
-                method : "POST",
+        function remotePhotos(){
+            fetch("http://localhost:8082/remotePhotos",{
+                method : "GET",
                 headers : {
                     Authorization : "Bearer "+ localStorage.getItem("access_token")
                 }
             })
                 .then(response => {
                     response.json().then(function(data){
-                        for(var prop in data) {
-                            document.querySelector("#photos").innerHTML = data[prop];
+                        for(const prop in data) {
+                            document.querySelector("#remotePhotos").append(data[prop].userId);
+                            document.querySelector("#remotePhotos").append(data[prop].photoId);
+                            document.querySelector("#remotePhotos").append(data[prop].photoTitle);
+                            document.querySelector("#remotePhotos").append(data[prop].photoDescription);
                         }
                     })
                 })
-        }*/
+        }
 
         function photos(){
             fetch("/aaa?token="+localStorage.getItem("access_token"),
@@ -49,10 +52,11 @@
 <div>Welcome</div>
 <div sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></div>
 <form action="#">
-    <p><input type="button" onclick="photos()" value="사진 가져오기" />
+    <p><input type="button" onclick="photos()" value="Photos" />
+    <p><input type="button" onclick="remotePhotos()" value="Remote Photos" />
 </form>
-<div id="photos">
-
-</div>
+<div id="photos"></div>
+<p></p>
+<div id="remotePhotos"></div>
 </body>
 </html>

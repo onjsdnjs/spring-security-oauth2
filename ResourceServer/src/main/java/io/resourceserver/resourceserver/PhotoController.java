@@ -13,8 +13,17 @@ public class PhotoController {
     @GetMapping("/photos")
     public List<Photo> photos(){
 
-        Photo photo1 = getPhoto("1 ", "title1 ", "Description1 ");
-        Photo photo2 = getPhoto("2 ", "title2 ", "Description2 ");
+        Photo photo1 = getPhoto("ID1 ", "Title1 ", "Description1 ");
+        Photo photo2 = getPhoto("ID2 ", "Title2 ", "Description2 ");
+
+        return Arrays.asList(photo1, photo2);
+    }
+
+    @GetMapping("/remotePhotos")
+    public List<Photo> remotePhotos(){
+
+        Photo photo1 = getPhoto("RemoteID1 ", "RemoteTitle1 ", "RemoteDescription1 ");
+        Photo photo2 = getPhoto("RemoteID2 ", "RemoteTitle2 ", "RemoteDescription2 ");
 
         return Arrays.asList(photo1, photo2);
     }
