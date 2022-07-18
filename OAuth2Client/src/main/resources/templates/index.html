@@ -10,10 +10,11 @@
             fetch("/token")
                 // .then(response => response.json())
                 .then(response => {
-                    response.text().then(function(data){
+                    response.json().then(function(data){
                         console.log("text 안에 데이터 = " + data.tokenValue);
+                        window.localStorage.setItem("access_token", response);
+                        location.href = "/home";
                     })
-                    window.localStorage.setItem("access_token", response);
                 })
         }
     </script>
