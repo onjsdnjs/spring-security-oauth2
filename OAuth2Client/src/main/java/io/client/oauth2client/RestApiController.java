@@ -32,7 +32,7 @@ public class RestApiController {
     }
 
     @PostMapping("/photos")
-    public List<Photo> client(@RequestBody AccessToken accessToken){
+    public List<Photo> photos(@RequestBody AccessToken accessToken){
 
         HttpHeaders header = new HttpHeaders();
         header.add("Authorization", "Bearer " + accessToken);
