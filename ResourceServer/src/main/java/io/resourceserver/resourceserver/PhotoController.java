@@ -1,6 +1,7 @@
 package io.resourceserver.resourceserver;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
@@ -9,7 +10,7 @@ import java.util.List;
 @RestController
 public class PhotoController {
 
-    @GetMapping("/photos")
+    @PostMapping("/photos")
     public List<Photo> photos(){
 
         Photo photo1 = getPhoto("1", "Photo 1 title", "Photo 1 description");

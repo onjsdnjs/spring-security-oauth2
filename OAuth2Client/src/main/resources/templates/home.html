@@ -16,7 +16,9 @@
             })
                 .then(response => {
                     response.json().then(function(data){
-                        document.querySelector("#photos").innerHTML = data;
+                        for(var prop in data) {
+                            document.querySelector("#photos").innerHTML = data[prop];
+                        }
                     })
                 })
         }
