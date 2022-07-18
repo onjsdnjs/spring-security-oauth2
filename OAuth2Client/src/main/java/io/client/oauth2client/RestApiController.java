@@ -31,7 +31,7 @@ public class RestApiController {
         return oAuth2AuthorizedClient.getAccessToken();
     }
 
-    @GetMapping("/aaa")
+    @GetMapping("/photos")
     public List<Photo> photos(AccessToken accessToken){
 
         HttpHeaders header = new HttpHeaders();

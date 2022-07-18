@@ -27,7 +27,7 @@
         }
 
         function photos(){
-            fetch("/aaa?token="+localStorage.getItem("access_token"),
+            fetch("/photos?token="+localStorage.getItem("access_token"),
                 {
                     method : "GET",
                     headers : {
@@ -44,6 +44,7 @@
                         }
                     })
                 })
+                .catch((error) => console.log("error:", error));
         }
 
     </script>
