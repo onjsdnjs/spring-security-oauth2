@@ -10,17 +10,17 @@ import java.util.List;
 @RestController
 public class PhotoController {
 
-    @PostMapping("/photos")
+    @GetMapping("/photos")
     public List<Photo> photos(){
 
-        Photo photo1 = getPhoto("1", "Photo 1 title", "Photo 1 description");
-        Photo photo2 = getPhoto("2", "Photo 2 title", "Photo 2 description");
+        Photo photo1 = getPhoto("1 ", "title1 ", "Description1 ");
+        Photo photo2 = getPhoto("2 ", "title2 ", "Description2 ");
 
         return Arrays.asList(photo1, photo2);
     }
     private Photo getPhoto(String photoId, String photoTitle, String photoDescription) {
         Photo photo = new Photo();
-        photo.setUserId("user");
+        photo.setUserId("user ");
         photo.setPhotoId(photoId);
         photo.setPhotoTitle(photoTitle);
         photo.setPhotoDescription(photoDescription);

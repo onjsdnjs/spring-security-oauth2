@@ -24,19 +24,20 @@
         }*/
 
         function photos(){
-            fetch("http://localhost:8081/photos",{
-                method : "POST",
-                headers : {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    token: localStorage.getItem("access_token")
+            fetch("/aaa?token="+localStorage.getItem("access_token"),
+                {
+                    method : "GET",
+                    headers : {
+                        "Content-Type": "application/json",
+                    },
                 })
-            })
                 .then(response => {
                     response.json().then(function(data){
-                        for(var prop in data) {
-                            document.querySelector("#photos").innerHTML = data[prop];
+                        for(const prop in data) {
+                            document.querySelector("#photos").append(data[prop].userId);
+                            document.querySelector("#photos").append(data[prop].photoId);
+                            document.querySelector("#photos").append(data[prop].photoTitle);
+                            document.querySelector("#photos").append(data[prop].photoDescription);
                         }
                     })
                 })

@@ -31,11 +31,11 @@ public class RestApiController {
         return oAuth2AuthorizedClient.getAccessToken();
     }
 
-    @PostMapping("/photos")
-    public List<Photo> photos(@RequestBody AccessToken accessToken){
+    @GetMapping("/aaa")
+    public List<Photo> photos(AccessToken accessToken){
 
         HttpHeaders header = new HttpHeaders();
-        header.add("Authorization", "Bearer " + accessToken);
+        header.add("Authorization", "Bearer " + accessToken.getToken());
         HttpEntity<?> entity = new HttpEntity<>(header);
         String url = "http://localhost:8082/photos";
         ResponseEntity<List<Photo>> response = restTemplate.exchange(url, HttpMethod.GET, entity, new ParameterizedTypeReference<>(){});
