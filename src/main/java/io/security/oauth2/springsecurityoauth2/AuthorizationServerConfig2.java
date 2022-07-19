@@ -19,8 +19,8 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import java.util.UUID;
 
-@Configuration(proxyBeanMethods = false)
-@Import(OAuth2AuthorizationServerConfiguration.class)
+//@Configuration(proxyBeanMethods = false)
+//@Import(OAuth2AuthorizationServerConfiguration.class)
 public class AuthorizationServerConfig2 {
 
 	@Bean

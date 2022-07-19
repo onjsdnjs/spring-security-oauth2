@@ -1,3 +1,4 @@
+package io.security.oauth2.springsecurityoauth2;/*
 package io.security.oauth2.springsecurityoauth2;
 
 import org.springframework.context.annotation.Bean;
@@ -20,7 +21,7 @@ import org.springframework.security.web.authentication.LoginUrlAuthenticationEnt
 
 import java.util.UUID;
 
-//@Configuration(proxyBeanMethods = false)
+@Configuration(proxyBeanMethods = false)
 public class AuthorizationServerConfig {
 
 	@Bean
@@ -57,3 +58,4 @@ public class AuthorizationServerConfig {
 		return registeredClientRepository;
 	}
 }
+*/
