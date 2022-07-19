@@ -41,8 +41,8 @@ public class DefaultSecurityConfig {
 	@Bean
 	UserDetailsService users() {
 		UserDetails user = User.withDefaultPasswordEncoder()
-				.username("onjsdnjs")
-				.password("pass")
+				.username("user")
+				.password("1234")
 				.roles("USER")
 				.build();
 		return new InMemoryUserDetailsManager(user);
