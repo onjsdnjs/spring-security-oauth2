@@ -18,11 +18,15 @@ package io.security.oauth2.springsecurityoauth2;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -38,13 +42,11 @@ public class DefaultSecurityConfig {
 			.formLogin(withDefaults());
 		return http.build();
 	}
+
 	@Bean
-	UserDetailsService users() {
-		UserDetails user = User.withDefaultPasswordEncoder()
-				.username("user")
-				.password("1234")
-				.roles("USER")
-				.build();
+	public UserDetailsService getUserDetailsService() {
+
+		User user = new User("user", "{noop}1234", List.of(new SimpleGrantedAuthority("ROLE_USER")));
 		return new InMemoryUserDetailsManager(user);
 	}
 }
