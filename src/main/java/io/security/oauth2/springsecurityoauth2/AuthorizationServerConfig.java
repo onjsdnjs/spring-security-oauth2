@@ -17,6 +17,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.core.OAuth2AuthorizationCode;
+import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.server.authorization.InMemoryOAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.authentication.OAuth2AuthorizationCodeRequestAuthenticationToken;
@@ -30,6 +31,7 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -61,7 +63,11 @@ public class AuthorizationServerConfig {
                                                 System.out.println(authentication);
                                                 String redirectUri = authentication1.getRedirectUri();
                                                 String authorizationCode = authentication1.getAuthorizationCode().getTokenValue();
-                                                response.sendRedirect(redirectUri+"?code="+authorizationCode);
+                                                String state = null;
+                                                if (StringUtils.hasText(authentication1.getState())) {
+                                                    state = authentication1.getState();
+                                                }
+                                                response.sendRedirect(redirectUri+"?code="+authorizationCode+"&state="+state);
                                             }
                                         }
                                 )
