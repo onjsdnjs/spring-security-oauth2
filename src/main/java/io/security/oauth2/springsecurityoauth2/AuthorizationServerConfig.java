@@ -60,8 +60,8 @@ public class AuthorizationServerConfig {
                                                 OAuth2AuthorizationCodeRequestAuthenticationToken authentication1 = (OAuth2AuthorizationCodeRequestAuthenticationToken) authentication;
                                                 System.out.println(authentication);
                                                 String redirectUri = authentication1.getRedirectUri();
-                                                OAuth2AuthorizationCode authorizationCode = authentication1.getAuthorizationCode();
-                                                response.sendRedirect(redirectUri+"?code="+authorizationCode.getTokenValue());
+                                                String authorizationCode = authentication1.getAuthorizationCode().getTokenValue();
+                                                response.sendRedirect(redirectUri+"?code="+authorizationCode);
                                             }
                                         }
                                 )
