@@ -46,8 +46,8 @@ public class AuthorizationServerConfig {
 				.redirectUri("http://127.0.0.1:8081/login/oauth2/code/oauth2-client-app")
 				.redirectUri("http://127.0.0.1:8081")
 				.scope(OidcScopes.OPENID)
-				.scope("message.read")
-				.scope("message.write")
+				.scope("read")
+				.scope("write")
 				.clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
 				.build();
 
