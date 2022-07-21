@@ -16,8 +16,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
+import org.springframework.security.oauth2.core.OAuth2AuthorizationCode;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.server.authorization.InMemoryOAuth2AuthorizationService;
+import org.springframework.security.oauth2.server.authorization.authentication.OAuth2AuthorizationCodeRequestAuthenticationToken;
 import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
@@ -55,7 +57,11 @@ public class AuthorizationServerConfig {
                                 .authorizationResponseHandler(new AuthenticationSuccessHandler() {
                                             @Override
                                             public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+                                                OAuth2AuthorizationCodeRequestAuthenticationToken authentication1 = (OAuth2AuthorizationCodeRequestAuthenticationToken) authentication;
                                                 System.out.println(authentication);
+                                                String redirectUri = authentication1.getRedirectUri();
+                                                OAuth2AuthorizationCode authorizationCode = authentication1.getAuthorizationCode();
+                                                response.sendRedirect(redirectUri+"?code="+authorizationCode.getTokenValue());
                                             }
                                         }
                                 )
@@ -63,6 +69,7 @@ public class AuthorizationServerConfig {
                                     @Override
                                     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
                                         System.out.println(exception.toString());
+                                        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
                                     }
                                 })
                 );
