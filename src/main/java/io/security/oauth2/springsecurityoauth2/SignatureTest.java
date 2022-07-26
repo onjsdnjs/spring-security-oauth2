@@ -15,13 +15,11 @@ public class SignatureTest {
         KeyPair keyPair = keyPairGenerator.genKeyPair();
 
         byte[] data = message.getBytes("UTF-8");
-        Signature signature = Signature.getInstance("MD5WithRSA");
+        Signature signature = Signature.getInstance("SHA256WithRSA");
         signature.initSign(keyPair.getPrivate());
         signature.update(data);
 
         byte[] sign = signature.sign();
-        byte[] encode = Base64.getEncoder().encode(sign);
-        System.out.println("전자서명된 데이타 : " + encode);
 
         signature.initVerify(keyPair.getPublic());
         signature.update(data);
