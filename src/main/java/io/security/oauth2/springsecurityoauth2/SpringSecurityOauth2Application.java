@@ -1,8 +1,5 @@
 package io.security.oauth2.springsecurityoauth2;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
 import static io.security.oauth2.springsecurityoauth2.MessageDigestTest.createMD5;
 import static io.security.oauth2.springsecurityoauth2.MessageDigestTest.validateMD5;
 
@@ -14,5 +11,4 @@ public class SpringSecurityOauth2Application {
         validateMD5("스프링 시큐리티");
 
     }
-
 }
