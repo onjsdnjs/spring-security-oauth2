@@ -21,7 +21,7 @@ public class MessageDigestTest {
 
         byte[] digest = messageDigest.digest();
 
-        FileOutputStream fileOutputStream = new FileOutputStream("c:\\message.txt");
+        FileOutputStream fileOutputStream = new FileOutputStream("E:\\project\\spring-security-oauth2\\src\\main\\resources\\message.txt");
         fileOutputStream.write(salt);
         fileOutputStream.write(digest);
         fileOutputStream.close();
@@ -30,7 +30,7 @@ public class MessageDigestTest {
     public static void validateMD5(String message) throws Exception {
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        FileInputStream fis = new FileInputStream("c:\\message.txt");
+        FileInputStream fis = new FileInputStream("E:\\project\\spring-security-oauth2\\src\\main\\resources\\message.txt");
         int theByte = 0;
         while ((theByte = fis.read()) != -1)
             byteArrayOutputStream.write(theByte);
@@ -46,7 +46,7 @@ public class MessageDigestTest {
         byte[] digest = md.digest();
 
         byte[] digestInFile = new byte[hashedMessage.length - 10];
-        System.arraycopy(hashedMessage, 12, digestInFile, 0, hashedMessage.length - 10);
+        System.arraycopy(hashedMessage, 10, digestInFile, 0, hashedMessage.length - 10);
 
         if (Arrays.equals(digest, digestInFile))
             System.out.println("message matches.");
