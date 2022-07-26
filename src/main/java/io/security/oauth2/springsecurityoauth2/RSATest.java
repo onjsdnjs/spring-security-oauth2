@@ -8,6 +8,7 @@ import java.util.Base64;
 public class RSATest {
 
     public static void rsa(String message) throws Exception {
+
         KeyPair keyPair = RSAGen.genKeyPair();
         PublicKey publicKey = keyPair.getPublic();
         PrivateKey privateKey = keyPair.getPrivate();
@@ -15,17 +16,25 @@ public class RSATest {
         String encrypted = RSAGen.encrypt(message, publicKey);
         String decrypted = RSAGen.decrypt(encrypted, privateKey);
 
+        System.out.println("message : " + message);
+        System.out.println("decrypted : " + decrypted);
+
         byte[] bytePublicKey = publicKey.getEncoded();
         String base64PublicKey = Base64.getEncoder().encodeToString(bytePublicKey);
         byte[] bytePrivateKey = privateKey.getEncoded();
         String base64PrivateKey = Base64.getEncoder().encodeToString(bytePrivateKey);
 
-        PublicKey rePublicKey = RSAGen.getPublicKey(base64PublicKey);
-        String encryptedRe = RSAGen.encrypt(message, rePublicKey);
-        String decryptedRe = RSAGen.decrypt(encryptedRe, privateKey);
+        PublicKey X509PublicKey = RSAGen.getPublicKeyFromKeySpec(base64PublicKey);
+        String encrypted2 = RSAGen.encrypt(message, X509PublicKey);
+        String decrypted2 = RSAGen.decrypt(encrypted2, privateKey);
 
-        // base64 암호화한 String 에서 Private Key 를 다시생성한후 복호화 테스트를 진행
-        PrivateKey privateKeyRe = RSAGen.getPrivateKey(base64PrivateKey);
-        String decryptedReRe = RSAGen.decrypt(encryptedRe, privateKeyRe);
+        System.out.println("message : " + message);
+        System.out.println("decrypted2 : " + decrypted2);
+
+        PrivateKey PKCS8PrivateKey = RSAGen.getPrivateKeyFromKeySpec(base64PrivateKey);
+        String decrypted3 = RSAGen.decrypt(encrypted2, PKCS8PrivateKey);
+
+        System.out.println("message : " + message);
+        System.out.println("decrypted3 : " + decrypted3);
     }
 }

@@ -38,13 +38,13 @@ public class RSAGen {
         return new String(bytePlain, "utf-8");
     }
 
-    public static PublicKey getPublicKey(String base64PublicKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public static PublicKey getPublicKeyFromKeySpec(String base64PublicKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
         byte[] decodedBase64PubKey = Base64.getDecoder().decode(base64PublicKey);
 
         return KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(decodedBase64PubKey));
     }
 
-    public static PrivateKey getPrivateKey(String base64PrivateKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public static PrivateKey getPrivateKeyFromKeySpec(String base64PrivateKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
         byte[] decodedBase64PrivateKey = Base64.getDecoder().decode(base64PrivateKey);
 
         return KeyFactory.getInstance("RSA").generatePrivate(new PKCS8EncodedKeySpec(decodedBase64PrivateKey));
