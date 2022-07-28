@@ -9,6 +9,7 @@
 </head>
 <body>
 <div>Welcome</div></br></br>
+<span th:text = "${oAuth2User}"/></br></br>
 <span th:text = "${authentication}"/></br></br>
 <div sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></div>
 </body>
