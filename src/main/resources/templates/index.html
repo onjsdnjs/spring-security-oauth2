@@ -13,5 +13,6 @@
     <a th:href="@{/oauth2/authorization/google}">구글 로그인</a></br>
     <a th:href="@{/oauth2/authorization/naver}">네이버 로그인</a></br>
 </div>
+<div sec:authorize="isAuthenticated()"><a th:href="@{/home}">Home 으로</a></div>
 </body>
 </html>
