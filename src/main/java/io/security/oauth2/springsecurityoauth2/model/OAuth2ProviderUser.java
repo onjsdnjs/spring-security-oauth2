@@ -19,8 +19,8 @@ public abstract class OAuth2ProviderUser implements ProviderUser {
     private OAuth2User oAuth2User;
     private ClientRegistration clientRegistration;
 
-    public OAuth2ProviderUser(OAuth2User oAuth2User, ClientRegistration clientRegistration){
-        this.attributes = oAuth2User.getAttributes();
+    public OAuth2ProviderUser(Map<String, Object> attributes, OAuth2User oAuth2User, ClientRegistration clientRegistration){
+        this.attributes = attributes;
         this.oAuth2User = oAuth2User;
         this.clientRegistration = clientRegistration;
     }
