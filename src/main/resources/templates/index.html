@@ -13,6 +13,9 @@
     <a th:href="@{/oauth2/authorization/google}">구글 로그인</a></br>
     <a th:href="@{/oauth2/authorization/naver}">네이버 로그인</a></br>
 </div>
-<div sec:authorize="isAuthenticated()"><a th:href="@{/home}">Home 으로</a></div>
+<div sec:authorize="isAuthenticated()">
+    <a th:href="@{/user}">OAuth2 User</a></br>
+    <a th:href="@{/oidc}">OpenID User</a>
+</div>
 </body>
 </html>
