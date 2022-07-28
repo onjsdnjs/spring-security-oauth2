@@ -1,18 +1,14 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta charset="UTF-8">
     <title>Insert title here</title>
 </head>
 <body>
-
-<div>Welcome <span th:text = "${oAuth2AuthenticationToken}"/></div>
-
-<div>
-    <a href="/logout">Logout</a>
-</div>
-
+<div>Welcome <span th:text = "${authentication}"/></div>
+<div sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></div>
 </body>
 </html>
