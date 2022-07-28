@@ -8,7 +8,8 @@
     <title>Insert title here</title>
 </head>
 <body>
-<div>Welcome <span th:text = "${authentication}"/></div>
+<div>Welcome</div></br></br>
+<span th:text = "${authentication}"/></br></br>
 <div sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></div>
 </body>
 </html>
