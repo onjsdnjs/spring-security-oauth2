@@ -32,6 +32,7 @@ public class OAuth2ClientConfig {
                 userInfoEndpointConfig -> userInfoEndpointConfig
                         .userService(customOAuth2UserService)
                         .oidcUserService(customOidcUserService)));
+        http.logout().logoutSuccessUrl("/");
         return http.build();
    }
 
