@@ -20,6 +20,7 @@ public class CustomOAuth2UserService extends AbstractOAuth2UserService implement
         OAuth2User oAuth2User = oAuth2UserService.loadUser(userRequest);
 
         ProviderUser providerUser = super.providerUser(clientRegistration,oAuth2User);
+        // 회원가입하기
         super.register(providerUser, userRequest);
 
         return oAuth2User;
