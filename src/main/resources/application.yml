@@ -38,5 +38,5 @@ spring:
                         authorization-grant-type: authorization_code
                         client-name: naver-client-app
                         redirect-uri: http://localhost:8081/login/oauth2/code/naver
-#                        scope: profile,email
-                        scope: openid,profile,email
+                        scope: profile,email
+#                        scope: openid,profile,email

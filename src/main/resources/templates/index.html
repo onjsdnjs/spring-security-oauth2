@@ -15,7 +15,10 @@
 </div>
 <div sec:authorize="isAuthenticated()">
     <a th:href="@{/user}">OAuth2 User</a></br>
-    <a th:href="@{/oidc}">OpenID User</a>
+    <a th:href="@{/oidc}">OpenID User</a></br></br>
+    <div><p>Rest API</p></div>
+    <a th:href="@{/api/user}">OAuth2 User</a></br>
+    <a th:href="@{/api/oidc}">OpenID User</a>
 </div>
 </body>
 </html>

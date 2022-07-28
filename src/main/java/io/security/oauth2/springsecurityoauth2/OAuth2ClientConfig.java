@@ -21,10 +21,10 @@ public class OAuth2ClientConfig {
     @Bean
     SecurityFilterChain oauth2SecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests((requests) -> requests
-                .antMatchers("/user")
+                .antMatchers("/user","/api/user")
                 .access("hasRole('SCOPE_profile')")
 //                .access("hasAuthority('SCOPE_profile')")
-                .antMatchers("/oidc")
+                .antMatchers("/oidc","/api/oidc")
                 .access("hasRole('SCOPE_openid')")
                 //.access("hasAuthority('SCOPE_openid')")
                 .antMatchers("/")
