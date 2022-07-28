@@ -16,7 +16,7 @@ public class GoogleUser extends OAuth2ProviderUser {
 
     @Override
     public String getUsername() {
-        return (String)getAttributes().get("preferred_username");
+        return (String)getAttributes().get("sub");
     }
 
 }
