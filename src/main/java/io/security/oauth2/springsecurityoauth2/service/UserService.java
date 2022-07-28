@@ -14,10 +14,12 @@ public class UserService {
     public void register(String registrationId, ProviderUser providerUser) {
 
         User user = User.builder().registrationId(registrationId)
-                .id(providerUser.getProvider())
+                .id(providerUser.getId())
                 .username(providerUser.getUsername())
                 .password(providerUser.getPassword())
                 .authorities(providerUser.getAuthorities())
+                .provider(providerUser.getProvider())
+                .email(providerUser.getEmail())
                 .build();
 
         userRepository.register(user);
