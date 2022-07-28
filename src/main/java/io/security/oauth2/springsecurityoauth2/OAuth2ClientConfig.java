@@ -23,8 +23,10 @@ public class OAuth2ClientConfig {
         http.authorizeRequests((requests) -> requests
                 .antMatchers("/user")
                 .access("hasRole('SCOPE_profile')")
+//                .access("hasAuthority('SCOPE_profile')")
                 .antMatchers("/oidc")
                 .access("hasRole('SCOPE_openid')")
+                //.access("hasAuthority('SCOPE_openid')")
                 .antMatchers("/")
                 .permitAll()
                 .anyRequest().authenticated());
@@ -36,7 +38,7 @@ public class OAuth2ClientConfig {
         return http.build();
    }
 
-   @Bean
+   @Bean // hasAuthority 일경우 정의하지 않는다
     public GrantedAuthoritiesMapper grantedAuthoritiesMapper(){
        SimpleAuthorityMapper simpleAuthorityMapper = new SimpleAuthorityMapper();
        simpleAuthorityMapper.setPrefix("ROLE_");
