@@ -25,7 +25,7 @@ public class HomeController {
         return "home";
     }
 
-    @GetMapping("/oidc")
+    @GetMapping("/oidc") // 요청시 scope 에 openid 가 포함되어야 oidcUser 가 생성된다
     public String oidc(Model model, Authentication authentication, @AuthenticationPrincipal OidcUser oidcUser) {
         model.addAttribute("oAuth2User",oidcUser);
         model.addAttribute("authentication",authentication);
