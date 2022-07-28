@@ -25,6 +25,8 @@ public class OAuth2ClientConfig {
                 .access("hasRole('SCOPE_profile')")
                 .antMatchers("/oidc")
                 .access("hasRole('SCOPE_openid')")
+                .antMatchers("/")
+                .permitAll()
                 .anyRequest().authenticated());
         http.oauth2Login(oauth2 -> oauth2.userInfoEndpoint(
                 userInfoEndpointConfig -> userInfoEndpointConfig
