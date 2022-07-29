@@ -14,11 +14,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
 
     @GetMapping("/user")
-    public String user(Model model, Authentication authentication) {
-
-        OAuth2User oAuth2User = (OAuth2User)authentication.getPrincipal();
+    public String user(Model model, Authentication authentication, @AuthenticationPrincipal OAuth2User oAuth2User) {
         System.out.println("oAuth2User = " + oAuth2User);
-        model.addAttribute("authentication",authentication);
+        OAuth2AuthenticationToken authenticationToken = (OAuth2AuthenticationToken)authentication;
+        model.addAttribute("provider",authenticationToken.getAuthorizedClientRegistrationId());
 
         return "home";
     }
@@ -26,7 +25,8 @@ public class HomeController {
     @GetMapping("/oidc") // 요청시 scope 에 openid 가 포함되어야 oidcUser 가 생성된다
     public String oidc(Model model, Authentication authentication, @AuthenticationPrincipal OidcUser oidcUser) {
         System.out.println("oidcUser = " + oidcUser);
-        model.addAttribute("authentication",authentication);
+        OAuth2AuthenticationToken authenticationToken = (OAuth2AuthenticationToken)authentication;
+        model.addAttribute("provider",authenticationToken.getAuthorizedClientRegistrationId());
         return "home";
     }
 }
