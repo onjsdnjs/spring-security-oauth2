@@ -17,7 +17,7 @@ public class HomeController {
     public String user(Model model, Authentication authentication, @AuthenticationPrincipal OAuth2User oAuth2User) {
         System.out.println("oAuth2User = " + oAuth2User);
         OAuth2AuthenticationToken authenticationToken = (OAuth2AuthenticationToken)authentication;
-        model.addAttribute("provider",authenticationToken.getAuthorizedClientRegistrationId());
+        model.addAttribute("provider",authenticationToken.getAuthorizedClientRegistrationId().toUpperCase());
 
         return "home";
     }
@@ -26,7 +26,7 @@ public class HomeController {
     public String oidc(Model model, Authentication authentication, @AuthenticationPrincipal OidcUser oidcUser) {
         System.out.println("oidcUser = " + oidcUser);
         OAuth2AuthenticationToken authenticationToken = (OAuth2AuthenticationToken)authentication;
-        model.addAttribute("provider",authenticationToken.getAuthorizedClientRegistrationId());
+        model.addAttribute("provider",authenticationToken.getAuthorizedClientRegistrationId().toUpperCase());
         return "home";
     }
 }
