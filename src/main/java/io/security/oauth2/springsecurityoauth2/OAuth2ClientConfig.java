@@ -29,7 +29,7 @@ public class OAuth2ClientConfig {
                 //.access("hasAuthority('SCOPE_openid')")
                 .antMatchers("/")
                 .permitAll()
-                .anyRequest().authenticated());
+                .anyRequest().permitAll());
         http.oauth2Login(oauth2 -> oauth2.userInfoEndpoint(
                 userInfoEndpointConfig -> userInfoEndpointConfig
                         .userService(customOAuth2UserService)

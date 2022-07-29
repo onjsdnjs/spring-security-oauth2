@@ -40,3 +40,5 @@ spring:
                         redirect-uri: http://localhost:8081/login/oauth2/code/naver
                         scope: profile,email
 #                        scope: openid,profile,email
+    mvc:
+      static-path-pattern: /static/**

@@ -3,22 +3,57 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8">
-    <title>Insert title here</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="static/fonts/icomoon/style.css">
+
+    <link rel="stylesheet" href="static/css/owl.carousel.min.css">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="static/css/bootstrap.min.css">
+
+    <!-- Style -->
+    <link rel="stylesheet" href="static/css/style.css">
+
+    <title>Login</title>
 </head>
 <body>
-<div><p>OAuth2.0 Client</p></div>
-<div sec:authorize="isAnonymous()">
-    <a th:href="@{/oauth2/authorization/keycloak}">keycloak 로그인</a></br>
-    <a th:href="@{/oauth2/authorization/google}">구글 로그인</a></br>
-    <a th:href="@{/oauth2/authorization/naver}">네이버 로그인</a></br>
+<div class="content">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-5" sec:authorize="isAnonymous()">
+                <div class="social-login text-center">
+                    <a th:href="@{/oauth2/authorization/google}" class="google btn btn-block">
+                        <span>Sign in with Google</span>
+                    </a>
+                    <a th:href="@{/oauth2/authorization/naver}" class="naver btn btn-block">
+                        <span>Sign in with Naver</span>
+                    </a>
+                    <a th:href="@{/oauth2/authorization/keycloak}" class="keycloak btn btn-block">
+                        <span >Sign in with Keycloak</span>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div sec:authorize="isAuthenticated()">
+                    <a th:href="@{/user}">OAuth2 User</a></br>
+                    <a th:href="@{/oidc}">OpenID User</a></br></br>
+                    <div><p>Rest API</p></div>
+                    <a th:href="@{/api/user}">OAuth2 User</a></br>
+                    <a th:href="@{/api/oidc}">OpenID User</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<div sec:authorize="isAuthenticated()">
-    <a th:href="@{/user}">OAuth2 User</a></br>
-    <a th:href="@{/oidc}">OpenID User</a></br></br>
-    <div><p>Rest API</p></div>
-    <a th:href="@{/api/user}">OAuth2 User</a></br>
-    <a th:href="@{/api/oidc}">OpenID User</a>
-</div>
+
+
+<script src="static/js/jquery-3.3.1.min.js"></script>
+<script src="static/js/popper.min.js"></script>
+<script src="static/js/bootstrap.min.js"></script>
+<script src="static/js/main.js"></script>
 </body>
 </html>
