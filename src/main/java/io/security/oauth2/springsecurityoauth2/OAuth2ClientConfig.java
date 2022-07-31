@@ -21,10 +21,10 @@ public class OAuth2ClientConfig {
     @Bean
     SecurityFilterChain oauth2SecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests((requests) -> requests
-                .antMatchers("/user","/api/user")
+                .antMatchers("/api/user")
                 .access("hasRole('SCOPE_profile')")
 //                .access("hasAuthority('SCOPE_profile')")
-                .antMatchers("/oidc","/api/oidc")
+                .antMatchers("/api/oidc")
                 .access("hasRole('SCOPE_openid')")
                 //.access("hasAuthority('SCOPE_openid')")
                 .antMatchers("/")
@@ -38,10 +38,15 @@ public class OAuth2ClientConfig {
         return http.build();
    }
 
-   @Bean // hasAuthority 일경우 정의하지 않는다
+   /*@Bean // hasAuthority 일경우 정의하지 않는다
     public GrantedAuthoritiesMapper grantedAuthoritiesMapper(){
        SimpleAuthorityMapper simpleAuthorityMapper = new SimpleAuthorityMapper();
        simpleAuthorityMapper.setPrefix("ROLE_");
        return simpleAuthorityMapper;
-   }
+   }*/
+
+    @Bean
+    public GrantedAuthoritiesMapper customAuthorityMapper(){
+        return new CustomAuthorityMapper();
+    }
 }

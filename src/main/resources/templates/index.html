@@ -33,17 +33,22 @@
                         <span>Sign in with Naver</span>
                     </a>
                     <a th:href="@{/oauth2/authorization/keycloak}" class="keycloak btn btn-block">
-                        <span >Sign in with Keycloak</span>
+                        <span>Sign in with Keycloak</span>
                     </a>
                 </div>
             </div>
             <div class="col-md-5">
-                <div sec:authorize="isAuthenticated()">
-                    <a th:href="@{/user}">OAuth2 User</a></br>
-                    <a th:href="@{/oidc}">OpenID User</a></br></br>
-                    <div><p>Rest API</p></div>
-                    <a th:href="@{/api/user}">OAuth2 User</a></br>
-                    <a th:href="@{/api/oidc}">OpenID User</a>
+                <div class="social-login text-center">
+                    <div sec:authorize="isAuthenticated()">
+                        <div><h2>안녕하세요 <span th:text="${user}"/> 님</h2></div>
+                        </br></br>
+                        <!--<a th:href="@{/user}">OAuth2 </a></br>
+                        <a th:href="@{/oidc}">OpenID 인증</a></br></br>-->
+                        <!--<div><p>Rest API</p></div>-->
+                        <a th:href="@{/api/user}" class="keycloak btn btn-block">OAuth2 인증 정보</a>
+                        <a th:href="@{/api/oidc}" class="keycloak btn btn-block">OpenID 인증 정보</a></br></br>
+                        <a th:href="@{/logout}" class="google btn btn-block">Logout</a>
+                    </div>
                 </div>
             </div>
         </div>
