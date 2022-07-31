@@ -22,7 +22,7 @@ public class OAuth2ClientConfig {
     SecurityFilterChain oauth2SecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests((requests) -> requests
                 .antMatchers("/api/user")
-                .access("hasRole('SCOPE_profile')")
+                .access("hasAnyRole('SCOPE_profile','SCOPE_email')")
 //                .access("hasAuthority('SCOPE_profile')")
                 .antMatchers("/api/oidc")
                 .access("hasRole('SCOPE_openid')")
