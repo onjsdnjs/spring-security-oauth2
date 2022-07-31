@@ -9,10 +9,13 @@ import java.util.Base64;
 
 public class MacTest {
 
-    public static String hmac(String data) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException {
+    public static void hmac(String data) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException {
 
-        String secret = "hmacKey";
-        String algorithms = "HmacSHA256";
+        hmacBase64("secretKey", data, "HmacMD5");
+        hmacBase64("secretKey", data, "HmacSHA256");
+    }
+
+    public static void hmacBase64(String secret, String data, String algorithms) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException {
 
         SecretKeySpec secretKey = new SecretKeySpec(secret.getBytes("utf-8"), algorithms);
 
@@ -22,6 +25,8 @@ public class MacTest {
 
         byte[] hash = mac.doFinal(data.getBytes());
 
-        return Base64.getEncoder().encodeToString(hash);
+        String encodedStr = Base64.getEncoder().encodeToString(hash);
+
+        System.out.println(algorithms + ": " + encodedStr);
     }
 }
