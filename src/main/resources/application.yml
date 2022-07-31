@@ -25,8 +25,8 @@ spring:
                         client-name: oauth2-client-app
                         client-secret: CQueEWXZYmv7IIZVxbvh2uwxptXVaRcX
                         redirect-uri: http://localhost:8081/login/oauth2/code/keycloak
-#                        scope: profile,email
-                        scope: openid,profile,email
+                        scope: profile,email
+#                        scope: openid,profile,email
                     google:
                         client-id: 823010453529-vtpf78akl4dc0rn8s9uq649v1crtpn0t.apps.googleusercontent.com
                         client-secret: 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
