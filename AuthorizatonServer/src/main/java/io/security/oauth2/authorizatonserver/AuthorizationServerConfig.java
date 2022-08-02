@@ -53,33 +53,6 @@ public class AuthorizationServerConfig {
         OAuth2AuthorizationServerConfigurer<HttpSecurity> authorizationServerConfigurer =
                 new OAuth2AuthorizationServerConfigurer<>();
         RequestMatcher endpointsMatcher = authorizationServerConfigurer.getEndpointsMatcher();
-        authorizationServerConfigurer.authorizationEndpoint(authorizationEndpoint ->
-                        authorizationEndpoint
-//                                .authenticationProvider(new CustomAuthenticationProvider())
-                                .authorizationResponseHandler(new AuthenticationSuccessHandler() {
-                                            @Override
-                                            public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-                                                OAuth2AuthorizationCodeRequestAuthenticationToken authentication1 = (OAuth2AuthorizationCodeRequestAuthenticationToken) authentication;
-                                                System.out.println(authentication);
-                                                String redirectUri = authentication1.getRedirectUri();
-                                                String authorizationCode = authentication1.getAuthorizationCode().getTokenValue();
-                                                String state = null;
-                                                if (StringUtils.hasText(authentication1.getState())) {
-                                                    state = authentication1.getState();
-                                                }
-                                                response.sendRedirect(redirectUri+"?code="+authorizationCode+"&state="+state);
-                                            }
-                                        }
-                                )
-                                .errorResponseHandler(new AuthenticationFailureHandler() {
-                                    @Override
-                                    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-                                        System.out.println(exception.toString());
-                                        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                                    }
-                                })
-                );
-
         http
                 .requestMatcher(endpointsMatcher)
                 .authorizeRequests(authorizeRequests ->
@@ -87,6 +60,7 @@ public class AuthorizationServerConfig {
                 )
                 .csrf(csrf -> csrf.ignoringRequestMatchers(endpointsMatcher))
                 .apply(authorizationServerConfigurer);
+        http.oauth2ResourceServer().jwt();
         http
                 .exceptionHandling(exceptions ->
                         exceptions.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
@@ -129,11 +103,6 @@ public class AuthorizationServerConfig {
     }
 
     @Bean
-    public InMemoryOAuth2AuthorizationService oAuth2AuthorizationService() {
-        return new InMemoryOAuth2AuthorizationService();
-    }
-
-    @Bean
     public RegisteredClientRepository registeredClientRepository() {
 
         RegisteredClient registeredClient1 = getRegisteredClient("oauth2-client-app1", "{noop}secret1", "read", "write");
@@ -153,7 +122,7 @@ public class AuthorizationServerConfig {
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
-                .redirectUri("http://127.0.0.1:8081/login/oauth2/code/oauth2-client-app")
+                .redirectUri("http://127.0.0.1:8081/login/oauth2/code/springOAuth2")
                 .redirectUri("http://127.0.0.1:8081")
                 .scope(OidcScopes.OPENID)
                 .scope(scope1)
@@ -162,4 +131,3 @@ public class AuthorizationServerConfig {
                 .build();
     }
 }
-

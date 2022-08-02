@@ -6,7 +6,7 @@ plugins {
 
 group = 'io.security.oauth2'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
+sourceCompatibility = '11'
 
 configurations {
     compileOnly {

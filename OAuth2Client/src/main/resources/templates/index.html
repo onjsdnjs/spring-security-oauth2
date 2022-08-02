@@ -20,7 +20,7 @@
 </head>
 <body>
 <div>OAuth2.0 Client</div>
-<div sec:authorize="isAnonymous()"><a th:href="@{/oauth2/authorization/keycloak}">Login</a></div>
+<div sec:authorize="isAnonymous()"><a th:href="@{/oauth2/authorization/springOAuth2}">Login</a></div>
 <div sec:authorize="isAuthenticated()">
 <form action="#">
     <p><input type="button" onclick="token()" value="access token" />
