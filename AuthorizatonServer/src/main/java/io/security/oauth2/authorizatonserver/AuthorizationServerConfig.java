@@ -61,7 +61,7 @@ import java.util.UUID;
 @Configuration(proxyBeanMethods = false)
 public class AuthorizationServerConfig {
 
-    private static String CLIENT_SECRET = "bCzY/M48bbkwBEWjmNSIEPfwApcvXOnkCxORBEbPr+4=";
+    private final String CLIENT_SECRET = "bCzY/M48bbkwBEWjmNSIEPfwApcvXOnkCxORBEbPr+4=";
 
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -152,7 +152,7 @@ public class AuthorizationServerConfig {
     private RegisteredClient registeredClient() {
         return RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("oauth2-client-app")
-                .clientSecret(CLIENT_SECRET)
+                .clientSecret("{noop}"+CLIENT_SECRET)
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_POST)
                 .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
