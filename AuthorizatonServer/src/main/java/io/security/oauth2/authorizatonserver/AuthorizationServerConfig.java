@@ -1,6 +1,8 @@
 package io.security.oauth2.authorizatonserver;
 
 import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.KeyUse;
+import com.nimbusds.jose.jwk.OctetSequenceKey;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
@@ -20,6 +22,8 @@ import org.springframework.security.oauth2.core.OAuth2AuthorizationCode;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.authorization.InMemoryOAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.authentication.OAuth2AuthorizationCodeRequestAuthenticationToken;
 import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
@@ -34,10 +38,13 @@ import org.springframework.security.web.authentication.LoginUrlAuthenticationEnt
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.util.StringUtils;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
@@ -109,19 +116,34 @@ public class AuthorizationServerConfig {
     }
 
     @Bean
-    public RegisteredClientRepository registeredClientRepository() {
-
-        RegisteredClient registeredClient1 = getRegisteredClient("oauth2-client-app1", "{noop}secret1", "read", "write");
-        RegisteredClient registeredClient2 = getRegisteredClient("oauth2-client-app2", "{noop}secret2", "read", "delete");
-        RegisteredClient registeredClient3 = getRegisteredClient("oauth2-client-app3", "{noop}secret3", "read", "update");
-
-        return new InMemoryRegisteredClientRepository(Arrays.asList(registeredClient1, registeredClient2, registeredClient3));
+    JwtEncoder jwtEncoder(JWKSource<SecurityContext> jwkSource) {
+        return new NimbusJwtEncoder(jwkSource);
     }
 
-    private RegisteredClient getRegisteredClient(String clientId, String clientSecret, String scope1, String scope2) {
+    @Bean
+    public JWKSource<SecurityContext> macJwkSource() {
+        SecretKey secretKey = new SecretKeySpec("secret".getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+        OctetSequenceKey octetSequenceKey = jwk(secretKey).build();
+        JWKSet jwkSet = new JWKSet(octetSequenceKey);
+
+        return (jwkSelector, securityContext) -> jwkSelector.select(jwkSet);
+    }
+
+    public OctetSequenceKey.Builder jwk(SecretKey secretKey) {
+        return new OctetSequenceKey.Builder(secretKey)
+                .keyUse(KeyUse.SIGNATURE)
+                .keyID("secret-jwk-kid");
+    }
+
+    @Bean
+    public RegisteredClientRepository registeredClientRepository() {
+        return new InMemoryRegisteredClientRepository(registeredClient());
+    }
+
+    private RegisteredClient registeredClient() {
         return RegisteredClient.withId(UUID.randomUUID().toString())
-                .clientId(clientId)
-                .clientSecret(clientSecret)
+                .clientId("oauth2-client-app")
+                .clientSecret("{noop}secret")
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_POST)
                 .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
@@ -131,8 +153,8 @@ public class AuthorizationServerConfig {
                 .redirectUri("http://127.0.0.1:8081/login/oauth2/code/springOAuth2")
                 .redirectUri("http://127.0.0.1:8081")
                 .scope(OidcScopes.OPENID)
-                .scope(scope1)
-                .scope(scope2)
+                .scope("read")
+                .scope("write")
                 .scope("photo")
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
                 .build();
