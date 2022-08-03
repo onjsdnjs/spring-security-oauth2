@@ -26,7 +26,7 @@ public class RestApiController {
     private final RestTemplate restTemplate;
 
     @GetMapping("/token")
-    public OAuth2AccessToken token(@RegisteredOAuth2AuthorizedClient("keycloak") OAuth2AuthorizedClient oAuth2AuthorizedClient){
+    public OAuth2AccessToken token(@RegisteredOAuth2AuthorizedClient("springOAuth2") OAuth2AuthorizedClient oAuth2AuthorizedClient){
 
         return oAuth2AuthorizedClient.getAccessToken();
     }

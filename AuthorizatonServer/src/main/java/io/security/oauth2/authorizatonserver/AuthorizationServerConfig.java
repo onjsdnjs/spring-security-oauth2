@@ -19,6 +19,7 @@ import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.core.OAuth2AuthorizationCode;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.authorization.InMemoryOAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.authentication.OAuth2AuthorizationCodeRequestAuthenticationToken;
 import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
@@ -71,6 +72,11 @@ public class AuthorizationServerConfig {
     @Bean
     public ProviderSettings providerSettings() {
         return ProviderSettings.builder().issuer("http://localhost:9000").build();
+    }
+
+    @Bean
+    public JwtDecoder jwtDecoder(JWKSource jwkSource) {
+        return OAuth2AuthorizationServerConfiguration.jwtDecoder(jwkSource);
     }
 
     @Bean
@@ -127,6 +133,7 @@ public class AuthorizationServerConfig {
                 .scope(OidcScopes.OPENID)
                 .scope(scope1)
                 .scope(scope2)
+                .scope("photo")
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
                 .build();
     }
