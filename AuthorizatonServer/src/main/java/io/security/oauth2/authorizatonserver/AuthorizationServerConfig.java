@@ -21,6 +21,8 @@ import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.core.OAuth2AuthorizationCode;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
+import org.springframework.security.oauth2.jwt.JoseHeaderNames;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
@@ -31,6 +33,8 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.config.ProviderSettings;
+import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
+import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -86,15 +90,15 @@ public class AuthorizationServerConfig {
         return OAuth2AuthorizationServerConfiguration.jwtDecoder(jwkSource);
     }
 
-    @Bean
+    /*@Bean
     public JWKSource<SecurityContext> jwkSource() {
-        RSAKey rsaKey = generateRsa();
+        RSAKey rsaKey = generateRsaKey();
         JWKSet jwkSet = new JWKSet(rsaKey);
         return (jwkSelector, securityContext) -> jwkSelector.select(jwkSet);
     }
 
-    public static RSAKey generateRsa() {
-        KeyPair keyPair = generateRsaKey();
+    public static RSAKey generateRsaKey() {
+        KeyPair keyPair = generateRsaKeyPair();
         RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
         RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
         return new RSAKey.Builder(publicKey)
@@ -103,7 +107,7 @@ public class AuthorizationServerConfig {
                 .build();
     }
 
-    static KeyPair generateRsaKey() {
+    static KeyPair generateRsaKeyPair() {
         KeyPair keyPair;
         try {
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
@@ -114,6 +118,7 @@ public class AuthorizationServerConfig {
         }
         return keyPair;
     }
+    */
 
     @Bean
     JwtEncoder jwtEncoder(JWKSource<SecurityContext> jwkSource) {
@@ -121,15 +126,15 @@ public class AuthorizationServerConfig {
     }
 
     @Bean
-    public JWKSource<SecurityContext> macJwkSource() {
+    public JWKSource<SecurityContext> jwkSource() {
         SecretKey secretKey = new SecretKeySpec("secret".getBytes(StandardCharsets.UTF_8), "HmacSHA256");
-        OctetSequenceKey octetSequenceKey = jwk(secretKey).build();
+        OctetSequenceKey octetSequenceKey = generateMac(secretKey).build();
         JWKSet jwkSet = new JWKSet(octetSequenceKey);
 
         return (jwkSelector, securityContext) -> jwkSelector.select(jwkSet);
     }
 
-    public OctetSequenceKey.Builder jwk(SecretKey secretKey) {
+    public OctetSequenceKey.Builder generateMac(SecretKey secretKey) {
         return new OctetSequenceKey.Builder(secretKey)
                 .keyUse(KeyUse.SIGNATURE)
                 .keyID("secret-jwk-kid");
@@ -158,5 +163,12 @@ public class AuthorizationServerConfig {
                 .scope("photo")
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
                 .build();
+    }
+
+    @Bean
+    public OAuth2TokenCustomizer<JwtEncodingContext> oAuth2TokenCustomizer() {
+        return context -> {
+            context.getHeaders().header(JoseHeaderNames.ALG, MacAlgorithm.HS256);
+        };
     }
 }
