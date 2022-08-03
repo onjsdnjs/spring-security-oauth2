@@ -17,7 +17,7 @@ spring:
             authorization-grant-type: authorization_code
             client-id: oauth2-client-app
             client-name: oauth2-client-app
-            client-secret: secret
+            client-secret: bCzY/M48bbkwBEWjmNSIEPfwApcvXOnkCxORBEbPr+4=
             redirect-uri: http://127.0.0.1:8081/login/oauth2/code/springOAuth2
             #scope: openid,read,write
             scope: openid,read,write,photo

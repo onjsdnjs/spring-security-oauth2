@@ -6,6 +6,7 @@ import com.nimbusds.jose.jwk.OctetSequenceKey;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -16,6 +17,7 @@ import org.springframework.security.config.annotation.web.configuration.OAuth2Au
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.authorization.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.core.OAuth2AuthorizationCode;
@@ -58,6 +60,8 @@ import java.util.UUID;
 
 @Configuration(proxyBeanMethods = false)
 public class AuthorizationServerConfig {
+
+    private static String CLIENT_SECRET = "bCzY/M48bbkwBEWjmNSIEPfwApcvXOnkCxORBEbPr+4=";
 
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -127,7 +131,7 @@ public class AuthorizationServerConfig {
 
     @Bean
     public JWKSource<SecurityContext> jwkSource() {
-        SecretKey secretKey = new SecretKeySpec("secret".getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+        SecretKey secretKey = new SecretKeySpec(CLIENT_SECRET.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
         OctetSequenceKey octetSequenceKey = generateMac(secretKey).build();
         JWKSet jwkSet = new JWKSet(octetSequenceKey);
 
@@ -148,7 +152,7 @@ public class AuthorizationServerConfig {
     private RegisteredClient registeredClient() {
         return RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("oauth2-client-app")
-                .clientSecret("{noop}secret")
+                .clientSecret(CLIENT_SECRET)
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_POST)
                 .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
