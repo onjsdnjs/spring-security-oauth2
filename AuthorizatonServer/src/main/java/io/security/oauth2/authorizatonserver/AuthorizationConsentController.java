@@ -75,11 +75,11 @@ public class AuthorizationConsentController {
 		private static final Map<String, String> scopeDescriptions = new HashMap<>();
 		static {
 			scopeDescriptions.put(
-					"message.read",
+					"read",
 					"This application will be able to read your message."
 			);
 			scopeDescriptions.put(
-					"message.write",
+					"write",
 					"This application will be able to add new messages. It will also be able to edit and delete existing messages."
 			);
 			scopeDescriptions.put(
