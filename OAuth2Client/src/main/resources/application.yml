@@ -6,11 +6,11 @@ spring:
       client:
         provider:
           springOAuth2:
-            authorization-uri: http://localhost:9000/oauth2/authorize
-            issuer-uri: http://localhost:9000
-            jwk-set-uri: http://localhost:9000/oauth2/jwks
-            token-uri: http://localhost:9000/oauth2/token
-            user-info-uri: http://localhost:9000/userinfo
+            authorization-uri: http://auth-server:9000/oauth2/authorize
+            issuer-uri: http://auth-server:9000
+            jwk-set-uri: http://auth-server:9000/oauth2/jwks
+            token-uri: http://auth-server:9000/oauth2/token
+            user-info-uri: http://auth-server:9000/userinfo
             #user-name-attribute: preferred_username
         registration:
           springOAuth2:
@@ -18,6 +18,6 @@ spring:
             client-id: oauth2-client-app1
             client-name: oauth2-client-app
             client-secret: secret1
-            redirect-uri: http://127.0.0.1:8081/login/oauth2/code/springOAuth2
+            redirect-uri: http://client-app:8081/login/oauth2/code/springOAuth2
             #scope: openid,read,write
             scope: openid,read,write,photo

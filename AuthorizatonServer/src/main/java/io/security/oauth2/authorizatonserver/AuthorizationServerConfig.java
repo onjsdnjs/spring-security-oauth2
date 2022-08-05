@@ -76,7 +76,7 @@ public class AuthorizationServerConfig {
 
     @Bean
     public ProviderSettings providerSettings() {
-        return ProviderSettings.builder().issuer("http://localhost:9000").build();
+        return ProviderSettings.builder().issuer("http://auth-server:9000").build();
     }
 
     @Bean
@@ -133,8 +133,8 @@ public class AuthorizationServerConfig {
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
-                .redirectUri("http://127.0.0.1:8081/login/oauth2/code/springOAuth2")
-                .redirectUri("http://127.0.0.1:8081")
+                .redirectUri("http://client-app:8081/login/oauth2/code/springOAuth2")
+                .redirectUri("http://client-app:8081")
                 .scope(OidcScopes.OPENID)
                 .scope(scope1)
                 .scope(scope2)
