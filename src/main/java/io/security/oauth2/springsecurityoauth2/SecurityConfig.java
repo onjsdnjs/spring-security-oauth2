@@ -8,10 +8,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 public class SecurityConfig {
     @Bean
-    @Order(SecurityProperties.BASIC_AUTH_ORDER)
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests().anyRequest().authenticated();
         http.formLogin();
