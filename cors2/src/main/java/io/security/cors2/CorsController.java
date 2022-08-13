@@ -1,4 +1,4 @@
-package io.cors.cors2;
+package io.security.cors2;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
