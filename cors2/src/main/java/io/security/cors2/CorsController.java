@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class CorsController {
     @GetMapping("/users")
     public String users(){
-        return "hong gil dong";
+        return "{\"name\":\"hong gil dong\"}";
     }
 }

@@ -5,20 +5,19 @@
     <title>Title</title>
     <script>
 
-        const xhr = new XMLHttpRequest();
-        const url = 'http://localhost:8081/api/users';
-
-        function corsTest() {
-            if (xhr) {
-                xhr.open('GET', url, true);
-                xhr.setRequestHeader("Content-Type", "'text/xml");
-                xhr.onreadystatechange = resultHandler;
-                xhr.send();
-            }
-        }
-
-        function resultHandler(data){
-            console.log(data)
+        function corsTest(){
+            fetch("http://localhost:8081/api/users",{
+                method : "GET",
+                headers : {
+                    "Content-Type" : "text/xml",
+                    "custom" : "1234"
+                }
+            })
+                .then(response => {
+                    response.json().then(function(data){
+                        console.log(data)
+                    })
+                })
         }
 
     </script>
