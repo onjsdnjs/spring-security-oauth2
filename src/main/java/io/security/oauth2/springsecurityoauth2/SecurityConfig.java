@@ -1,3 +1,4 @@
+/*
 package io.security.oauth2.springsecurityoauth2;
 
 import org.springframework.context.annotation.Bean;
@@ -16,3 +17,4 @@ public class SecurityConfig {
         return http.build();
     }
 }
+*/
