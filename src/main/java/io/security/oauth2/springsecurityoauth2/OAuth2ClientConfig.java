@@ -12,8 +12,8 @@ public class OAuth2ClientConfig {
 
     @Bean
     SecurityFilterChain oauth2SecurityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeRequests().anyRequest().authenticated();
-        http.oauth2Login();
+        http.authorizeRequests(authreq ->authreq.anyRequest().authenticated());
+        http.oauth2Login(Customizer.withDefaults());
         return http.build();
    }
 }
