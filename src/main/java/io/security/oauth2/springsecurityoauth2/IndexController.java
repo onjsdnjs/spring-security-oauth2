@@ -13,8 +13,15 @@ public class IndexController {
 
     @GetMapping("/")
     public String index() {
+
         ClientRegistration clientRegistration = this.clientRegistrationRepository.findByRegistrationId("keycloak");
-        String clientName = clientRegistration.getClientName();
-        return clientName;
+
+        String clientId = clientRegistration.getClientId();
+        System.out.println("clientId = " + clientId);
+
+        String redirectUri = clientRegistration.getRedirectUri();
+        System.out.println("redirectUri = " + redirectUri);
+
+        return "index";
     }
 }
