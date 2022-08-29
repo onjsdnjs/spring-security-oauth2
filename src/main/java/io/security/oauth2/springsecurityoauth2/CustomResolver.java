@@ -68,7 +68,6 @@ public class CustomResolver implements OAuth2AuthorizationRequestResolver {
         }
         return defaultResolver.resolve(request,clientRegistrationId);
     }
-
     private OAuth2AuthorizationRequest customResolve(OAuth2AuthorizationRequest authorizationRequest) {
 
         OAuth2AuthorizationRequest.Builder builder = OAuth2AuthorizationRequest.implicit();
