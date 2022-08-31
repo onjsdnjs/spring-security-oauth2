@@ -70,18 +70,11 @@ public class CustomResolver implements OAuth2AuthorizationRequestResolver {
     }
     private OAuth2AuthorizationRequest customResolve(OAuth2AuthorizationRequest authorizationRequest) {
 
-        OAuth2AuthorizationRequest.Builder builder = OAuth2AuthorizationRequest.implicit();
+        OAuth2AuthorizationRequest.Builder builder = OAuth2AuthorizationRequest.from(authorizationRequest);
         String nonce = getNonce();
 
         builder
-                .clientId(authorizationRequest.getClientId())
-                .authorizationUri(authorizationRequest.getAuthorizationUri())
-                .authorizationRequestUri(authorizationRequest.getAuthorizationRequestUri()+"&nonce="+nonce)
-                .redirectUri("http://localhost:8081/home")
-                .scopes(authorizationRequest.getScopes())
-                .state(authorizationRequest.getState())
-                .additionalParameters(authorizationRequest.getAdditionalParameters())
-                .attributes(authorizationRequest.getAttributes());
+                .authorizationRequestUri(authorizationRequest.getAuthorizationRequestUri()+"&nonce="+nonce);
 
         return builder.build();
     }
