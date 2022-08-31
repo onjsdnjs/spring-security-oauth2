@@ -54,6 +54,7 @@ public class CustomResolver implements OAuth2AuthorizationRequestResolver {
         if(authorizationGrantType.getValue().equals(AuthorizationGrantType.IMPLICIT.getValue())){
             OAuth2AuthorizationRequest oAuth2AuthorizationRequest = defaultResolver.resolve(request);
             return customResolve(oAuth2AuthorizationRequest);
+
         }
         return defaultResolver.resolve(request);
     }
