@@ -17,7 +17,7 @@ spring:
                         authorization-grant-type: implicit
                         client-id: oauth2-client-app
                         client-name: oauth2-client-app
-                        client-secret: kFo7LFyXAhzsWcHivIzUIOrCHUWW4XZ6
+                        client-secret: tynI8eYUw4H1fJYxwLQ36XhFC1Ge1w1x
                         provider: keycloak
                         redirect-uri: http://localhost:8081/home
                         scope: openid,email
