@@ -19,4 +19,5 @@ spring:
                         client-name: oauth2-client-app
                         client-secret: tynI8eYUw4H1fJYxwLQ36XhFC1Ge1w1x
                         redirect-uri: http://localhost:8081/home
+                        clientAuthenticationMethod: client_secret_basic
                         scope: openid,email
