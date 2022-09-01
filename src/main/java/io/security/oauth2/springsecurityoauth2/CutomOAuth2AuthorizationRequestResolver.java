@@ -8,7 +8,6 @@ import org.springframework.security.oauth2.client.web.DefaultOAuth2Authorization
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
-import org.springframework.security.oauth2.core.oidc.endpoint.OidcParameterNames;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,13 +16,12 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
-public class CustomResolver implements OAuth2AuthorizationRequestResolver {
+public class CutomOAuth2AuthorizationRequestResolver implements OAuth2AuthorizationRequestResolver {
 
     private static final String REGISTRATION_ID_URI_VARIABLE_NAME = "registrationId";
 
     private static final StringKeyGenerator DEFAULT_SECURE_KEY_GENERATOR = new Base64StringKeyGenerator(
             Base64.getUrlEncoder().withoutPadding(), 96);
-
 
     private ClientRegistrationRepository clientRegistrationRepository;
     private String defaultAuthorizationRequestBaseUri;
@@ -33,7 +31,7 @@ public class CustomResolver implements OAuth2AuthorizationRequestResolver {
     private final AntPathRequestMatcher authorizationRequestMatcher;
 
 
-    public CustomResolver(ClientRegistrationRepository clientRegistrationRepository, String authorizationRequestBaseUri) {
+    public CutomOAuth2AuthorizationRequestResolver(ClientRegistrationRepository clientRegistrationRepository, String authorizationRequestBaseUri) {
 
         this.clientRegistrationRepository = clientRegistrationRepository;
         this.authorizationRequestMatcher = new AntPathRequestMatcher(
