@@ -21,10 +21,3 @@ spring:
                         provider: keycloak
                         redirect-uri: http://localhost:8081/home
                         scope: openid,email
-                    keycloak2:
-                        authorization-grant-type: authorization_code
-                        client-id: oauth2-client-app2
-                        client-secret: LyxC7l7l36tuY9assxIRzJ5Hbx1QqZRf
-                        provider: keycloak
-                        redirect-uri: http://localhost:8081/login/oauth2/code/keycloak2
-                        scope: openid,email
