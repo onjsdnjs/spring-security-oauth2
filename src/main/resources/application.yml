@@ -14,9 +14,17 @@ spring:
                         user-name-attribute: preferred_username
                 registration:
                     keycloak:
-                        authorization-grant-type: authorization_code
+                        authorization-grant-type: implicit
                         client-id: oauth2-client-app
                         client-name: oauth2-client-app
-                        client-secret: tynI8eYUw4H1fJYxwLQ36XhFC1Ge1w1x
-                        redirect-uri: http://localhost:8081/login/oauth2/code/keycloak
-                        scope: openid
+                        client-secret: kFo7LFyXAhzsWcHivIzUIOrCHUWW4XZ6
+                        provider: keycloak
+                        redirect-uri: http://localhost:8081/home
+                        scope: openid,email
+                    keycloak2:
+                        authorization-grant-type: authorization_code
+                        client-id: oauth2-client-app2
+                        client-secret: LyxC7l7l36tuY9assxIRzJ5Hbx1QqZRf
+                        provider: keycloak
+                        redirect-uri: http://localhost:8081/login/oauth2/code/keycloak2
+                        scope: openid,email
