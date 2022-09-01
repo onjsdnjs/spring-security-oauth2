@@ -54,7 +54,7 @@ public class IndexController {
     @GetMapping("/oidc")
     public OidcUser oidc(String accessToken, String idToken) {
         ClientRegistration clientRegistration = this.clientRegistrationRepository.findByRegistrationId("keycloak");
-        OAuth2AccessToken auth2AccessToken = new OAuth2AccessToken(OAuth2AccessToken.TokenType.BEARER, accessToken, Instant.MIN, Instant.MAX, Set.of("profile"));
+        OAuth2AccessToken auth2AccessToken = new OAuth2AccessToken(OAuth2AccessToken.TokenType.BEARER, accessToken, Instant.MIN, Instant.MAX, Set.of("read"));
 
         Map<String, Object> idTokenClaims = new HashMap<>();
         idTokenClaims.put(IdTokenClaimNames.ISS, "http://localhost:8080/realms/oauth2");
@@ -63,7 +63,7 @@ public class IndexController {
         OidcIdToken oidcIdToken = new OidcIdToken(idToken, Instant.MIN, Instant.MAX, idTokenClaims);
 
         OidcUserService oidcUserService = new OidcUserService();
-        oidcUserService.setAccessibleScopes(Set.of("read"));
+//        oidcUserService.setAccessibleScopes(Set.of("read"));
         oidcUserService.setOauth2UserService(new DefaultOAuth2UserService());
         OidcUser oidcUser = oidcUserService.loadUser(new OidcUserRequest(clientRegistration, auth2AccessToken, oidcIdToken));
 
