@@ -2,9 +2,6 @@ server:
     port: 8081
 spring:
     security:
-        user:
-          name: user
-          password: 1234
         oauth2:
             client:
                 provider:
