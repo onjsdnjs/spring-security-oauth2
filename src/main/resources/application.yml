@@ -19,4 +19,4 @@ spring:
                         client-name: oauth2-client-app
                         client-secret: tynI8eYUw4H1fJYxwLQ36XhFC1Ge1w1x
                         redirect-uri: http://localhost:8081/login/oauth2/code/keycloak
-                        scope: openid,email
+                        scope: openid,profile,email
