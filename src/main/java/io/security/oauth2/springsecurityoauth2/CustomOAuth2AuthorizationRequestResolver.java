@@ -23,16 +23,9 @@ import java.util.function.Consumer;
 public class CustomOAuth2AuthorizationRequestResolver implements OAuth2AuthorizationRequestResolver {
 
     private static final String REGISTRATION_ID_URI_VARIABLE_NAME = "registrationId";
-
-    private static final StringKeyGenerator DEFAULT_SECURE_KEY_GENERATOR = new Base64StringKeyGenerator(
-            Base64.getUrlEncoder().withoutPadding(), 96);
-
     private static final Consumer<OAuth2AuthorizationRequest.Builder> DEFAULT_PKCE_APPLIER = OAuth2AuthorizationRequestCustomizers
             .withPkce();
-
     private ClientRegistrationRepository clientRegistrationRepository;
-    private String defaultAuthorizationRequestBaseUri;
-
     DefaultOAuth2AuthorizationRequestResolver defaultResolver;
 
     private final AntPathRequestMatcher authorizationRequestMatcher;
@@ -44,8 +37,7 @@ public class CustomOAuth2AuthorizationRequestResolver implements OAuth2Authoriza
         this.authorizationRequestMatcher = new AntPathRequestMatcher(
                 authorizationRequestBaseUri + "/{" + REGISTRATION_ID_URI_VARIABLE_NAME + "}");
 
-        defaultResolver = new DefaultOAuth2AuthorizationRequestResolver(clientRegistrationRepository,
-                authorizationRequestBaseUri);
+        defaultResolver = new DefaultOAuth2AuthorizationRequestResolver(clientRegistrationRepository, authorizationRequestBaseUri);
     }
 
     @Override
@@ -76,16 +68,9 @@ public class CustomOAuth2AuthorizationRequestResolver implements OAuth2Authoriza
     private OAuth2AuthorizationRequest customResolve(OAuth2AuthorizationRequest authorizationRequest, ClientRegistration clientRegistration) {
 
         OAuth2AuthorizationRequest.Builder builder = OAuth2AuthorizationRequest.from(authorizationRequest);
-
-//        String nonce = getNonce();
-//        Map<String, Object> extraParams = new HashMap<>(authorizationRequest.getAdditionalParameters());
-//        extraParams.put("nonce", nonce);
-
         DEFAULT_PKCE_APPLIER.accept(builder);
 
         return builder.build();
-//                .additionalParameters(extraParams)
-//                .build();
     }
 
     private String resolveRegistrationId(HttpServletRequest request) {
@@ -94,21 +79,5 @@ public class CustomOAuth2AuthorizationRequestResolver implements OAuth2Authoriza
                     .get(REGISTRATION_ID_URI_VARIABLE_NAME);
         }
         return null;
-    }
-
-    private String getNonce() {
-        try {
-            String nonce = DEFAULT_SECURE_KEY_GENERATOR.generateKey();
-            return createHash(nonce);
-        }
-        catch (NoSuchAlgorithmException ignored) {
-        }
-        return null;
-    }
-
-    private String createHash(String value) throws NoSuchAlgorithmException {
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        byte[] digest = md.digest(value.getBytes(StandardCharsets.US_ASCII));
-        return Base64.getUrlEncoder().withoutPadding().encodeToString(digest);
     }
 }
