@@ -14,6 +14,7 @@ spring:
                         scope: openid,profile
                         clientAuthenticationMethod: client_secret_basic
                         redirectUri: http://localhost:8081/login/oauth2/code/keycloak
+                        provider: keycloak
 
                     keycloak2:
                         clientId: oauth2-client-app2
@@ -22,7 +23,8 @@ spring:
                         authorizationGrantType: implicit
                         scope: openid,profile
                         clientAuthenticationMethod: client_secret_basic
-                        redirectUri: http://localhost:8081/login/oauth2/code/keycloak2
+                        redirectUri: http://localhost:8081/home
+                        provider: keycloak
 
                 provider:
                     keycloak:

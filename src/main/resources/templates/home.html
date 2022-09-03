@@ -8,13 +8,11 @@
 <title>Insert title here</title>
     <script>
         function authorizationCode(){
-            let url = new URL('http://localhost:8081/oauth2/authorization/keycloak');
-            window.open(url, 'blank');
+            window.location = new URL('http://localhost:8081/oauth2/authorization/keycloak');
         }
 
         function implicit(){
-            let url = new URL('http://localhost:8081/oauth2/authorization/keycloak2');
-            window.open(url, 'blank');
+            window.location = new URL('http://localhost:8081/oauth2/authorization/keycloak2');
         }
 
     </script>
