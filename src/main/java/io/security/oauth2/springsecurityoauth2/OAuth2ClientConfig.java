@@ -14,11 +14,13 @@ public class OAuth2ClientConfig {
         http
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/login")
-//                        .loginProcessingUrl("/login/v1/oauth2/code/*")
+                        .loginProcessingUrl("/login/v1/oauth2/code/*")
                         .authorizationEndpoint(authorizationEndpointConfig ->
                                 authorizationEndpointConfig.baseUri("/oauth2/v1/authorization"))
                         .redirectionEndpoint(redirectionEndpointConfig ->
-                                redirectionEndpointConfig.baseUri("/login/v1/oauth2/code/*")));
+                                redirectionEndpointConfig.baseUri("/login/v1/oauth2/code/*"))
+                )
+        ;
 
         return http.build();
     }
