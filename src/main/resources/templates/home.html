@@ -7,14 +7,14 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
     <script>
-        function implicit(){
+        function authorizationCode(){
             let url = new URL('http://localhost:8081/oauth2/authorization/keycloak');
-            let window1 = window.open(url, 'blank');
+            window.open(url, 'blank');
         }
 
-        function authorizationCode(){
+        function implicit(){
             let url = new URL('http://localhost:8081/oauth2/authorization/keycloak2');
-            let window1 = window.open(url, 'blank');
+            window.open(url, 'blank');
         }
 
     </script>
