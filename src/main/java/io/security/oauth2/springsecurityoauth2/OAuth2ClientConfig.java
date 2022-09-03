@@ -2,6 +2,7 @@ package io.security.oauth2.springsecurityoauth2;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
@@ -21,6 +22,8 @@ public class OAuth2ClientConfig {
         http.oauth2Login(authLogin ->
                 authLogin.authorizationEndpoint(authEndpoint ->
                         authEndpoint.authorizationRequestResolver(customOAuth2AuthenticationRequestResolver())));
+//        http.oauth2Login(Customizer.withDefaults());
+        http.logout().logoutSuccessUrl("/home");
         return http.build();
    }
 

@@ -5,6 +5,7 @@ import org.springframework.security.crypto.keygen.StringKeyGenerator;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizationRequestResolver;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestCustomizers;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
@@ -17,6 +18,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class CustomOAuth2AuthorizationRequestResolver implements OAuth2AuthorizationRequestResolver {
 
@@ -24,6 +26,9 @@ public class CustomOAuth2AuthorizationRequestResolver implements OAuth2Authoriza
 
     private static final StringKeyGenerator DEFAULT_SECURE_KEY_GENERATOR = new Base64StringKeyGenerator(
             Base64.getUrlEncoder().withoutPadding(), 96);
+
+    private static final Consumer<OAuth2AuthorizationRequest.Builder> DEFAULT_PKCE_APPLIER = OAuth2AuthorizationRequestCustomizers
+            .withPkce();
 
     private ClientRegistrationRepository clientRegistrationRepository;
     private String defaultAuthorizationRequestBaseUri;
@@ -51,9 +56,9 @@ public class CustomOAuth2AuthorizationRequestResolver implements OAuth2Authoriza
         }
         ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId(registrationId);
         AuthorizationGrantType authorizationGrantType = clientRegistration.getAuthorizationGrantType();
-        if(authorizationGrantType.getValue().equals(AuthorizationGrantType.IMPLICIT.getValue())){
+        if(registrationId.equals("keycloakWithPKCE")){
             OAuth2AuthorizationRequest oAuth2AuthorizationRequest = defaultResolver.resolve(request);
-            return customResolve(oAuth2AuthorizationRequest);
+            return customResolve(oAuth2AuthorizationRequest, clientRegistration);
 
         }
         return defaultResolver.resolve(request);
@@ -62,28 +67,25 @@ public class CustomOAuth2AuthorizationRequestResolver implements OAuth2Authoriza
     @Override
     public OAuth2AuthorizationRequest resolve(HttpServletRequest request, String clientRegistrationId) {
         ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId(clientRegistrationId);
-        AuthorizationGrantType authorizationGrantType = clientRegistration.getAuthorizationGrantType();
-        if(authorizationGrantType.getValue().equals(AuthorizationGrantType.IMPLICIT.getValue())){
+        if(clientRegistrationId.equals("keycloakWithPKCE")){
             OAuth2AuthorizationRequest oAuth2AuthorizationRequest = defaultResolver.resolve(request);
-            return customResolve(oAuth2AuthorizationRequest);
+            return customResolve(oAuth2AuthorizationRequest, clientRegistration);
         }
         return defaultResolver.resolve(request,clientRegistrationId);
     }
-    private OAuth2AuthorizationRequest customResolve(OAuth2AuthorizationRequest authorizationRequest) {
+    private OAuth2AuthorizationRequest customResolve(OAuth2AuthorizationRequest authorizationRequest, ClientRegistration clientRegistration) {
 
         OAuth2AuthorizationRequest.Builder builder = OAuth2AuthorizationRequest.from(authorizationRequest);
-        String nonce = getNonce();
 
-        Map<String,Object> extraParams = new HashMap<>();
-        extraParams.putAll(authorizationRequest.getAdditionalParameters());
-        extraParams.put("nonce", nonce);
+//        String nonce = getNonce();
+//        Map<String, Object> extraParams = new HashMap<>(authorizationRequest.getAdditionalParameters());
+//        extraParams.put("nonce", nonce);
 
-        return builder
-                .additionalParameters(extraParams)
-                .build();
-//                .authorizationRequestUri(authorizationRequest.getAuthorizationRequestUri()+"&nonce="+nonce);
+        DEFAULT_PKCE_APPLIER.accept(builder);
 
-//        return builder.build();
+        return builder.build();
+//                .additionalParameters(extraParams)
+//                .build();
     }
 
     private String resolveRegistrationId(HttpServletRequest request) {

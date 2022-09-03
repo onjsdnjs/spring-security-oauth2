@@ -8,7 +8,11 @@
 <title>Insert title here</title>
     <script>
         function authorizationCode(){
-            window.location = new URL('http://localhost:8081/oauth2/authorization/keycloak');
+            window.location = new URL('http://localhost:8081/oauth2/authorization/keycloak1');
+        }
+
+        function authorizationCodeWithPKCE(){
+            window.location = new URL('http://localhost:8081/oauth2/authorization/keycloakWithPKCE');
         }
 
         function implicit(){
@@ -20,8 +24,9 @@
 <body>
 <div>Welcome</div>
 <div sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></div>
-<form action="#">
+<form sec:authorize="isAnonymous()" action="#">
     <p><input type="button" onclick="authorizationCode()" value="AuthorizationCode Grant" />
+    <p><input type="button" onclick="authorizationCodeWithPKCE()" value="AuthorizationCode Grant with PKCE" />
     <p><input type="button" onclick="implicit()" value="Implicit Grant" />
 </form>
 </body>
