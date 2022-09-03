@@ -15,8 +15,10 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
-public class CutomOAuth2AuthorizationRequestResolver implements OAuth2AuthorizationRequestResolver {
+public class CustomOAuth2AuthorizationRequestResolver implements OAuth2AuthorizationRequestResolver {
 
     private static final String REGISTRATION_ID_URI_VARIABLE_NAME = "registrationId";
 
@@ -31,7 +33,7 @@ public class CutomOAuth2AuthorizationRequestResolver implements OAuth2Authorizat
     private final AntPathRequestMatcher authorizationRequestMatcher;
 
 
-    public CutomOAuth2AuthorizationRequestResolver(ClientRegistrationRepository clientRegistrationRepository, String authorizationRequestBaseUri) {
+    public CustomOAuth2AuthorizationRequestResolver(ClientRegistrationRepository clientRegistrationRepository, String authorizationRequestBaseUri) {
 
         this.clientRegistrationRepository = clientRegistrationRepository;
         this.authorizationRequestMatcher = new AntPathRequestMatcher(
@@ -72,10 +74,16 @@ public class CutomOAuth2AuthorizationRequestResolver implements OAuth2Authorizat
         OAuth2AuthorizationRequest.Builder builder = OAuth2AuthorizationRequest.from(authorizationRequest);
         String nonce = getNonce();
 
-        builder
-                .authorizationRequestUri(authorizationRequest.getAuthorizationRequestUri()+"&nonce="+nonce);
+        Map<String,Object> extraParams = new HashMap<>();
+        extraParams.putAll(authorizationRequest.getAdditionalParameters());
+        extraParams.put("nonce", nonce);
 
-        return builder.build();
+        return builder
+                .additionalParameters(extraParams)
+                .build();
+//                .authorizationRequestUri(authorizationRequest.getAuthorizationRequestUri()+"&nonce="+nonce);
+
+//        return builder.build();
     }
 
     private String resolveRegistrationId(HttpServletRequest request) {

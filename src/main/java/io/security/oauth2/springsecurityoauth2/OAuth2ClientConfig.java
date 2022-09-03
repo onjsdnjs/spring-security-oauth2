@@ -1,20 +1,34 @@
 package io.security.oauth2.springsecurityoauth2;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
 import org.springframework.security.web.SecurityFilterChain;
 
-@Configuration(proxyBeanMethods = false)
+@EnableWebSecurity
 public class OAuth2ClientConfig {
+
+    @Autowired
+    private ClientRegistrationRepository clientRegistrationRepository;
 
     @Bean
     SecurityFilterChain oauth2SecurityFilterChain(HttpSecurity http) throws Exception {
-//        http.authorizeRequests((requests) -> requests.antMatchers("/login").permitAll().anyRequest().authenticated());
-        http.authorizeRequests((requests) -> requests.anyRequest().permitAll());
-        http.oauth2Login(Customizer.withDefaults());
-//        http.oauth2Login(oauth2 -> oauth2.loginPage("/login"));
+        http.authorizeRequests((requests) -> requests.antMatchers("/home").permitAll()
+                .anyRequest().authenticated());
+        http.oauth2Login(authLogin ->
+                authLogin.authorizationEndpoint(authEndpoint ->
+                        authEndpoint.authorizationRequestResolver(customOAuth2AuthenticationRequestResolver())));
         return http.build();
    }
+
+    private OAuth2AuthorizationRequestResolver customOAuth2AuthenticationRequestResolver() {
+        ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId("keycloak");
+        return new CustomOAuth2AuthorizationRequestResolver(clientRegistrationRepository, clientRegistration.getRedirectUri());
+    }
 }
