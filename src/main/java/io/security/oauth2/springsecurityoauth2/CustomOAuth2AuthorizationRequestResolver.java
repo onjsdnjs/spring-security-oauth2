@@ -47,7 +47,6 @@ public class CustomOAuth2AuthorizationRequestResolver implements OAuth2Authoriza
             return null;
         }
         ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId(registrationId);
-        AuthorizationGrantType authorizationGrantType = clientRegistration.getAuthorizationGrantType();
         if(registrationId.equals("keycloakWithPKCE")){
             OAuth2AuthorizationRequest oAuth2AuthorizationRequest = defaultResolver.resolve(request);
             return customResolve(oAuth2AuthorizationRequest, clientRegistration);
