@@ -22,7 +22,6 @@ public class OAuth2ClientConfig {
         http.oauth2Login(authLogin ->
                 authLogin.authorizationEndpoint(authEndpoint ->
                         authEndpoint.authorizationRequestResolver(customOAuth2AuthenticationRequestResolver())));
-//        http.oauth2Login(Customizer.withDefaults());
         http.logout().logoutSuccessUrl("/home");
         return http.build();
    }

@@ -8,7 +8,7 @@ spring:
                 registration:
                     keycloak1:
                         clientId: oauth2-client-app
-                        clientSecret: tynI8eYUw4H1fJYxwLQ36XhFC1Ge1w1x
+                        clientSecret: dXf021lMWuZ9kZafqxZn230MvVEdROIo
                         clientName: oauth2-client-app
                         authorizationGrantType: authorization_code
                         scope: openid,profile
