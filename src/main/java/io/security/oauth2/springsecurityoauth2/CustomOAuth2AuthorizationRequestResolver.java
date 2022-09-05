@@ -66,7 +66,15 @@ public class CustomOAuth2AuthorizationRequestResolver implements OAuth2Authoriza
     }
     private OAuth2AuthorizationRequest customResolve(OAuth2AuthorizationRequest authorizationRequest, ClientRegistration clientRegistration) {
 
-        OAuth2AuthorizationRequest.Builder builder = OAuth2AuthorizationRequest.from(authorizationRequest);
+        Map<String,Object> extraParam = new HashMap<>();
+        extraParam.put("customName1","customValue1");
+        extraParam.put("customName2","customValue2");
+        extraParam.put("customName3","customValue3");
+
+        OAuth2AuthorizationRequest.Builder builder = OAuth2AuthorizationRequest
+                .from(authorizationRequest)
+                .additionalParameters(extraParam)
+                ;
         DEFAULT_PKCE_APPLIER.accept(builder);
 
         return builder.build();
