@@ -1,0 +1,18 @@
+server:
+    port: 8081
+spring:
+    security:
+        oauth2:
+            client:
+                provider:
+                    keycloak:
+                        issuer-uri: http://localhost:8080/realms/oauth2
+                registration:
+                    keycloak:
+                        authorization-grant-type: password
+                        client-id: oauth2-client-app
+                        client-secret: dXf021lMWuZ9kZafqxZn230MvVEdROIo
+                        redirectUri: http://localhost:8081
+        user:
+            name: user
+            password: pass
