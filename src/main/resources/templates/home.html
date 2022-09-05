@@ -19,12 +19,6 @@
             window.location = new URL('http://localhost:8081/oauth2/authorization/keycloak3');
         }
 
-        function refresh(){
-            window.location = new URL('http://localhost:8081/oauth2/authorization/keycloak4');
-        }
-
-
-
 
     </script>
 </head>
@@ -34,7 +28,6 @@
     <p><input type="button" onclick="authorizationCode()" value="AuthorizationCode Grant" />
     <p><input type="button" onclick="password()" value="Resource Owner Password Grant" />
     <p><input type="button" onclick="clientCredentials()" value="Client Credentials Grant" />
-    <p><input type="button" onclick="refresh()" value="Refresh Token" />
 </form>
 </body>
 </html>
