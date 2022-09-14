@@ -105,6 +105,6 @@ public class LoginController {
     public String logout(HttpServletRequest servletRequest, HttpServletResponse servletResponse, Authentication authentication){
         SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
         logoutHandler.logout(servletRequest, servletResponse, authentication);
-        return "index";
+        return "redirect:/";
     }
 }
