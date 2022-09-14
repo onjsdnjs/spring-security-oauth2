@@ -6,14 +6,14 @@ spring:
     oauth2:
       client:
         registration:
-          keycloak1:
+          keycloak:
             clientId: oauth2-client-app
             clientSecret: dXf021lMWuZ9kZafqxZn230MvVEdROIo
             clientName: oauth2-client-app
             authorizationGrantType: authorization_code
             scope: openid,profile
             clientAuthenticationMethod: client_secret_basic
-            redirectUri: http://localhost:8081/login/oauth2/code/keycloak
+            redirectUri: http://localhost:8081/client
             provider: keycloak
 
         provider:
