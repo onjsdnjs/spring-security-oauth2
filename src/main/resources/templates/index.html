@@ -18,6 +18,7 @@
 <form sec:authorize="isAnonymous()" action="#">
     <p><input type="button" onclick="authorizationCode()" value="AuthorizationCode Grant" />
     <div sec:authorize="isAnonymous()"><a th:href="@{/oauth2Login(username='user',password='1234')}">Password Flow Login</a></div>
+    <div sec:authorize="isAnonymous()"><a th:href="@{/oauth2Login}">Client Credentials Flow Login</a></div>
 </form>
 </body>
 </html>
