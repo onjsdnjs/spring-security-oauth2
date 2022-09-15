@@ -61,29 +61,10 @@ public class LoginController {
 
         OAuth2AuthorizedClient authorizedClient = oAuth2AuthorizedClientManager.authorize(authorizeRequest);
 
-
-
-        if(authorizedClient != null){
-            OAuth2UserService<OAuth2UserRequest,OAuth2User> oAuth2UserService = new DefaultOAuth2UserService();
-            ClientRegistration clientRegistration = authorizedClient.getClientRegistration();
-            OAuth2AccessToken accessToken = authorizedClient.getAccessToken();
-            OAuth2UserRequest oAuth2UserRequest = new OAuth2UserRequest(clientRegistration,accessToken);
-            OAuth2User oAuth2User = oAuth2UserService.loadUser(oAuth2UserRequest);
-
-            SimpleAuthorityMapper authorityMapper = new SimpleAuthorityMapper();
-            authorityMapper.setPrefix("SYSTEM_");
-            Set<GrantedAuthority> grantedAuthorities = authorityMapper.mapAuthorities(oAuth2User.getAuthorities());
-
-            OAuth2AuthenticationToken oAuth2AuthenticationToken =
-                    new OAuth2AuthenticationToken(oAuth2User,grantedAuthorities, clientRegistration.getRegistrationId());
-
-            SecurityContextHolder.getContext().setAuthentication(oAuth2AuthenticationToken);
-
-            model.addAttribute("oAuth2AuthenticationToken", oAuth2AuthenticationToken);
-
-        }
+        model.addAttribute("authorizedClient", authorizedClient);
 
         return "home";
+
     }
 
 
