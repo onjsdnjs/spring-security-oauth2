@@ -60,14 +60,36 @@ public class LoginController {
 
         OAuth2AuthorizedClient authorizedClient = oAuth2AuthorizedClientManager.authorize(authorizeRequest);
 
+        // 권한 부여 타입을 변경하지 않고 토큰 재발금
         if (authorizedClient != null && hasTokenExpired(authorizedClient.getAccessToken())
                 && authorizedClient.getRefreshToken() != null) {
-            ClientRegistration.withClientRegistration
-                    (authorizedClient.getClientRegistration()).authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN);
             authorizedClient = oAuth2AuthorizedClientManager.authorize(authorizeRequest);
         }
 
-        model.addAttribute("authorizedClient", authorizedClient.getAccessToken().getTokenValue());
+        // 권한 부여 타입을 변경하고 토큰 재발급
+        /*if (authorizedClient != null && hasTokenExpired(authorizedClient.getAccessToken())
+                && authorizedClient.getRefreshToken() != null) {
+
+            ClientRegistration clientRegistration = ClientRegistration.withClientRegistration
+                    (authorizedClient.getClientRegistration()).authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+                    .build();
+
+            OAuth2AuthorizedClient oAuth2AuthorizedClient =
+                    new OAuth2AuthorizedClient(clientRegistration, authorizedClient.getPrincipalName(),
+                            authorizedClient.getAccessToken(),authorizedClient.getRefreshToken());
+
+            OAuth2AuthorizeRequest oAuth2AuthorizeRequest =
+                    OAuth2AuthorizeRequest.withAuthorizedClient(oAuth2AuthorizedClient)
+                            .principal(authentication)
+                            .attribute(HttpServletRequest.class.getName(), request)
+                            .attribute(HttpServletResponse.class.getName(), response)
+                            .build();
+
+            authorizedClient = oAuth2AuthorizedClientManager.authorize(oAuth2AuthorizeRequest);
+        }*/
+
+        model.addAttribute("AccessToken", authorizedClient.getAccessToken().getTokenValue());
+        model.addAttribute("RefreshToken", authorizedClient.getRefreshToken().getTokenValue());
 
         return "home";
 
