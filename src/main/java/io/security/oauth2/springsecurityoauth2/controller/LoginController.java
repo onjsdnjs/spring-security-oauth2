@@ -51,7 +51,7 @@ public class LoginController {
 
         OAuth2AuthorizedClient authorizedClient = oAuth2AuthorizedClientManager.authorize(authorizeRequest);
 
-        model.addAttribute("authorizedClient", authorizedClient);
+        model.addAttribute("authorizedClient", authorizedClient.getAccessToken().getTokenValue());
 
         return "home";
 
