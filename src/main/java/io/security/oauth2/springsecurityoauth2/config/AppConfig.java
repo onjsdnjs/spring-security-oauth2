@@ -30,7 +30,7 @@ public class AppConfig {
                         .authorizationCode()
                         .password(passwordGrantBuilder -> passwordGrantBuilder.clockSkew(Duration.ofSeconds(3600)))
                         .refreshToken(refreshTokenGrantBuilder -> refreshTokenGrantBuilder.clockSkew(Duration.ofSeconds(3600)))
-                        .refreshToken()
+                        .clientCredentials()
                         .build();
 
         DefaultOAuth2AuthorizedClientManager oAuth2AuthorizedClientManager =
