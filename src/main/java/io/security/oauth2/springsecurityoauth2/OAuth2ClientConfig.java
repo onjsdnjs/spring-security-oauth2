@@ -2,21 +2,28 @@ package io.security.oauth2.springsecurityoauth2;
 
 import io.security.oauth2.springsecurityoauth2.service.CustomOAuth2UserService;
 import io.security.oauth2.springsecurityoauth2.service.CustomOidcUserService;
-import io.security.oauth2.springsecurityoauth2.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
-import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
 import org.springframework.security.web.SecurityFilterChain;
 
-@Configuration(proxyBeanMethods = false)
-@RequiredArgsConstructor
+@EnableWebSecurity
 public class OAuth2ClientConfig {
 
-    private final CustomOAuth2UserService customOAuth2UserService;
-    private final CustomOidcUserService customOidcUserService;
+    @Autowired
+    private CustomOAuth2UserService customOAuth2UserService;
+    @Autowired
+    private CustomOidcUserService customOidcUserService;
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().antMatchers("/js/**", "/images/**", "/css/**","/scss/**","/icomoon/**");
+    }
 
     @Bean
     SecurityFilterChain oauth2SecurityFilterChain(HttpSecurity http) throws Exception {
@@ -29,7 +36,7 @@ public class OAuth2ClientConfig {
                 //.access("hasAuthority('SCOPE_openid')")
                 .antMatchers("/")
                 .permitAll()
-                .anyRequest().permitAll());
+                .anyRequest().authenticated());
         http.oauth2Login(oauth2 -> oauth2.userInfoEndpoint(
                 userInfoEndpointConfig -> userInfoEndpointConfig
                         .userService(customOAuth2UserService)
