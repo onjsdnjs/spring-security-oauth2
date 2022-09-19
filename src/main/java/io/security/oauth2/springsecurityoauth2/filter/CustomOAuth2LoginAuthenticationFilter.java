@@ -41,8 +41,6 @@ public class CustomOAuth2LoginAuthenticationFilter extends AbstractAuthenticatio
     private DefaultOAuth2AuthorizedClientManager oAuth2AuthorizedClientManager;
     private OAuth2AuthorizationSuccessHandler authorizationSuccessHandler;
 
-    private OAuth2AuthorizationFailureHandler authorizationFailureHandler;
-
     private Duration clockSkew = Duration.ofSeconds(3600);
 
     private Clock clock = Clock.systemUTC();
