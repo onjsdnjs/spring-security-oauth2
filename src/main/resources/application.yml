@@ -13,15 +13,15 @@ spring:
                         client-secret: dXf021lMWuZ9kZafqxZn230MvVEdROIo
                         redirect-uri: http://localhost:8081/login/oauth2/code/keycloak
                         scope: profile,email
-#                        scope: openid,profile,email
+
                     google:
                         client-id: 823010453529-vtpf78akl4dc0rn8s9uq649v1crtpn0t.apps.googleusercontent.com
                         client-secret: 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
-                        scope: profile,email
-#                        scope: openid,profile,email
+                        scope: openid,profile,email
+
                     naver:
-                        client-id: ad6x8jw3fzuq_YzfQDD3
-                        client-secret: dG4eW7lP7e
+                        client-id: PyqTi2mMDkpj2i9Y22z4
+                        client-secret: kSKrKX7XYO
                         authorization-grant-type: authorization_code
                         client-name: naver-client-app
                         redirect-uri: http://localhost:8081/login/oauth2/code/naver
