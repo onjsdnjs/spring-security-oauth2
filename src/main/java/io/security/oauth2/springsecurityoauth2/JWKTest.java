@@ -9,11 +9,9 @@ import com.nimbusds.jose.jwk.gen.OctetSequenceKeyGenerator;
 import com.nimbusds.jose.jwk.gen.RSAKeyGenerator;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
-import com.nimbusds.jose.util.Base64URL;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.Key;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
@@ -22,7 +20,6 @@ import java.security.interfaces.RSAPublicKey;
 import java.util.Base64;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 public class JWKTest {
 
@@ -43,11 +40,12 @@ public class JWKTest {
                 .keyID("rsa-kid1")
                 .build();
 
+
         RSAKey rsaKey2 = new RSAKeyGenerator(2048)
                 .keyID("rsa-kid2")
                 .keyUse(KeyUse.SIGNATURE)
                 .keyOperations(Set.of(KeyOperation.SIGN))
-                .algorithm(JWSAlgorithm.RS256)
+                .algorithm(JWSAlgorithm.RS512)
                 .generate();
 
         // 대칭키 JWK
@@ -55,30 +53,35 @@ public class JWKTest {
                 Base64.getDecoder().decode("bCzY/M48bbkwBEWjmNSIEPfwApcvXOnkCxORBEbPr+4="), "AES");
 
         OctetSequenceKey octetSequenceKey1 = new OctetSequenceKey.Builder(secretKey)
+                .keyID("secret-kid1")
                 .keyUse(KeyUse.SIGNATURE)
-                .keyID("secret-kid1").build();
+                .keyOperations(Set.of(KeyOperation.SIGN))
+                .algorithm(JWSAlgorithm.HS256)
+                .build();
 
         OctetSequenceKey octetSequenceKey2 = new OctetSequenceKeyGenerator(256)
                 .keyID("secret-kid2")
                 .keyUse(KeyUse.SIGNATURE)
                 .keyOperations(Set.of(KeyOperation.SIGN))
-                .algorithm(JWSAlgorithm.HS256)
+                .algorithm(JWSAlgorithm.HS384)
                 .generate();
 
 
         String kId;
-        kId = rsaKey1.getKeyID();
-        kId = rsaKey2.getKeyID();
+//        kId = rsaKey1.getKeyID();
+//        kId = rsaKey2.getKeyID();
         kId = octetSequenceKey1.getKeyID();
-        kId = octetSequenceKey2.getKeyID();
+//        kId = octetSequenceKey2.getKeyID();
 
         JWSAlgorithm alg;
-        alg = JWSAlgorithm.RS256;
-        alg = JWSAlgorithm.HS256;
-
+//        alg = (JWSAlgorithm)rsaKey1.getAlgorithm();
+//        alg = (JWSAlgorithm)rsaKey2.getAlgorithm();
+        alg = (JWSAlgorithm)octetSequenceKey1.getAlgorithm();
+//        alg = (JWSAlgorithm)octetSequenceKey2.getAlgorithm();
+//
         KeyType type;
         type = KeyType.RSA;
-        type = KeyType.OCT;
+//        type = KeyType.OCT;
 
         jwkSet(kId,alg,type,rsaKey1,rsaKey2,octetSequenceKey1,octetSequenceKey2);
     }
