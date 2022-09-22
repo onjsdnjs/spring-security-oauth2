@@ -6,8 +6,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
-@Configuration(proxyBeanMethods = false)
-public class OAuth2ResourceServer {
+@Configuration
+public class OAuth2ResourceServerConfig {
 
     @Bean
     SecurityFilterChain jwtSecurityFilterChain(HttpSecurity http) throws Exception {
