@@ -27,20 +27,16 @@ import java.util.Map;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    private HttpSecurity httpSecurity;
     private SecuritySigner securitySigner;
     private JWK jwk;
 
-    public JwtAuthenticationFilter(HttpSecurity httpSecurity, SecuritySigner securitySigner, JWK jwk) {
-        this.httpSecurity = httpSecurity;
+    public JwtAuthenticationFilter(SecuritySigner securitySigner, JWK jwk) {
         this.securitySigner = securitySigner;
         this.jwk = jwk;
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-
-        AuthenticationManager authenticationManager = httpSecurity.getSharedObject(AuthenticationManager.class);
 
         ObjectMapper objectMapper = new ObjectMapper();
         LoginDto loginDto = null;
@@ -51,14 +47,15 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         } catch (Exception e) {
             e.printStackTrace();
         }
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
-        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
 
-        return authentication;
+        return getAuthenticationManager().authenticate(authenticationToken);
+
     }
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws ServletException, IOException {
-
+        SecurityContextHolder.getContext().setAuthentication(authResult);
         User user = (User) authResult.getPrincipal();
 
         String jwtToken;
