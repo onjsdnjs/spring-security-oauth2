@@ -3,6 +3,8 @@ package io.security.oauth2.springsecurityoauth2.configs;
 import io.security.oauth2.springsecurityoauth2.filter.authentication.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,7 +24,7 @@ public class OAuth2ResourceServer {
 
         http.authorizeRequests((requests) -> requests.anyRequest().authenticated());
         http.userDetailsService(getUserDetailsService());
-        http.addFilterBefore(new JwtAuthenticationFilter(http), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -32,6 +34,18 @@ public class OAuth2ResourceServer {
 
         UserDetails user = User.withUsername("user").password("1234").authorities("ROLE_USER").build();
         return new InMemoryUserDetailsManager(user);
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfiguration) throws Exception {
+        return authConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
+        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter();
+        jwtAuthenticationFilter.setAuthenticationManager(authenticationManager(null));
+        return jwtAuthenticationFilter;
     }
 
     @Bean
