@@ -20,7 +20,7 @@ public class OAuth2ResourceServer {
 
         http.csrf().disable();
 
-        http.authorizeRequests((requests) -> requests.antMatchers("/login").permitAll().anyRequest().authenticated());
+        http.authorizeRequests((requests) -> requests.anyRequest().authenticated());
         http.userDetailsService(getUserDetailsService());
         http.addFilterBefore(new JwtAuthenticationFilter(http), UsernamePasswordAuthenticationFilter.class);
 
