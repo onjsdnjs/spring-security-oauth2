@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class IndexController {
 
     @GetMapping("/")
-    public Authentication index(Authentication authentication){
-        return authentication;
+    public String index(){
+        return "index";
     }
 }
