@@ -22,7 +22,6 @@ public class OAuth2ResourceServer {
         http.csrf().disable();
 
         http.authorizeRequests((requests) -> requests.antMatchers("/login").permitAll().anyRequest().authenticated());
-        http.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
         http.userDetailsService(getUserDetailsService());
         http.addFilterBefore(new JwtAuthenticationFilter(http), UsernamePasswordAuthenticationFilter.class);
 
