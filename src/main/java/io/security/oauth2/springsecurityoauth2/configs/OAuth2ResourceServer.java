@@ -15,17 +15,17 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import java.util.Arrays;
-
-@Configuration(proxyBeanMethods = false)
+@Configuration
 public class OAuth2ResourceServer {
 
     @Autowired
@@ -58,7 +58,7 @@ public class OAuth2ResourceServer {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        http.authorizeRequests((requests) -> requests.antMatchers("/login","/").permitAll().anyRequest().authenticated());
+        http.authorizeRequests((requests) -> requests.antMatchers("/").permitAll().anyRequest().authenticated());
         http.userDetailsService(getUserDetailsService());
         http.addFilterBefore(new JwtAuthenticationFilter(http, securitySigner(), jwk()), UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(new JwtAuthorizationRsaPublicKeyFilter(jwtDecoder), UsernamePasswordAuthenticationFilter.class);
@@ -66,12 +66,16 @@ public class OAuth2ResourceServer {
         return http.build();
     }
 
-    private UserDetailsService getUserDetailsService() {
+    @Bean
+    public UserDetailsService getUserDetailsService() {
 
-        User user = new User("user", "{noop}1234", Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
-        InMemoryUserDetailsManager userDetailsManager = new InMemoryUserDetailsManager(user);
+        UserDetails user = User.withUsername("user").password("1234").authorities("ROLE_USER").build();
+        return new InMemoryUserDetailsManager(user);
+    }
 
-        return userDetailsManager;
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return NoOpPasswordEncoder.getInstance();
     }
 
     private SecuritySigner securitySigner() {
