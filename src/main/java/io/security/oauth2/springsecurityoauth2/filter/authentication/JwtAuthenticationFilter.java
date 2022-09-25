@@ -5,9 +5,7 @@ import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.jwk.JWK;
 import io.security.oauth2.springsecurityoauth2.dto.LoginDto;
 import io.security.oauth2.springsecurityoauth2.signature.SecuritySigner;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
@@ -21,12 +19,10 @@ import java.io.IOException;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    private HttpSecurity httpSecurity;
     private SecuritySigner securitySigner;
     private JWK jwk;
 
-    public JwtAuthenticationFilter(HttpSecurity httpSecurity, SecuritySigner securitySigner, JWK jwk) {
-        this.httpSecurity = httpSecurity;
+    public JwtAuthenticationFilter(SecuritySigner securitySigner, JWK jwk) {
         this.securitySigner = securitySigner;
         this.jwk = jwk;
     }
@@ -34,36 +30,34 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
-        AuthenticationManager authenticationManager = httpSecurity.getSharedObject(AuthenticationManager.class);
-
         ObjectMapper objectMapper = new ObjectMapper();
         LoginDto loginDto = null;
-        try {
 
+        try {
             loginDto = objectMapper.readValue(request.getInputStream(), LoginDto.class);
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
-        Authentication authentication = authenticationManager.authenticate(authenticationToken);
 
-        return authentication;
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
+
+        return getAuthenticationManager().authenticate(authenticationToken);
+
     }
+
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws ServletException, IOException {
-
-        User user = (User) authResult.getPrincipal();
-
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+        User user = (User)authResult.getPrincipal();
         String jwtToken;
+
         try {
             jwtToken = securitySigner.getJwtToken(user, jwk);
             response.addHeader("Authorization", "Bearer " + jwtToken);
 
         } catch (JOSEException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-
-
     }
 }
