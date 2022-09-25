@@ -2,6 +2,7 @@ package io.security.oauth2.springsecurityoauth2.filter.authorization;
 
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jose.jwk.OctetSequenceKey;
+import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 public class JwtAuthorizationMacFilter extends OncePerRequestFilter {
     private OctetSequenceKey jwk;
@@ -36,24 +38,29 @@ public class JwtAuthorizationMacFilter extends OncePerRequestFilter {
             return;
         }
         System.out.println("header : " + header);
-        String token = request.getHeader("Authorization").replace("Bearer ", "");
+        String token = header.replace("Bearer ", "");
 
 		SignedJWT signedJWT;
 		try {
 			signedJWT = SignedJWT.parse(token);
 			MACVerifier macVerifier = new MACVerifier(jwk.toSecretKey());
-			signedJWT.verify(macVerifier);
+			boolean verify = signedJWT.verify(macVerifier);
 
-			String username = signedJWT.getJWTClaimsSet().getClaim("username").toString();
-			List<String> authority = (List)signedJWT.getJWTClaimsSet().getClaim("authority");
+			if(verify){
+				JWTClaimsSet jwtClaimsSet = signedJWT.getJWTClaimsSet();
+				String username = jwtClaimsSet.getClaim("username").toString();
+				List<String> authority = (List)jwtClaimsSet.getClaim("authority");
 
-			if (username != null) {
-				UserDetails user = User.builder().username(username)
-						.password("")
-						.authorities(authority.get(0))
-						.build();
-				Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-				SecurityContextHolder.getContext().setAuthentication(authentication);
+				if(username != null){
+					UserDetails user = User.withUsername(username)
+							.password(UUID.randomUUID().toString())
+							.authorities(authority.get(0))
+							.build();
+
+					Authentication authentication =
+							new UsernamePasswordAuthenticationToken(user,null,user.getAuthorities());
+					SecurityContextHolder.getContext().setAuthentication(authentication);
+				}
 			}
 
 		} catch (Exception e) {

@@ -7,18 +7,16 @@ import com.nimbusds.jose.JWSSigner;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public abstract class SecuritySigner {
     public String getJwtTokenInternal(JWSSigner jwsSigner, UserDetails user, JWK jwk) throws JOSEException {
 
+        JWSHeader header = new JWSHeader.Builder((JWSAlgorithm) jwk.getAlgorithm()).keyID(jwk.getKeyID()).build();
         List<String> authority = user.getAuthorities().stream().map(auth -> auth.getAuthority()).collect(Collectors.toList());
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject("user")
@@ -28,7 +26,7 @@ public abstract class SecuritySigner {
                 .expirationTime(new Date(new Date().getTime() + 60 * 1000 * 5))
                 .build();
 
-        SignedJWT signedJWT = new SignedJWT(new JWSHeader.Builder((JWSAlgorithm)jwk.getAlgorithm()).keyID(jwk.getKeyID()).build(), jwtClaimsSet);
+        SignedJWT signedJWT = new SignedJWT(header,jwtClaimsSet);
         signedJWT.sign(jwsSigner);
         String jwtToken = signedJWT.serialize();
 
