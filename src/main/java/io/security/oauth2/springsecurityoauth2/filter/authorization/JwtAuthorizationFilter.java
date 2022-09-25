@@ -23,10 +23,11 @@ public abstract class JwtAuthorizationFilter extends OncePerRequestFilter {
 	}
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
 
-		if (!tokenResolve(request, response, chain)){
-			chain.doFilter(request,response);
+		String header = request.getHeader("Authorization");
+		if(header == null || !header.startsWith("Bearer ")){
+			filterChain.doFilter(request,response);
 			return;
 		}
 		String token = request.getHeader("Authorization").replace("Bearer ", "");
@@ -53,14 +54,6 @@ public abstract class JwtAuthorizationFilter extends OncePerRequestFilter {
 			e.printStackTrace();
 		}
 
-		chain.doFilter(request, response);
+		filterChain.doFilter(request, response);
     }
-	private boolean tokenResolve(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-		String header = request.getHeader("Authorization");
-		if (header == null || !header.startsWith("Bearer ")) {
-			return false;
-		}
-		return true;
-	}
-
 }
