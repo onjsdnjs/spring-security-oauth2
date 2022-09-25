@@ -27,7 +27,7 @@ public class JwtAuthorizationRsaPublicKeyFilter extends JwtAuthorizationFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
 
-		if (tokenResolve(request, response, chain)){
+		if (tokenResolve(request)){
 			chain.doFilter(request,response);
 			return;
 		}

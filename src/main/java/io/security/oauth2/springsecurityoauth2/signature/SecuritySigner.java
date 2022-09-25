@@ -17,18 +17,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public abstract class SecuritySigner {
-    public String getJwtTokenInternal(JWSSigner jwsSigner, UserDetails user, JWK jwk) throws JOSEException {
-
-        List<String> authority = user.getAuthorities().stream().map(auth -> auth.getAuthority()).collect(Collectors.toList());
+    protected String getJwtTokenInternal(JWSSigner jwsSigner, UserDetails user, JWK jwk) throws JOSEException {
+        JWSHeader header = new JWSHeader.Builder((JWSAlgorithm) jwk.getAlgorithm()).keyID(jwk.getKeyID()).build();
+        List<String> authorities = user.getAuthorities().stream().map(auth -> auth.getAuthority()).collect(Collectors.toList());
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject("user")
                 .issuer("http://localhost:8081")
-                .claim("username", user.getUsername())
-                .claim("authority", authority)
+                .claim("username",user.getUsername())
+                .claim("authority",authorities)
                 .expirationTime(new Date(new Date().getTime() + 60 * 1000 * 5))
                 .build();
-
-        SignedJWT signedJWT = new SignedJWT(new JWSHeader.Builder((JWSAlgorithm)jwk.getAlgorithm()).keyID(jwk.getKeyID()).build(), jwtClaimsSet);
+        SignedJWT signedJWT = new SignedJWT(header,jwtClaimsSet);
         signedJWT.sign(jwsSigner);
         String jwtToken = signedJWT.serialize();
 

@@ -21,9 +21,6 @@ public class RsaKeyExtractor implements ApplicationRunner {
     @Autowired
     private RsaPublicKeySecuritySigner rsaPublicKeySecuritySigner;
 
-    @Autowired
-    private OAuth2ResourceServerProperties properties;
-
     @Override
     public void run(ApplicationArguments args) throws Exception {
 

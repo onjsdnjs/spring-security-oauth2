@@ -33,15 +33,7 @@ public class SignatureConfig {
         return new RSASecuritySigner();
     }
     @Bean
-    public RSAKey rsaKey512() throws JOSEException {
-        return new RSAKeyGenerator(2048)
-                .keyID("rsaKey")
-                .algorithm(JWSAlgorithm.RS512)
-                .generate();
-    }
-
-    @Bean
-    public RSAKey rsaKey256() throws JOSEException {
+    public RSAKey rsaKey() throws JOSEException {
         return new RSAKeyGenerator(2048)
                 .keyID("rsaKey")
                 .algorithm(JWSAlgorithm.RS256)
