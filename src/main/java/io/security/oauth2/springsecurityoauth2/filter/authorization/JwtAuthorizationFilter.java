@@ -2,6 +2,7 @@ package io.security.oauth2.springsecurityoauth2.filter.authorization;
 
 import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.jwk.JWK;
+import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 public abstract class JwtAuthorizationFilter extends OncePerRequestFilter {
 	private JWSVerifier jwsVerifier;
@@ -27,28 +29,34 @@ public abstract class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
 
-		if (!tokenResolve(request, response, chain)){
+		String header = request.getHeader("Authorization");
+		if (!tokenResolve(header, request, response, chain)){
 			chain.doFilter(request,response);
 			return;
 		}
-		String token = request.getHeader("Authorization").replace("Bearer ", "");
+		String token = header.replace("Bearer ", "");
 
 		SignedJWT signedJWT;
 		try {
 			signedJWT = SignedJWT.parse(token);
 
-			signedJWT.verify(jwsVerifier);
+			boolean verify = signedJWT.verify(jwsVerifier);
 
-			String username = signedJWT.getJWTClaimsSet().getClaim("username").toString();
-			List<String> authority = (List)signedJWT.getJWTClaimsSet().getClaim("authority");
+			if(verify){
+				JWTClaimsSet jwtClaimsSet = signedJWT.getJWTClaimsSet();
+				String username = jwtClaimsSet.getClaim("username").toString();
+				List<String> authority = (List)jwtClaimsSet.getClaim("authority");
 
-			if (username != null) {
-				UserDetails user = User.builder().username(username)
-						.password("")
-						.authorities(authority.get(0))
-						.build();
-				Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-				SecurityContextHolder.getContext().setAuthentication(authentication);
+				if(username != null){
+					UserDetails user = User.withUsername(username)
+							.password(UUID.randomUUID().toString())
+							.authorities(authority.get(0))
+							.build();
+
+					Authentication authentication =
+							new UsernamePasswordAuthenticationToken(user,null,user.getAuthorities());
+					SecurityContextHolder.getContext().setAuthentication(authentication);
+				}
 			}
 
 		} catch (Exception e) {
@@ -58,8 +66,8 @@ public abstract class JwtAuthorizationFilter extends OncePerRequestFilter {
 		chain.doFilter(request, response);
     }
 
-	private boolean tokenResolve(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-		String header = request.getHeader("Authorization");
+	private boolean tokenResolve(String header, HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+
 		if (header == null || !header.startsWith("Bearer ")) {
 			return false;
 		}
