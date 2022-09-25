@@ -24,10 +24,10 @@ public abstract class JwtAuthorizationFilter extends OncePerRequestFilter {
 	}
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
 
-		if (tokenResolve(request, response, chain)){
-			chain.doFilter(request,response);
+		if (tokenResolve(request, response, filterChain)){
+			filterChain.doFilter(request,response);
 			return;
 		}
 		String token = getToken(request);
@@ -54,7 +54,7 @@ public abstract class JwtAuthorizationFilter extends OncePerRequestFilter {
 			e.printStackTrace();
 		}
 
-		chain.doFilter(request, response);
+		filterChain.doFilter(request, response);
     }
 
 	protected String getToken(HttpServletRequest request) {
