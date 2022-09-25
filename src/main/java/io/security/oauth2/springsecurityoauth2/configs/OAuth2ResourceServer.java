@@ -47,10 +47,10 @@ public class OAuth2ResourceServer {
         return new JwtAuthorizationRsaFilter(new RSASSAVerifier(rsaKey.toRSAPublicKey()));
     }
 
-    @Bean
+  /*  @Bean
     public JwtAuthorizationMacFilter jwtAuthorizationMacFilter(OctetSequenceKey octetSequenceKey) throws JOSEException {
         return new JwtAuthorizationMacFilter(new MACVerifier(octetSequenceKey.toSecretKey()));
-    }
+    }*/
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
