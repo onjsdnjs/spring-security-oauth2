@@ -12,7 +12,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
     private String realmName = "localhost";
 
-
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) throws IOException {

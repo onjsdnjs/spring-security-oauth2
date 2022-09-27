@@ -11,8 +11,7 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests().anyRequest().authenticated();
-        http.httpBasic()
-                .realmName("myRealm");
+        http.httpBasic().authenticationEntryPoint(new CustomAuthenticationEntryPoint());
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         return http.build();
     }
