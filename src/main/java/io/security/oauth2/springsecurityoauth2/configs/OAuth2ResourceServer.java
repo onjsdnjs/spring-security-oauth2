@@ -68,9 +68,14 @@ public class OAuth2ResourceServer {
                 .anyRequest().authenticated());
         http.userDetailsService(userDetailsService());
         http.addFilterBefore(jwtAuthenticationFilter(null, null), UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(new JwtAuthorizationRsaPublicKeyFilter(jwtDecoder), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthorizationRsaPublicKeyFilter(null), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    public JwtAuthorizationRsaPublicKeyFilter jwtAuthorizationRsaPublicKeyFilter(JwtDecoder jwtDecoder) throws JOSEException {
+        return new JwtAuthorizationRsaPublicKeyFilter(jwtDecoder);
     }
 
    /* @Bean
