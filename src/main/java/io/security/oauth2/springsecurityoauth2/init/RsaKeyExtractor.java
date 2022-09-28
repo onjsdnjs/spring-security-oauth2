@@ -4,7 +4,6 @@ import io.security.oauth2.springsecurityoauth2.signature.RsaPublicKeySecuritySig
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -21,13 +20,10 @@ public class RsaKeyExtractor implements ApplicationRunner {
     @Autowired
     private RsaPublicKeySecuritySigner rsaPublicKeySecuritySigner;
 
-    @Autowired
-    private OAuth2ResourceServerProperties properties;
-
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        String path = "E:\\project\\spring-security-oauth2\\src\\main\\resources\\certs\\";
+        String path = "E:\\project\\oauth2\\spring-security-oauth2\\src\\main\\resources\\certs\\";
         File file = new File(path + "publicKey.txt");
 
         FileInputStream is = new FileInputStream(path + "apiKey.jks");
