@@ -15,23 +15,25 @@ import java.util.stream.Collectors;
 
 public class CustomRoleConverter implements Converter<Jwt, Collection<GrantedAuthority>> {
 
+    private final String PREFIX = "ROLE_";
+
     @Override
     public Collection<GrantedAuthority> convert(final Jwt jwt) {
 
-        String scopes = (String) jwt.getClaims().get("scope");
-        Map<String, Object> realmAccess = (Map<String, Object>) jwt.getClaims().get("realm_access");
+        String scopes = jwt.getClaimAsString("scope");
+        Map<String, Object> realmAccess = jwt.getClaimAsMap("realm_access");
 
-        if (scopes == null || realmAccess == null) {
-            return new ArrayList<>();
+        if(scopes == null || realmAccess == null){
+            return Collections.EMPTY_LIST;
         }
 
-        Collection<GrantedAuthority> authorities1 = ((List<String>) realmAccess.get("roles"))
-                .stream().map(roleName -> "ROLE_" + roleName)
-                .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+        Collection<GrantedAuthority> authorities1 = Arrays.stream(scopes.split(" "))
+                .map(roleName -> PREFIX + roleName)
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
 
-
-        Collection<SimpleGrantedAuthority> authorities2 = Arrays.stream(scopes.split(" "))
-                .map(roleName -> "ROLE_" + roleName)
+        Collection<GrantedAuthority> authorities2 = ((List<String>) realmAccess.get("roles")).stream()
+                .map(roleName -> PREFIX + roleName)
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
