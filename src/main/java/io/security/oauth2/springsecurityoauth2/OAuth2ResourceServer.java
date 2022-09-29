@@ -26,5 +26,4 @@ public class OAuth2ResourceServer {
         OAuth2ResourceServerProperties.Opaquetoken opaquetoken = properties.getOpaquetoken();
         return new NimbusOpaqueTokenIntrospector(opaquetoken.getIntrospectionUri(),opaquetoken.getClientId(),opaquetoken.getClientSecret());
     }
-
 }
