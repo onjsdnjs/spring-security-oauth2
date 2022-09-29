@@ -1,6 +1,7 @@
 package io.security.oauth2.springsecurityoauth2;
 
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,7 +19,7 @@ public class PhotoController {
     }
 
     @GetMapping("/photos/2")
-//    @PreAuthorize("hasAnyAuthority('SCOPE_photo')")
+    @PreAuthorize("hasAnyAuthority('ROLE_photo')")
     public Photo photo2(){
         return Photo.builder()
                 .photoId("2")
@@ -29,6 +30,7 @@ public class PhotoController {
     }
 
     @GetMapping("/photos/3")
+    @PreAuthorize("hasAnyAuthority('ROLE_default-roles-oauth2')")
     public Photo photo3(){
         return Photo.builder()
                 .photoId("3")
@@ -37,5 +39,4 @@ public class PhotoController {
                 .userId("user3")
                 .build();
     }
-
 }

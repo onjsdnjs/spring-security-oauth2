@@ -20,7 +20,7 @@ public class OAuth2ResourceServer {
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new CustomRoleConverter());
 
-        http.antMatcher("/photos/1").authorizeRequests(
+        http.authorizeRequests(
                 (requests) -> requests.antMatchers("/photos/1").hasAuthority("ROLE_photo")
                         .antMatchers("/photos/3").hasAuthority("ROLE_default-roles-oauth2")
                         .anyRequest().authenticated());
