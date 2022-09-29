@@ -21,10 +21,10 @@ public class OAuth2ResourceServer {
         return http.build();
     }
 
- /*   @Bean
+    @Bean
     public OpaqueTokenIntrospector nimbusOpaqueTokenIntrospector(OAuth2ResourceServerProperties properties) {
         OAuth2ResourceServerProperties.Opaquetoken opaquetoken = properties.getOpaquetoken();
         return new NimbusOpaqueTokenIntrospector(opaquetoken.getIntrospectionUri(),opaquetoken.getClientId(),opaquetoken.getClientSecret());
-    }*/
+    }
 
 }
