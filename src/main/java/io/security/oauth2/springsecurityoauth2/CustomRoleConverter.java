@@ -18,14 +18,25 @@ public class CustomRoleConverter implements Converter<Jwt, Collection<GrantedAut
     @Override
     public Collection<GrantedAuthority> convert(final Jwt jwt) {
 
-        String scopes = (String)jwt.getClaims().get("scope");
+        String scopes = (String) jwt.getClaims().get("scope");
+        Map<String, Object> realmAccess = (Map<String, Object>) jwt.getClaims().get("realm_access");
 
-        if (scopes == null || scopes.isEmpty()) {
+        if (scopes == null || realmAccess == null) {
             return new ArrayList<>();
         }
 
-        return Arrays.stream(scopes.split(" ")).map(roleName -> "ROLE_" + roleName)
+        Collection<GrantedAuthority> authorities1 = ((List<String>) realmAccess.get("roles"))
+                .stream().map(roleName -> "ROLE_" + roleName)
+                .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+
+
+        Collection<SimpleGrantedAuthority> authorities2 = Arrays.stream(scopes.split(" "))
+                .map(roleName -> "ROLE_" + roleName)
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
+
+        authorities1.addAll(authorities2);
+
+        return authorities1;
     }
 }

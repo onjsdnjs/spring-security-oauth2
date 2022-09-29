@@ -4,36 +4,38 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
-import java.util.List;
-
 @RestController
 public class PhotoController {
 
     @GetMapping("/photos/1")
-    public List<Photo> photosUrl(){
-
-        Photo photo1 = getPhoto("1", "Photo 1 title", "Photo 1 description");
-        Photo photo2 = getPhoto("2", "Photo 2 title", "Photo 2 description");
-
-        return Arrays.asList(photo1, photo2);
+    public Photo photo1(){
+        return Photo.builder()
+                .photoId("1")
+                .photoTitle("Photo 1 title")
+                .photoDescription("Photo is nice")
+                .userId("user1")
+                .build();
     }
 
     @GetMapping("/photos/2")
-    @PreAuthorize("hasAuthority('SCOPE_photo')")
-    public List<Photo> photosMethod(){
-
-        Photo photo1 = getPhoto("1", "Photo 1 title", "Photo 1 description");
-        Photo photo2 = getPhoto("2", "Photo 2 title", "Photo 2 description");
-
-        return Arrays.asList(photo1, photo2);
+//    @PreAuthorize("hasAnyAuthority('SCOPE_photo')")
+    public Photo photo2(){
+        return Photo.builder()
+                .photoId("2")
+                .photoTitle("Photo 2 title")
+                .photoDescription("Photo is beauty")
+                .userId("user2")
+                .build();
     }
-    private Photo getPhoto(String photoId, String photoTitle, String photoDescription) {
-        Photo photo = new Photo();
-        photo.setUserId("user");
-        photo.setPhotoId(photoId);
-        photo.setPhotoTitle(photoTitle);
-        photo.setPhotoDescription(photoDescription);
-        return photo;
+
+    @GetMapping("/photos/3")
+    public Photo photo3(){
+        return Photo.builder()
+                .photoId("3")
+                .photoTitle("Photo 3 title")
+                .photoDescription("Photo is beauty")
+                .userId("user3")
+                .build();
     }
+
 }
