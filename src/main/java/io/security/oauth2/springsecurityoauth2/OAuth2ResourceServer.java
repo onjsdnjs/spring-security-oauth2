@@ -8,7 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class OAuth2ResourceServer {
 
