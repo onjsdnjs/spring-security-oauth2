@@ -11,22 +11,20 @@ import java.util.List;
 public class PhotoController {
 
     @GetMapping("/photos/1")
-    public List<Photo> photosUrl(){
+    public Photo photosUrl(){
 
         Photo photo1 = getPhoto("1", "Photo 1 title", "Photo 1 description");
-        Photo photo2 = getPhoto("2", "Photo 2 title", "Photo 2 description");
 
-        return Arrays.asList(photo1, photo2);
+        return photo1;
     }
 
     @GetMapping("/photos/2")
-    @PreAuthorize("hasAuthority('SCOPE_photo')")
-    public List<Photo> photosMethod(){
+//    @PreAuthorize("hasAuthority('SCOPE_photo')")
+    public Photo photosMethod(){
 
-        Photo photo1 = getPhoto("1", "Photo 1 title", "Photo 1 description");
         Photo photo2 = getPhoto("2", "Photo 2 title", "Photo 2 description");
 
-        return Arrays.asList(photo1, photo2);
+        return photo2;
     }
     private Photo getPhoto(String photoId, String photoTitle, String photoDescription) {
         Photo photo = new Photo();
