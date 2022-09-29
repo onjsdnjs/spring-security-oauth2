@@ -30,4 +30,5 @@ public class CustomOpaqueTokenIntrospector implements OpaqueTokenIntrospector {
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
+
 }
