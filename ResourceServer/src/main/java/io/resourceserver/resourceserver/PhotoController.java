@@ -13,8 +13,8 @@ public class PhotoController {
     @GetMapping("/photos")
     public List<Photo> photos(){
 
-        Photo photo1 = getPhoto("ID1 ", "Title1 ", "Description1 ");
-        Photo photo2 = getPhoto("ID2 ", "Title2 ", "Description2 ");
+        Photo photo1 = getBuild("1 ", "Photo 1 title ", "Photo is nice ", "user1");
+        Photo photo2 = getBuild("2 ", "Photo 2 title ", "Photo is beautiful ", "user2");
 
         return Arrays.asList(photo1, photo2);
     }
@@ -22,17 +22,17 @@ public class PhotoController {
     @GetMapping("/remotePhotos")
     public List<Photo> remotePhotos(){
 
-        Photo photo1 = getPhoto("RemoteID1 ", "RemoteTitle1 ", "RemoteDescription1 ");
-        Photo photo2 = getPhoto("RemoteID2 ", "RemoteTitle2 ", "RemoteDescription2 ");
+        Photo photo1 = getBuild("Remote1 ", "Remote Photo 1 title ", "Remote Photo is nice ", "Remote user1");
+        Photo photo2 = getBuild("Remote2 ", "Remote Photo 2 title ", "Remote Photo is beautiful ", "Remote user1");
 
         return Arrays.asList(photo1, photo2);
     }
-    private Photo getPhoto(String photoId, String photoTitle, String photoDescription) {
-        Photo photo = new Photo();
-        photo.setUserId("user ");
-        photo.setPhotoId(photoId);
-        photo.setPhotoTitle(photoTitle);
-        photo.setPhotoDescription(photoDescription);
-        return photo;
+    private Photo getBuild(String photoId, String photoTitle, String description, String user1) {
+        return Photo.builder()
+                .photoId(photoId)
+                .photoTitle(photoTitle)
+                .photoDescription(description)
+                .userId(user1)
+                .build();
     }
 }
