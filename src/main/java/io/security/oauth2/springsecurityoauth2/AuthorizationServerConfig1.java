@@ -1,8 +1,6 @@
 package io.security.oauth2.springsecurityoauth2;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
@@ -11,19 +9,12 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.config.ProviderSettings;
-import org.springframework.security.web.SecurityFilterChain;
 
 import java.util.UUID;
 
 //@Configuration
-public class AuthorizationServerConfig2 {
-
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
-        OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
-        return http.build();
-    }
+//@Import(OAuth2AuthorizationServerConfiguration.class)
+public class AuthorizationServerConfig1 {
 
     @Bean
     public ProviderSettings providerSettings(){
