@@ -46,6 +46,29 @@ public class AuthorizationServerConfig {
 		return ProviderSettings.builder().issuer("http://localhost:9000").build();
 	}
 
+
+	@Bean
+	public RegisteredClientRepository registeredClientRepository() {
+		RegisteredClient registeredClient = RegisteredClient.withId(UUID.randomUUID().toString())
+				.clientId("oauth2-client-app")
+				.clientSecret("{noop}secret")
+				.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+				.clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
+				.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+				.authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+				.authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+				.redirectUri("http://127.0.0.1:8081/login/oauth2/code/oauth2-client-app")
+				.redirectUri("http://127.0.0.1:8081")
+				.scope(OidcScopes.OPENID)
+				.scope("read")
+				.scope("write")
+				.clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
+				.build();
+
+		InMemoryRegisteredClientRepository registeredClientRepository = new InMemoryRegisteredClientRepository(registeredClient);
+		return registeredClientRepository;
+	}
+
 	@Bean
 	public JWKSource<SecurityContext> jwkSource() {
 		RSAKey rsaKey = generateRsa();
@@ -73,28 +96,6 @@ public class AuthorizationServerConfig {
 			throw new IllegalStateException(ex);
 		}
 		return keyPair;
-	}
-
-	@Bean
-	public RegisteredClientRepository registeredClientRepository() {
-		RegisteredClient registeredClient = RegisteredClient.withId(UUID.randomUUID().toString())
-				.clientId("oauth2-client-app")
-				.clientSecret("{noop}secret")
-				.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-				.clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
-				.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-				.authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-				.authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
-				.redirectUri("http://127.0.0.1:8081/login/oauth2/code/oauth2-client-app")
-				.redirectUri("http://127.0.0.1:8081")
-				.scope(OidcScopes.OPENID)
-				.scope("read")
-				.scope("write")
-				.clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
-				.build();
-
-		InMemoryRegisteredClientRepository registeredClientRepository = new InMemoryRegisteredClientRepository(registeredClient);
-		return registeredClientRepository;
 	}
 }
 
