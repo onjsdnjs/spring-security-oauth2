@@ -14,8 +14,8 @@ public class OAuth2AuthorizationController {
     private OAuth2AuthorizationService oAuth2AuthorizationService;
 
 
-    @GetMapping("/oAuth2Authorization")
-    public OAuth2Authorization oAuth2Authorization(String token){
+    @GetMapping("/authorization")
+    public OAuth2Authorization authorization(String token){
 
         return oAuth2AuthorizationService.findByToken(token, OAuth2TokenType.ACCESS_TOKEN);
 
