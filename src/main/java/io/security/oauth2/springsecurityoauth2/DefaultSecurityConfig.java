@@ -8,6 +8,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.oauth2.server.authorization.InMemoryOAuth2AuthorizationService;
+import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -32,5 +34,10 @@ public class DefaultSecurityConfig {
 	public UserDetailsService userDetailsService(){
 		UserDetails user = User.withUsername("user").password("{noop}1234").authorities("ROLE_USER").build();
 		return new InMemoryUserDetailsManager(user);
+	}
+
+	@Bean
+	public OAuth2AuthorizationService oAuth2AuthorizationService(){
+		return new InMemoryOAuth2AuthorizationService();
 	}
 }

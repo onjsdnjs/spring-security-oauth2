@@ -9,15 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class OAuth2AuthorizationController {
-
     @Autowired
     private OAuth2AuthorizationService oAuth2AuthorizationService;
 
-
     @GetMapping("/authorization")
-    public OAuth2Authorization authorization(String token){
-
+    public OAuth2Authorization oAuth2Authorization(String token){
         return oAuth2AuthorizationService.findByToken(token, OAuth2TokenType.ACCESS_TOKEN);
-
     }
 }
+
