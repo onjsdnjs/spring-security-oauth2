@@ -8,6 +8,8 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -16,11 +18,13 @@ public class RegisteredClientController {
 
     private final RegisteredClientRepository registeredClientRepository;
 
-    @GetMapping("/registeredClient")
-    public RegisteredClient registeredClient(){
-        RegisteredClient registeredClient = registeredClientRepository.findByClientId("oauth2-client-app2");
-        Set<String> scopes = registeredClient.getScopes();
-        Set<AuthorizationGrantType> authorizationGrantTypes = registeredClient.getAuthorizationGrantTypes();
-        return registeredClient;
+    @GetMapping("/registeredClients")
+    public List<RegisteredClient> registeredClients(){
+
+        RegisteredClient registeredClient1 = registeredClientRepository.findByClientId("oauth2-client-app1");
+        RegisteredClient registeredClient2 = registeredClientRepository.findByClientId("oauth2-client-app2");
+        RegisteredClient registeredClient3 = registeredClientRepository.findByClientId("oauth2-client-app3");
+
+        return Arrays.asList(registeredClient1,registeredClient2, registeredClient3);
     }
 }
