@@ -15,15 +15,12 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 @Component
+@RequiredArgsConstructor
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
-    @Autowired
-    private OAuth2AuthorizationService oAuth2AuthorizationService;
-    @Autowired
-    private OAuth2AuthorizationConsentService oAuth2AuthorizationConsentService;
-    @Autowired
-    private RegisteredClientRepository registeredClientRepository;
-
+    private final RegisteredClientRepository registeredClientRepository;
+    private final OAuth2AuthorizationService oAuth2AuthorizationService;
+    private final OAuth2AuthorizationConsentService oAuth2AuthorizationConsentService;
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 
@@ -36,14 +33,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
                 = (OAuth2AuthorizationCodeRequestAuthenticationToken)authenticationProvider.authenticate(authorizationCodeRequestAuthentication);
 
         Authentication principal = (Authentication) authorizationCodeRequestAuthentication.getPrincipal();
+        System.out.println("principal = " + principal);
 
-        return OAuth2AuthorizationCodeRequestAuthenticationToken.with(authenticate.getClientId(), principal)
-                .authorizationUri(authorizationCodeRequestAuthentication.getAuthorizationUri())
-                .redirectUri(authorizationCodeRequestAuthentication.getRedirectUri())
-                .scopes(authorizationCodeRequestAuthentication.getScopes())
-                .state(authorizationCodeRequestAuthentication.getState() + UUID.randomUUID().toString())
-                .authorizationCode(authorizationCodeRequestAuthentication.getAuthorizationCode())
-                .build();
+        return authenticate;
 
     }
 

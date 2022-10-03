@@ -21,6 +21,8 @@ import org.springframework.security.oauth2.core.OAuth2AuthorizationCode;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.server.authorization.InMemoryOAuth2AuthorizationService;
+import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
+import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.authentication.OAuth2AuthorizationCodeRequestAuthenticationToken;
 import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
@@ -51,7 +53,7 @@ import java.util.UUID;
 public class AuthorizationServerConfig {
 
     @Autowired
-    private
+    private CustomAuthenticationProvider customAuthenticationProvider;
 
 
     @Bean
@@ -62,7 +64,7 @@ public class AuthorizationServerConfig {
         RequestMatcher endpointsMatcher = authorizationServerConfigurer.getEndpointsMatcher();
         authorizationServerConfigurer.authorizationEndpoint(authorizationEndpoint ->
                         authorizationEndpoint
-                                .authenticationProvider(customAuthenticationProvider())
+                                .authenticationProvider(customAuthenticationProvider)
                                 .authorizationResponseHandler(new AuthenticationSuccessHandler() {
                                             @Override
                                             public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -99,70 +101,6 @@ public class AuthorizationServerConfig {
                         exceptions.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
                 );
         return http.build();
-    }
-
-    @Bean
-    public ProviderSettings providerSettings(){
-        return ProviderSettings.builder().issuer("http://localhost:9000").build();
-    }
-
-    @Bean
-    public RegisteredClientRepository registeredClientRepository(){
-
-        RegisteredClient registeredClient1= getRegisteredClient("oauth2-client-app1", "{noop}secret1", "read", "write");
-        RegisteredClient registeredClient2= getRegisteredClient("oauth2-client-app2", "{noop}secret2", "read", "delete");
-        RegisteredClient registeredClient3= getRegisteredClient("oauth2-client-app3", "{noop}secret3", "read", "update");
-
-        return new InMemoryRegisteredClientRepository(Arrays.asList(registeredClient1,registeredClient2,registeredClient3));
-
-    }
-
-    private RegisteredClient getRegisteredClient(String clientId, String clientSecret, String scope1, String scope2) {
-        return RegisteredClient.withId(UUID.randomUUID().toString())
-                .clientId(clientId)
-                .clientSecret(clientSecret)
-                .clientName(clientId)
-                .clientIdIssuedAt(Instant.now())
-                .clientSecretExpiresAt(Instant.MAX)
-                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_POST)
-                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
-                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .redirectUri("http://127.0.0.1:8081")
-                .scope(OidcScopes.OPENID)
-                .scope(OidcScopes.PROFILE)
-                .scope(OidcScopes.EMAIL)
-                .scope(scope1)
-                .scope(scope2)
-                .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
-                .build();
-    }
-
-    @Bean
-    public JWKSource<SecurityContext> jwkSource() throws NoSuchAlgorithmException {
-        RSAKey rsaKey = generateRsa();
-        JWKSet jwkSet = new JWKSet(rsaKey);
-
-        return (jwkSelector, context) -> jwkSelector.select(jwkSet);
-    }
-
-    private RSAKey generateRsa() throws NoSuchAlgorithmException {
-
-        KeyPair keyPair = generateKeyPair();
-        RSAPrivateKey rsaPrivateKey = (RSAPrivateKey) keyPair.getPrivate();
-        RSAPublicKey rsaPublicKey = (RSAPublicKey) keyPair.getPublic();
-
-        return new RSAKey.Builder(rsaPublicKey)
-                .privateKey(rsaPrivateKey)
-                .keyID(UUID.randomUUID().toString())
-                .build();
-    }
-
-    private KeyPair generateKeyPair() throws NoSuchAlgorithmException {
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-        keyPairGenerator.initialize(2048);
-        return keyPairGenerator.generateKeyPair();
     }
 }
 

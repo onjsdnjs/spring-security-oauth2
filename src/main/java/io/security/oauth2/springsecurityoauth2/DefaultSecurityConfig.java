@@ -2,6 +2,7 @@
 package io.security.oauth2.springsecurityoauth2;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -22,6 +23,9 @@ public class DefaultSecurityConfig {
 
 		http.authorizeRequests(request -> request.anyRequest().authenticated());
 		http.formLogin();
+		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+		daoAuthenticationProvider.setUserDetailsService(userDetailsService());
+		http.authenticationProvider(daoAuthenticationProvider);
 
 		return http.build();
 	}
@@ -40,11 +44,6 @@ public class DefaultSecurityConfig {
 	@Bean
 	public OAuth2AuthorizationConsentService oAuth2AuthorizationConsentService(){
 		return new InMemoryOAuth2AuthorizationConsentService();
-	}
-
-	@Bean
-	public CustomAuthenticationProvider customAuthenticationProvider(){
-		return new CustomAuthenticationProvider();
 	}
 
 }
