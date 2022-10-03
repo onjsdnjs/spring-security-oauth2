@@ -7,7 +7,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.oauth2.server.authorization.InMemoryOAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.InMemoryOAuth2AuthorizationService;
+import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
@@ -33,6 +35,16 @@ public class DefaultSecurityConfig {
 	@Bean
 	public OAuth2AuthorizationService oAuth2AuthorizationService(){
 		return new InMemoryOAuth2AuthorizationService();
+	}
+
+	@Bean
+	public OAuth2AuthorizationConsentService oAuth2AuthorizationConsentService(){
+		return new InMemoryOAuth2AuthorizationConsentService();
+	}
+
+	@Bean
+	public CustomAuthenticationProvider customAuthenticationProvider(){
+		return new CustomAuthenticationProvider();
 	}
 
 }
