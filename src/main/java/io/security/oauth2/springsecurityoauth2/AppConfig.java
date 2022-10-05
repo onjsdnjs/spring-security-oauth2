@@ -9,6 +9,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
+import org.springframework.security.oauth2.server.authorization.InMemoryOAuth2AuthorizationConsentService;
+import org.springframework.security.oauth2.server.authorization.InMemoryOAuth2AuthorizationService;
+import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
+import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
@@ -89,5 +93,15 @@ public class AppConfig {
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
         keyPairGenerator.initialize(2048);
         return keyPairGenerator.generateKeyPair();
+    }
+
+    @Bean
+    public OAuth2AuthorizationService oAuth2AuthorizationService(){
+        return new InMemoryOAuth2AuthorizationService();
+    }
+
+    @Bean
+    public OAuth2AuthorizationConsentService oAuth2AuthorizationConsentService(){
+        return new InMemoryOAuth2AuthorizationConsentService();
     }
 }
