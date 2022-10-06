@@ -48,7 +48,6 @@ public class AuthorizationServerConfig {
 		return ProviderSettings.builder().issuer("http://localhost:9000").build();
 	}
 
-
 	@Bean
 	public RegisteredClientRepository registeredClientRepository() {
 		RegisteredClient registeredClient = RegisteredClient.withId(UUID.randomUUID().toString())
