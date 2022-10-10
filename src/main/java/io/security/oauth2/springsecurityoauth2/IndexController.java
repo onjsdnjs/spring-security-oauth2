@@ -12,7 +12,7 @@ import java.util.Map;
 
 @RestController
 public class IndexController {
-    @GetMapping("/")
+    @GetMapping("/introspect")
     public OpaqueDto index(Authentication authentication, @AuthenticationPrincipal OAuth2AuthenticatedPrincipal principal){
         BearerTokenAuthentication bearerTokenAuthentication =  (BearerTokenAuthentication)authentication;
         Map<String, Object> tokenAttributes = bearerTokenAuthentication.getTokenAttributes();

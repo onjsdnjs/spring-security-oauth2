@@ -6,6 +6,6 @@ spring:
     oauth2:
       resourceserver:
         opaquetoken:
-          introspection-uri: http://localhost:9000/oauth2/introspet
+          introspection-uri: http://localhost:9000/oauth2/introspect
           client-id: oauth2-client-app1
-          client-secret: secret
+          client-secret: secret1
