@@ -19,6 +19,7 @@ public class OAuth2ResourceServer {
                 (requests) -> requests.anyRequest().authenticated());
         http.oauth2ResourceServer(OAuth2ResourceServerConfigurer::opaqueToken);
         return http.build();
+
     }
 
     @Bean
