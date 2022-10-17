@@ -7,7 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.client.RestTemplate;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 public class OAuth2ClientConfig {
 
     @Bean

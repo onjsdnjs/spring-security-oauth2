@@ -8,11 +8,11 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-@Configuration//(proxyBeanMethods = false)
+@Configuration
 public class OAuth2ResourceServer {
 
     @Bean
-    SecurityFilterChain securityFilterChain1(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.authorizeRequests(
                 (requests) -> requests
