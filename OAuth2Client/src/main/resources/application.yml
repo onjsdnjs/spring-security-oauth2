@@ -18,6 +18,6 @@ spring:
             client-id: oauth2-client-app1
             client-name: oauth2-client-app
             client-secret: secret1
-            redirect-uri: http://127.0.0.1:8081/login/oauth2/code/springOAuth2
+            redirect-uri: http://127.0.0.1:8081/login/oauth2/code/springoauth2
             #scope: openid,read,write
             scope: openid,read,write,photo
