@@ -4,19 +4,19 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
     <script>
-        function remotePhotos(){
-            fetch("http://localhost:8082/remotePhotos",{
-                method : "GET",
-                headers : {
-                    Authorization : "Bearer "+ localStorage.getItem("access_token")
+        function remotePhotos() {
+            fetch("http://localhost:8082/remotePhotos", {
+                method: "GET",
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("access_token")
                 }
             })
                 .then(response => {
-                    response.json().then(function(data){
-                        for(const prop in data) {
+                    response.json().then(function (data) {
+                        for (const prop in data) {
                             document.querySelector("#remotePhotos").append(data[prop].userId);
                             document.querySelector("#remotePhotos").append(data[prop].photoId);
                             document.querySelector("#remotePhotos").append(data[prop].photoTitle);
@@ -27,17 +27,17 @@
                 })
         }
 
-        function photos(){
-            fetch("/photos?token="+localStorage.getItem("access_token"),
+        function photos() {
+            fetch("/photos?token=" + localStorage.getItem("access_token"),
                 {
-                    method : "GET",
-                    headers : {
+                    method: "GET",
+                    headers: {
                         "Content-Type": "application/json",
                     },
                 })
                 .then(response => {
-                    response.json().then(function(data){
-                        for(const prop in data) {
+                    response.json().then(function (data) {
+                        for (const prop in data) {
                             document.querySelector("#photos").append(data[prop].userId);
                             document.querySelector("#photos").append(data[prop].photoId);
                             document.querySelector("#photos").append(data[prop].photoTitle);
@@ -49,24 +49,30 @@
                 .catch((error) => console.log("error:", error));
         }
 
-        function myInfo(){
-            fetch("/myInfo?token="+localStorage.getItem("access_token"),
-                {
-                    method : "GET",
-                    headers : {
-                        "Content-Type": "application/json",
-                    },
-                })
+        function myInfo() {
+            fetch("http://localhost:8082/myInfo", {
+                method: "GET",
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("access_token")
+                }
+            })
                 .then(response => {
-                    response.json().then(function(data){
-                        for(const prop in data) {
-                            for(const prop in data) {
-                                document.querySelector("#myInfo").append(data[prop].userId);
-                                document.querySelector("#myInfo").append(data[prop].photoId);
-                                document.querySelector("#myInfo").append(data[prop].photoTitle);
-                                document.querySelector("#myInfo").append(data[prop].photoDescription);
-                                document.querySelector("#myInfo").append(document.createElement('br'));
-                            }
+                    response.json().then(function (data) {
+                        let photos = data["photos"];
+                        let friends = data["friends"];
+                        for (let i = 0; i < photos.length; i++) {
+                            document.querySelector("#albums").append(photos[i].photoId);
+                            document.querySelector("#albums").append(photos[i].userId);
+                            document.querySelector("#albums").append(photos[i].photoTitle);
+                            document.querySelector("#albums").append(photos[i].photoDescription);
+                            document.querySelector("#albums").append(document.createElement('br'));
+                        }
+
+                        for (let i = 0; i < friends.length; i++) {
+                            document.querySelector("#friends").append(friends[i].name);
+                            document.querySelector("#friends").append(friends[i].age);
+                            document.querySelector("#friends").append(friends[i].gender);
+                            document.querySelector("#friends").append(document.createElement('br'));
                         }
                     })
                 })
@@ -79,14 +85,18 @@
 <div>Welcome</div>
 <div sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></div>
 <form action="#">
-    <p><input type="button" onclick="photos()" value="Photos" />
-    <p><input type="button" onclick="remotePhotos()" value="Remote Photos" />
-    <p><input type="button" onclick="myInfo()" value="MyInfo" />
+    <p><input type="button" onclick="photos()" value="Photos"/>
+    <p><input type="button" onclick="remotePhotos()" value="Remote Photos"/>
+    <p><input type="button" onclick="myInfo()" value="MyInfo"/>
 </form>
 <div id="photos"></div>
 <p></p>
 <div id="remotePhotos"></div>
+
+p></p>
+<div id="albums"></div>
+
 <p></p>
-<div id="myInfo"></div>
+<div id="friends"></div>
 </body>
 </html>

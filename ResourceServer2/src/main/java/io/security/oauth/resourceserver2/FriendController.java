@@ -14,8 +14,8 @@ public class FriendController {
     @GetMapping("/friends")
     public List<Friend> friends(){
 
-        Friend friend1 = getFriend("friend 1 ", 10 , "man ");
-        Friend friend2 = getFriend("friend 2 ", 11 , "woman ");
+        Friend friend1 = getFriend("friend1 ", 10 , " man ");
+        Friend friend2 = getFriend("friend2 ", 11 , " woman ");
 
         return Arrays.asList(friend1, friend2);
     }
