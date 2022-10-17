@@ -49,6 +49,30 @@
                 .catch((error) => console.log("error:", error));
         }
 
+        function myInfo(){
+            fetch("/myInfo?token="+localStorage.getItem("access_token"),
+                {
+                    method : "GET",
+                    headers : {
+                        "Content-Type": "application/json",
+                    },
+                })
+                .then(response => {
+                    response.json().then(function(data){
+                        for(const prop in data) {
+                            for(const prop in data) {
+                                document.querySelector("#myInfo").append(data[prop].userId);
+                                document.querySelector("#myInfo").append(data[prop].photoId);
+                                document.querySelector("#myInfo").append(data[prop].photoTitle);
+                                document.querySelector("#myInfo").append(data[prop].photoDescription);
+                                document.querySelector("#myInfo").append(document.createElement('br'));
+                            }
+                        }
+                    })
+                })
+                .catch((error) => console.log("error:", error));
+        }
+
     </script>
 </head>
 <body>
@@ -57,9 +81,12 @@
 <form action="#">
     <p><input type="button" onclick="photos()" value="Photos" />
     <p><input type="button" onclick="remotePhotos()" value="Remote Photos" />
+    <p><input type="button" onclick="myInfo()" value="MyInfo" />
 </form>
 <div id="photos"></div>
 <p></p>
 <div id="remotePhotos"></div>
+<p></p>
+<div id="myInfo"></div>
 </body>
 </html>
