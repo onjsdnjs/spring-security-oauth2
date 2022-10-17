@@ -12,12 +12,13 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration//(proxyBeanMethods = false)
 public class OAuth2ResourceServer {
 
+
     @Bean
     SecurityFilterChain securityFilterChain1(HttpSecurity http) throws Exception {
 
         http.authorizeRequests(
                 (requests) -> requests
-                        .antMatchers("/photos","/remotePhotos").access("hasAuthority('SCOPE_photo')")
+                        .antMatchers("/photos").access("hasAuthority('SCOPE_photo')")
                         .anyRequest().authenticated());
         http.oauth2ResourceServer().jwt();
         http.cors().configurationSource(corsConfigurationSource());
