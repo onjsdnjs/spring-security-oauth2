@@ -7,27 +7,12 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.authorization.OAuth2AuthorizationServerConfigurer;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.oauth2.server.authorization.authentication.OAuth2AuthorizationCodeRequestAuthenticationToken;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.RequestMatcher;
-import org.springframework.util.StringUtils;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 @Configuration(proxyBeanMethods = false)
 public class AuthorizationServerConfig {
-
-    @Autowired
-    private CustomAuthenticationProvider customAuthenticationProvider;
-
 
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -35,26 +20,6 @@ public class AuthorizationServerConfig {
         OAuth2AuthorizationServerConfigurer<HttpSecurity> authorizationServerConfigurer =
                 new OAuth2AuthorizationServerConfigurer<>();
         RequestMatcher endpointsMatcher = authorizationServerConfigurer.getEndpointsMatcher();
-        authorizationServerConfigurer.authorizationEndpoint(authorizationEndpoint ->
-                        authorizationEndpoint
-                                .authenticationProvider(customAuthenticationProvider)
-                                .authorizationResponseHandler((request, response, authentication) -> {
-                                    OAuth2AuthorizationCodeRequestAuthenticationToken authentication1 = (OAuth2AuthorizationCodeRequestAuthenticationToken) authentication;
-                                    System.out.println(authentication);
-                                    String redirectUri = authentication1.getRedirectUri();
-                                    String authorizationCode = authentication1.getAuthorizationCode().getTokenValue();
-                                    String state = null;
-                                    if (StringUtils.hasText(authentication1.getState())) {
-                                        state = authentication1.getState();
-                                    }
-                                    response.sendRedirect(redirectUri+"?code="+authorizationCode+"&state="+state);
-                                }
-                                )
-                                .errorResponseHandler((request, response, exception) -> {
-                                    System.out.println(exception.toString());
-                                    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                                })
-                );
 
         http
                 .requestMatcher(endpointsMatcher)
