@@ -13,7 +13,7 @@ public class OAuth2ClientConfig {
     @Bean
     SecurityFilterChain oauth2SecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests((requests) -> requests.antMatchers("/","/photos").permitAll().anyRequest().authenticated());
-        http.oauth2Login(Customizer.withDefaults());
+        http.oauth2Login(authLogin -> authLogin.defaultSuccessUrl("/"));
         return http.build();
    }
 
