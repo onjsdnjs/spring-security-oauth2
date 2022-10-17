@@ -1,3 +1,1 @@
 rootProject.name = 'AuthorizatonServer'
-include ':SharedObject'
-project(':SharedObject').projectDir = new File(settingsDir, '../SharedObject')

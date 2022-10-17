@@ -1,1 +1,3 @@
 rootProject.name = 'ResourceServer2'
+include ':SharedObject'
+project(':SharedObject').projectDir = new File(settingsDir, '../SharedObject')

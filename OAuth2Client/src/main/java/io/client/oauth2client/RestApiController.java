@@ -1,6 +1,7 @@
 package io.client.oauth2client;
 
-import io.security.oauth2.springsecurityoauth2.Photo;
+import io.security.sharedobject.AccessToken;
+import io.security.sharedobject.Photo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -10,10 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 

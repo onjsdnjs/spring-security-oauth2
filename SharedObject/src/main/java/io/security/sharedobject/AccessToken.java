@@ -1,4 +1,4 @@
-package io.resourceserver.resourceserver;
+package io.security.sharedobject;
 
 import lombok.Data;
 

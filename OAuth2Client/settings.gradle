@@ -1,1 +1,3 @@
 rootProject.name = 'OAuth2Client'
+include ':SharedObject'
+project(':SharedObject').projectDir = new File(settingsDir, '../SharedObject')

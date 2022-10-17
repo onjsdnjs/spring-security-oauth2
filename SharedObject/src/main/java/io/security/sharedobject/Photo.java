@@ -1,8 +1,10 @@
-package io.security.oauth2.springsecurityoauth2;
+package io.security.sharedobject;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class Photo {
     private String userId;
     private String photoId;
