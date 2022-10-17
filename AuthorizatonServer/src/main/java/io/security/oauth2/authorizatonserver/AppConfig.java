@@ -66,6 +66,7 @@ public class AppConfig {
                 .scope(OidcScopes.EMAIL)
                 .scope(scope1)
                 .scope(scope2)
+                .scope("photo")
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
                 .build();
     }
