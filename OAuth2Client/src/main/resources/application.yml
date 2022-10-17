@@ -20,4 +20,4 @@ spring:
             client-secret: secret1
             redirect-uri: http://127.0.0.1:8081/login/oauth2/code/springoauth2
             #scope: openid,read,write
-            scope: openid,read,write,photo
+            scope: openid,read,write,photo,friend

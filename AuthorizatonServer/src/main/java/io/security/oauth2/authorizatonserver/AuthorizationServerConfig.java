@@ -38,27 +38,21 @@ public class AuthorizationServerConfig {
         authorizationServerConfigurer.authorizationEndpoint(authorizationEndpoint ->
                         authorizationEndpoint
                                 .authenticationProvider(customAuthenticationProvider)
-                                .authorizationResponseHandler(new AuthenticationSuccessHandler() {
-                                            @Override
-                                            public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-                                                OAuth2AuthorizationCodeRequestAuthenticationToken authentication1 = (OAuth2AuthorizationCodeRequestAuthenticationToken) authentication;
-                                                System.out.println(authentication);
-                                                String redirectUri = authentication1.getRedirectUri();
-                                                String authorizationCode = authentication1.getAuthorizationCode().getTokenValue();
-                                                String state = null;
-                                                if (StringUtils.hasText(authentication1.getState())) {
-                                                    state = authentication1.getState();
-                                                }
-                                                response.sendRedirect(redirectUri+"?code="+authorizationCode+"&state="+state);
-                                            }
-                                        }
-                                )
-                                .errorResponseHandler(new AuthenticationFailureHandler() {
-                                    @Override
-                                    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-                                        System.out.println(exception.toString());
-                                        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                                .authorizationResponseHandler((request, response, authentication) -> {
+                                    OAuth2AuthorizationCodeRequestAuthenticationToken authentication1 = (OAuth2AuthorizationCodeRequestAuthenticationToken) authentication;
+                                    System.out.println(authentication);
+                                    String redirectUri = authentication1.getRedirectUri();
+                                    String authorizationCode = authentication1.getAuthorizationCode().getTokenValue();
+                                    String state = null;
+                                    if (StringUtils.hasText(authentication1.getState())) {
+                                        state = authentication1.getState();
                                     }
+                                    response.sendRedirect(redirectUri+"?code="+authorizationCode+"&state="+state);
+                                }
+                                )
+                                .errorResponseHandler((request, response, exception) -> {
+                                    System.out.println(exception.toString());
+                                    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
                                 })
                 );
 
