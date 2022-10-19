@@ -2,6 +2,7 @@ package io.resourceserver.resourceserver;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.server.resource.introspection.OpaqueTokenIntrospector;
 import org.springframework.security.web.SecurityFilterChain;
@@ -13,6 +14,29 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 public class OAuth2ResourceServer {
 
+    @Bean
+    SecurityFilterChain bcurityFilterChain2(HttpSecurity http) throws Exception {
+
+        http.authorizeRequests(
+                (requests) -> requests
+                        .antMatchers("/photos").access("hasAuthority('SCOPE_photo')")
+                        .anyRequest().authenticated());
+//        http.oauth2ResourceServer().jwt();
+        http.cors().configurationSource(corsConfigurationSource());
+        return http.build();
+    }
+
+    @Bean
+    SecurityFilterChain aecurityFilterChain2(HttpSecurity http) throws Exception {
+
+        http.authorizeRequests(
+                (requests) -> requests
+                        .antMatchers("/photos").access("hasAuthority('SCOPE_photo')")
+                        .anyRequest().authenticated());
+//        http.oauth2ResourceServer().jwt();
+        http.cors().configurationSource(corsConfigurationSource());
+        return http.build();
+    }
 
     @Bean
     SecurityFilterChain securityFilterChain1(HttpSecurity http) throws Exception {
@@ -25,7 +49,9 @@ public class OAuth2ResourceServer {
         http.cors().configurationSource(corsConfigurationSource());
         return http.build();
     }
+
     @Bean
+
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("*");
