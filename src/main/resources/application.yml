@@ -6,38 +6,13 @@ spring:
         oauth2:
             client:
                 registration:
-#                    keycloak:
-#                        clientId: oauth2-client-app
-#                        clientSecret: dXf021lMWuZ9kZafqxZn230MvVEdROIo
-#                        clientName: oauth2-client-app
-#                        authorizationGrantType: authorization_code
-#                        scope: openid,profile
-#                        clientAuthenticationMethod: client_secret_basic
-#                        redirectUri: http://localhost:8081/client
-#                        provider: keycloak
-#
-#                    keycloak:
-#                        clientId: oauth2-client-app
-#                        clientSecret: dXf021lMWuZ9kZafqxZn230MvVEdROIo
-#                        clientName: oauth2-client-app
-#                        authorizationGrantType: password
-#                        scope: openid,profile
-#                        clientAuthenticationMethod: client_secret_basic
-#                        provider: keycloak
-
-                    keycloak:
-                        clientId: oauth2-client-app
-                        clientSecret: dXf021lMWuZ9kZafqxZn230MvVEdROIo
-                        clientName: oauth2-client-app
+                    springoauth2:
+                        clientId: oauth2-client-app1
+                        clientSecret: secret1
+                        clientName: oauth2-client-app1
                         authorizationGrantType: client_credentials
                         clientAuthenticationMethod: client_secret_basic
-                        provider: keycloak
 
                 provider:
-                    keycloak:
-                        issuerUri: http://localhost:8080/realms/oauth2
-                        authorizationUri: http://localhost:8080/realms/oauth2/protocol/openid-connect/auth
-                        jwkSetUri: http://localhost:8080/realms/oauth2/protocol/openid-connect/certs
-                        tokenUri: http://localhost:8080/realms/oauth2/protocol/openid-connect/token
-                        userInfoUri: http://localhost:8080/realms/oauth2/protocol/openid-connect/userinfo
-                        userNameAttribute: preferred_username
+                    springoauth2:
+                        issuerUri: http://localhost:9000
