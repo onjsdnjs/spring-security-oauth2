@@ -54,8 +54,8 @@ public class RestApiController {
     @GetMapping("/newAccessToken")
     public OAuth2AccessToken newAccessToken(AccessToken accessToken){
 
-        auth2AuthorizedClientManager.
+//        auth2AuthorizedClientManager.
 
-        return response.getBody();
+        return null;
     }
 }
