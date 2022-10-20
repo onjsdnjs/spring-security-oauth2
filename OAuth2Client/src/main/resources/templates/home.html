@@ -80,7 +80,7 @@
         }
 
         function tokenExpire() {
-            fetch("/tokenExpire?token=" + localStorage.getItem("access_token"),
+            fetch("/tokenExpire",
                 {
                     method: "GET",
                     headers: {
@@ -89,9 +89,21 @@
                 })
                 .then(response => {
                     response.json().then(function (data) {
-                        if(data["code"] == "99"){
-
-                        }
+                        fetch("/newAccessToken",
+                            {
+                                method: "GET",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                            })
+                            .then(response => {
+                                response.json().then(function (data) {
+                                    console.log("text 안에 데이터 = " + data.tokenValue);
+                                    window.localStorage.setItem("access_token", data.tokenValue);
+                                    location.href = "/home";
+                                })
+                            })
+                            .catch((error) => console.log("error:", error));
                     })
                 })
                 .catch((error) => console.log("error:", error));
@@ -106,6 +118,7 @@
     <p><input type="button" onclick="photos()" value="Photos"/>
     <p><input type="button" onclick="remotePhotos()" value="Remote Photos"/>
     <p><input type="button" onclick="myInfo()" value="MyInfo"/>
+    <p><input type="button" onclick="tokenExpire()" value="tokenExpire"/>
 </form>
 <div id="photos"></div>
 <p></p>
