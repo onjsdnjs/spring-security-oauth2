@@ -46,13 +46,13 @@ public class RestApiController {
     }
 
     @GetMapping("/tokenExpire")
-    public OAuth2Error tokenExpire(AccessToken accessToken){
+    public Map<String,Object> tokenExpire(AccessToken accessToken){
 
         HttpHeaders header = new HttpHeaders();
         header.add("Authorization", "Bearer " + accessToken.getToken());
         HttpEntity<?> entity = new HttpEntity<>(header);
         String url = "http://localhost:8082/tokenExpire";
-        ResponseEntity<OAuth2Error> response = restTemplate.exchange(url, HttpMethod.GET, entity, new ParameterizedTypeReference<>() {});
+        ResponseEntity<Map<String,Object>> response = restTemplate.exchange(url, HttpMethod.GET, entity, new ParameterizedTypeReference<>() {});
 
         return response.getBody();
     }

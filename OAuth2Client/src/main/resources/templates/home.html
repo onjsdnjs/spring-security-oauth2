@@ -7,8 +7,8 @@
     <meta charset="UTF-8">
     <title>Insert title here</title>
     <script>
-        function remotePhotos() {
-            fetch("http://localhost:8082/remotePhotos", {
+        function photos() {
+            fetch("http://localhost:8082/photos", {
                 method: "GET",
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("access_token")
@@ -27,27 +27,6 @@
                 })
         }
 
-        function photos() {
-            fetch("/photos?token=" + localStorage.getItem("access_token"),
-                {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                })
-                .then(response => {
-                    response.json().then(function (data) {
-                        for (const prop in data) {
-                            document.querySelector("#photos").append(data[prop].userId);
-                            document.querySelector("#photos").append(data[prop].photoId);
-                            document.querySelector("#photos").append(data[prop].photoTitle);
-                            document.querySelector("#photos").append(data[prop].photoDescription);
-                            document.querySelector("#photos").append(document.createElement('br'));
-                        }
-                    })
-                })
-                .catch((error) => console.log("error:", error));
-        }
 
         function myInfo() {
             fetch("http://localhost:8082/myInfo", {
@@ -80,7 +59,7 @@
         }
 
         function tokenExpire() {
-            fetch("/tokenExpire",
+            fetch("/tokenExpire?token=" + localStorage.getItem("access_token"),
                 {
                     method: "GET",
                     headers: {
@@ -116,7 +95,6 @@
 <div sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></div>
 <form action="#">
     <p><input type="button" onclick="photos()" value="Photos"/>
-    <p><input type="button" onclick="remotePhotos()" value="Remote Photos"/>
     <p><input type="button" onclick="myInfo()" value="MyInfo"/>
     <p><input type="button" onclick="tokenExpire()" value="tokenExpire"/>
 </form>
