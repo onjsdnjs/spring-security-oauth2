@@ -79,6 +79,24 @@
                 .catch((error) => console.log("error:", error));
         }
 
+        function tokenExpire() {
+            fetch("/tokenExpire?token=" + localStorage.getItem("access_token"),
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                })
+                .then(response => {
+                    response.json().then(function (data) {
+                        if(data["code"] == "99"){
+
+                        }
+                    })
+                })
+                .catch((error) => console.log("error:", error));
+        }
+
     </script>
 </head>
 <body>

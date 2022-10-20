@@ -1,6 +1,7 @@
 package io.resourceserver.resourceserver;
 
 import io.security.sharedobject.Photo;
+import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,5 +28,10 @@ public class PhotoController {
         Photo photo2 = PhotoService.getBuild("Remote2 ", "Remote Photo2 title ", "Remote Photo is beautiful ", "Remote user1 ");
 
         return Arrays.asList(photo1, photo2);
+    }
+
+    @GetMapping("/tokenExpire")
+    public OAuth2Error tokenExpire(){
+        return new OAuth2Error("invalid token", "token is expired", null);
     }
 }
