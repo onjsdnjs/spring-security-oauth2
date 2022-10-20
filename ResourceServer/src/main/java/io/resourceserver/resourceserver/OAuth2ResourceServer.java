@@ -21,7 +21,7 @@ public class OAuth2ResourceServer {
                 (requests) -> requests
                         .antMatchers("/photos","/remotePhotos","/myInfo").access("hasAuthority('SCOPE_photo')")
                         .anyRequest().authenticated());
-        http.oauth2ResourceServer().jwt();
+//        http.oauth2ResourceServer().jwt();
         http.cors().configurationSource(corsConfigurationSource());
         return http.build();
     }
