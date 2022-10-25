@@ -1,4 +1,4 @@
-package io.security.oauth2.springsecurityoauth2.model;
+package io.security.oauth2.springsecurityoauth2.model.users;
 
 import org.springframework.security.core.GrantedAuthority;
 
@@ -12,6 +12,7 @@ public interface ProviderUser {
     public String getPassword();
     public String getEmail();
     public String getProvider();
+    public String getPicture();
     public List<? extends GrantedAuthority> getAuthorities();
     public Map<String, Object> getAttributes();
 

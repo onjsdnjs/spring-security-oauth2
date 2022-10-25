@@ -1,12 +1,12 @@
-package io.security.oauth2.springsecurityoauth2.model;
+package io.security.oauth2.springsecurityoauth2.model.users;
 
+import io.security.oauth2.springsecurityoauth2.model.attributes.Attributes;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;

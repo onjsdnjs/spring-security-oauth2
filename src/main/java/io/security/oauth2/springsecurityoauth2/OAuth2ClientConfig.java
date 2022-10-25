@@ -45,13 +45,6 @@ public class OAuth2ClientConfig {
         return http.build();
    }
 
-   /*@Bean // hasAuthority 일경우 정의하지 않는다
-    public GrantedAuthoritiesMapper grantedAuthoritiesMapper(){
-       SimpleAuthorityMapper simpleAuthorityMapper = new SimpleAuthorityMapper();
-       simpleAuthorityMapper.setPrefix("ROLE_");
-       return simpleAuthorityMapper;
-   }*/
-
     @Bean
     public GrantedAuthoritiesMapper customAuthorityMapper(){
         return new CustomAuthorityMapper();

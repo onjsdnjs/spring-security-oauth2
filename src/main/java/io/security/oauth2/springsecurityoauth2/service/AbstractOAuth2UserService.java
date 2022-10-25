@@ -1,6 +1,10 @@
 package io.security.oauth2.springsecurityoauth2.service;
 
-import io.security.oauth2.springsecurityoauth2.model.*;
+import io.security.oauth2.springsecurityoauth2.model.attributes.Attributes;
+import io.security.oauth2.springsecurityoauth2.model.users.*;
+import io.security.oauth2.springsecurityoauth2.model.users.impl.GoogleUser;
+import io.security.oauth2.springsecurityoauth2.model.users.impl.KakaoUser;
+import io.security.oauth2.springsecurityoauth2.model.users.impl.NaverUser;
 import io.security.oauth2.springsecurityoauth2.repository.UserRepository;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +12,8 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service
 @Getter
@@ -33,14 +39,34 @@ public abstract class AbstractOAuth2UserService {
     public ProviderUser providerUser(ClientRegistration clientRegistration, OAuth2User oAuth2User){
 
         String registrationId = clientRegistration.getRegistrationId();
-        if(registrationId.equals("keycloak")){
-            return new KeycloakUser(oAuth2User,clientRegistration);
 
-        }else if(registrationId.equals("google")){
-            return new GoogleUser(oAuth2User,clientRegistration);
+        if(registrationId.equals("google")){
+
+            Attributes attributes = Attributes.builder()
+                    .attributes(oAuth2User.getAttributes())
+                    .build();
+
+            return new GoogleUser(attributes, oAuth2User,clientRegistration);
         }
         else if(registrationId.equals("naver")){
-            return new NaverUser(oAuth2User,clientRegistration);
+
+            Map<String, Object> mainAttributes = (Map<String, Object>)oAuth2User.getAttributes().get("response");
+            Attributes attributes = Attributes.builder()
+                    .attributes(mainAttributes)
+                    .build();
+
+            return new NaverUser(attributes, oAuth2User,clientRegistration);
+        }
+        else if(registrationId.equals("kakao")){
+
+            Map<String, Object> mainAttributes = (Map<String, Object>)oAuth2User.getAttributes().get("kakao_account");
+            Map<String, Object> subAttributes = (Map<String, Object>)mainAttributes.get("profile");
+
+            Attributes attributes = Attributes.builder()
+                    .attributes(mainAttributes)
+                    .subAttributes(subAttributes)
+                    .build();
+            return new KakaoUser(attributes, oAuth2User,clientRegistration);
         }
         return null;
     }
