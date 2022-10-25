@@ -26,6 +26,7 @@ public abstract class AbstractOAuth2UserService {
     private UserRepository userRepository;
 
     public void register(ProviderUser providerUser, OAuth2UserRequest userRequest){
+
         User user = userRepository.findByUsername(providerUser.getUsername());
 
         if(user == null){
