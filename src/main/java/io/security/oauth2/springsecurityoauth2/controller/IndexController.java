@@ -21,8 +21,13 @@ public class IndexController {
             Map<String, Object> attributes = oAuth2User.getAttributes();
             String userName = (String)attributes.get("name");
             if(authenticationToken.getAuthorizedClientRegistrationId().equals("naver")){
-                Map<String, Object> response = (Map)attributes.get("response");
-                userName = (String)response.get("name");
+                Map<String, Object> mainAttributes = (Map)attributes.get("response");
+                userName = (String)mainAttributes.get("name");
+            } else if(authenticationToken.getAuthorizedClientRegistrationId().equals("kakao")) {
+                Map<String, Object> mainAttributes = (Map<String, Object>) attributes.get("kakao_account");
+                Map<String, Object> subttributes = (Map)mainAttributes.get("profile");
+                userName = (String)subttributes.get("nickname");
+
             }
             model.addAttribute("user", userName);
         }

@@ -26,8 +26,9 @@ spring:
                         authorization-grant-type: authorization_code
                         client-authentication-method: POST
                         client-name: re100Kakao
-                        redirect-uri: http://localhost:8081/login/oauth2/code/naver
-                        scope: openid,profile_nickname,profile_image,account_email
+                        redirect-uri: http://localhost:8081/login/oauth2/code/kakao
+#                        scope: openid,profile_nickname,profile_image,account_email
+                        scope: profile_nickname,profile_image,account_email
 
                 provider:
 
