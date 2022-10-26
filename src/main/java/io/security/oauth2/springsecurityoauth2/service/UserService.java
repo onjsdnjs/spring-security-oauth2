@@ -20,6 +20,7 @@ public class UserService {
                 .authorities(providerUser.getAuthorities())
                 .provider(providerUser.getProvider())
                 .email(providerUser.getEmail())
+                .picture(providerUser.getPicture())
                 .build();
 
         userRepository.register(user);
