@@ -2,6 +2,19 @@ package io.security.oauth2.springsecurityoauth2.common.enums;
 
 public class OAuth2Config {
     public enum SocialType{
-        GOOGLE,APPLE,FACEBOOK,NAVER,KAKAO,
+        GOOGLE("google"),
+        APPLE("apple"),
+        FACEBOOK("facebook"),
+        NAVER("naver"),
+        KAKAO("kakao");
+        private String socialName;
+
+        private SocialType(String socialName) {
+            this.socialName = socialName;
+        }
+
+        public String getSocialName() {
+            return socialName;
+        }
     }
 }

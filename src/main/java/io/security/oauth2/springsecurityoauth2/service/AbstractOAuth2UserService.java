@@ -4,6 +4,7 @@ import io.security.oauth2.springsecurityoauth2.common.enums.OAuth2Config;
 import io.security.oauth2.springsecurityoauth2.common.util.OAuth2Utils;
 import io.security.oauth2.springsecurityoauth2.model.users.*;
 import io.security.oauth2.springsecurityoauth2.model.users.impl.GoogleUser;
+import io.security.oauth2.springsecurityoauth2.model.users.impl.KakaoOidcUser;
 import io.security.oauth2.springsecurityoauth2.model.users.impl.KakaoUser;
 import io.security.oauth2.springsecurityoauth2.model.users.impl.NaverUser;
 import io.security.oauth2.springsecurityoauth2.repository.UserRepository;
@@ -11,6 +12,7 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
@@ -40,16 +42,21 @@ public abstract class AbstractOAuth2UserService {
 
         String registrationId = clientRegistration.getRegistrationId();
 
-        if(registrationId.equals(OAuth2Config.SocialType.GOOGLE.name())){
-            return new GoogleUser(OAuth2Utils.getMainAttributes(oAuth2User), oAuth2User,clientRegistration);
+        if(registrationId.equals(OAuth2Config.SocialType.GOOGLE.getSocialName())){
+            return new GoogleUser(OAuth2Utils.getMainAttributes(oAuth2User), oAuth2User, clientRegistration);
 
         }
-        else if(registrationId.equals(OAuth2Config.SocialType.NAVER.name())){
-            return new NaverUser(OAuth2Utils.getSubAttributes(oAuth2User,"response"), oAuth2User,clientRegistration);
+        else if(registrationId.equals(OAuth2Config.SocialType.NAVER.getSocialName())){
+            return new NaverUser(OAuth2Utils.getSubAttributes(oAuth2User,"response"), oAuth2User, clientRegistration);
 
         }
-        else if(registrationId.equals(OAuth2Config.SocialType.KAKAO.name())){
-            return new KakaoUser(OAuth2Utils.getOtherAttributes(oAuth2User,"kakao_account","profile"), oAuth2User,clientRegistration);
+        else if(registrationId.equals(OAuth2Config.SocialType.KAKAO.getSocialName())){
+            if(oAuth2User instanceof OidcUser){
+                return new KakaoOidcUser(OAuth2Utils.getMainAttributes(oAuth2User), oAuth2User, clientRegistration);
+
+            }else{
+                return new KakaoUser(OAuth2Utils.getOtherAttributes(oAuth2User,"kakao_account","profile"), oAuth2User, clientRegistration);
+            }
         }
 
         return null;

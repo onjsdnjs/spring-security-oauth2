@@ -15,12 +15,19 @@ public class CustomOidcUserService extends AbstractOAuth2UserService implements 
     @Override
     public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
 
-        ClientRegistration clientRegistration = userRequest.getClientRegistration();
+        ClientRegistration clientRegistration = ClientRegistration
+                                                .withClientRegistration(userRequest.getClientRegistration())
+                                                .userNameAttributeName("sub")
+                                                .build();
+        OidcUserRequest oidcUserRequest =
+                new OidcUserRequest(clientRegistration, userRequest.getAccessToken(),
+                        userRequest.getIdToken(), userRequest.getAdditionalParameters());
+
         OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService = new OidcUserService();
-        OidcUser oidcUser = oidcUserService.loadUser(userRequest);
+        OidcUser oidcUser = oidcUserService.loadUser(oidcUserRequest);
 
         ProviderUser providerUser = super.providerUser(clientRegistration,oidcUser);
-        super.register(providerUser, userRequest);
+        super.register(providerUser, oidcUserRequest);
 
         return oidcUser;
     }
