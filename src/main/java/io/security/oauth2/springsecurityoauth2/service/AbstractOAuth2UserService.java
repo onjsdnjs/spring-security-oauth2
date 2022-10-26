@@ -2,8 +2,7 @@ package io.security.oauth2.springsecurityoauth2.service;
 
 import io.security.oauth2.springsecurityoauth2.common.enums.OAuth2Config;
 import io.security.oauth2.springsecurityoauth2.common.util.OAuth2Utils;
-import io.security.oauth2.springsecurityoauth2.model.users.PrincipalUser;
-import io.security.oauth2.springsecurityoauth2.model.users.form.User;
+import io.security.oauth2.springsecurityoauth2.model.users.User;
 import io.security.oauth2.springsecurityoauth2.model.users.social.*;
 import io.security.oauth2.springsecurityoauth2.repository.UserRepository;
 import lombok.Getter;

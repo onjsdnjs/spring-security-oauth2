@@ -1,7 +1,7 @@
 package io.security.oauth2.springsecurityoauth2.service;
 
 import io.security.oauth2.springsecurityoauth2.model.users.social.ProviderUser;
-import io.security.oauth2.springsecurityoauth2.model.users.form.User;
+import io.security.oauth2.springsecurityoauth2.model.users.User;
 import io.security.oauth2.springsecurityoauth2.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

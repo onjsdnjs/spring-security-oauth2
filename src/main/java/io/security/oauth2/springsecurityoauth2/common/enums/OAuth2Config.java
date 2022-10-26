@@ -7,7 +7,7 @@ public class OAuth2Config {
         FACEBOOK("facebook"),
         NAVER("naver"),
         KAKAO("kakao");
-        private String socialName;
+        private final String socialName;
 
         private SocialType(String socialName) {
             this.socialName = socialName;
