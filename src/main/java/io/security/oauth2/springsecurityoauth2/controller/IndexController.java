@@ -22,16 +22,21 @@ public class IndexController {
         if (authentication != null) {
 
             String registrationId = ((OAuth2AuthenticationToken)authentication).getAuthorizedClientRegistrationId();
-            OAuth2User oAuth2User = (OAuth2User) principalUser.getProviderUser();
+            OAuth2User oAuth2User = principalUser.getProviderUser().getOAuth2User();
+
+            // Google, Facebook, Apple
             Attributes attributes = OAuth2Utils.getMainAttributes(oAuth2User);
             String userName = (String) attributes.getMainAttributes().get("name");
 
+            // Naver
             if (registrationId.equals(OAuth2Config.SocialType.NAVER.getSocialName())) {
                 attributes = OAuth2Utils.getSubAttributes(oAuth2User,"response");
                 userName = (String) attributes.getSubAttributes().get("name");
 
+            // Kakao
             } else if (registrationId.equals(OAuth2Config.SocialType.KAKAO.getSocialName())) {
 
+                // OpenID Connect 로 인증받은 경우
                 if(oAuth2User instanceof OidcUser){
                     attributes = OAuth2Utils.getMainAttributes(oAuth2User);
                     userName = (String) attributes.getMainAttributes().get("nickname");
