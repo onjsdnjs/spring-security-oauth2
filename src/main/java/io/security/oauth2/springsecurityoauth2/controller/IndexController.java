@@ -19,14 +19,15 @@ public class IndexController {
     @GetMapping("/")
     public String index(Model model, Authentication authentication, @AuthenticationPrincipal PrincipalUser principalUser) {
 
-        if (authentication != null) {
+        String userName = null;
+        if (authentication instanceof OAuth2AuthenticationToken) {
 
             String registrationId = ((OAuth2AuthenticationToken)authentication).getAuthorizedClientRegistrationId();
             OAuth2User oAuth2User = principalUser.getProviderUser().getOAuth2User();
 
             // Google, Facebook, Apple
             Attributes attributes = OAuth2Utils.getMainAttributes(oAuth2User);
-            String userName = (String) attributes.getMainAttributes().get("name");
+            userName = (String) attributes.getMainAttributes().get("name");
 
             // Naver
             if (registrationId.equals(OAuth2Config.SocialType.NAVER.getSocialName())) {
@@ -46,9 +47,12 @@ public class IndexController {
                     userName = (String) attributes.getOtherAttributes().get("nickname");
                 }
             }
-
-            model.addAttribute("user", userName);
+        }else{
+            userName = principalUser.getProviderUser().getUsername();
         }
+
+        model.addAttribute("user", userName);
+
         return "index";
     }
 }
