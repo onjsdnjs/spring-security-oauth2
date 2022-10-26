@@ -19,8 +19,10 @@ public class IndexController {
     @GetMapping("/")
     public String index(Model model, Authentication authentication, @AuthenticationPrincipal PrincipalUser principalUser) {
 
-        String userName = "";
         if (authentication != null) {
+
+            String userName;
+
             if (authentication instanceof OAuth2AuthenticationToken) {
 
                 String registrationId = ((OAuth2AuthenticationToken) authentication).getAuthorizedClientRegistrationId();
@@ -51,8 +53,8 @@ public class IndexController {
             } else {
                 userName = principalUser.getProviderUser().getUsername();
             }
+            model.addAttribute("user", userName);
         }
-        model.addAttribute("user", userName);
 
         return "index";
     }
