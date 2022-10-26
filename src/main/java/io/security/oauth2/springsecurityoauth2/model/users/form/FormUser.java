@@ -69,7 +69,7 @@ public class FormUser implements ProviderUser {
 
     @Override
     public boolean isCertificated() {
-        return false;
+        return isCertificated;
     }
 
     @Override
