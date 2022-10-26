@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,18 +22,18 @@ public class IndexController {
         if (authentication != null) {
 
             String registrationId = ((OAuth2AuthenticationToken)authentication).getAuthorizedClientRegistrationId();
-
-            Attributes attributes = OAuth2Utils.getMainAttributes(principalUser);
+            OAuth2User oAuth2User = (OAuth2User) principalUser.getProviderUser();
+            Attributes attributes = OAuth2Utils.getMainAttributes(oAuth2User);
             String userName = (String) attributes.getMainAttributes().get("name");
 
             if (registrationId.equals(OAuth2Config.SocialType.NAVER.getSocialName())) {
-                attributes = OAuth2Utils.getSubAttributes(principalUser,"response");
+                attributes = OAuth2Utils.getSubAttributes(oAuth2User,"response");
                 userName = (String) attributes.getSubAttributes().get("name");
 
             } else if (registrationId.equals(OAuth2Config.SocialType.KAKAO.getSocialName())) {
 
-                if(principalUser instanceof OidcUser){
-                    attributes = OAuth2Utils.getMainAttributes(principalUser);
+                if(oAuth2User instanceof OidcUser){
+                    attributes = OAuth2Utils.getMainAttributes(oAuth2User);
                     userName = (String) attributes.getMainAttributes().get("nickname");
 
                 }else{

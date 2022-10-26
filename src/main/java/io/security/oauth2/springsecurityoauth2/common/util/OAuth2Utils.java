@@ -8,10 +8,10 @@ import java.util.Map;
 
 public class OAuth2Utils {
 
-    public static Attributes getMainAttributes(PrincipalUser principalUser) {
+    public static Attributes getMainAttributes(OAuth2User oAuth2User) {
 
         return Attributes.builder()
-                .mainAttributes(principalUser.getAttributes())
+                .mainAttributes(oAuth2User.getAttributes())
                 .build();
     }
 
