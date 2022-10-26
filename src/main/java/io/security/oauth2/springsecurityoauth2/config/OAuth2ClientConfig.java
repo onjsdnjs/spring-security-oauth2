@@ -1,11 +1,10 @@
-package io.security.oauth2.springsecurityoauth2;
+package io.security.oauth2.springsecurityoauth2.config;
 
+import io.security.oauth2.springsecurityoauth2.common.authority.CustomAuthorityMapper;
 import io.security.oauth2.springsecurityoauth2.service.CustomOAuth2UserService;
 import io.security.oauth2.springsecurityoauth2.service.CustomOidcUserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -29,7 +28,7 @@ public class OAuth2ClientConfig {
     SecurityFilterChain oauth2SecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests((requests) -> requests
                 .antMatchers("/api/user")
-                .access("hasAnyRole('SCOPE_profile','SCOPE_email')")
+                .access("hasAnyRole('SCOPE_profile','SCOPE_profile_image', 'SCOPE_email')")
 //                .access("hasAuthority('SCOPE_profile')")
                 .antMatchers("/api/oidc")
                 .access("hasRole('SCOPE_openid')")

@@ -1,4 +1,4 @@
-package io.security.oauth2.springsecurityoauth2;
+package io.security.oauth2.springsecurityoauth2.common.authority;
 
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
