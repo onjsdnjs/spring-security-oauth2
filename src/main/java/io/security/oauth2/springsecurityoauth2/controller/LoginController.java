@@ -1,7 +1,5 @@
 package io.security.oauth2.springsecurityoauth2.controller;
 
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
-import org.springframework.security.authentication.jaas.SecurityContextLoginModule;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;

@@ -37,7 +37,7 @@ public class OAuth2Utils {
                 .build();
     }
 
-    public static String authenticatedUserName(OAuth2AuthenticationToken authentication, PrincipalUser principalUser) {
+    public static String oAuth2UserName(OAuth2AuthenticationToken authentication, PrincipalUser principalUser) {
 
         String userName;
         String registrationId = authentication.getAuthorizedClientRegistrationId();
