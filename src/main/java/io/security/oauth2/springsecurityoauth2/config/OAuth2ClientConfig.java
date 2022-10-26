@@ -3,21 +3,29 @@ package io.security.oauth2.springsecurityoauth2.config;
 import io.security.oauth2.springsecurityoauth2.common.authority.CustomAuthorityMapper;
 import io.security.oauth2.springsecurityoauth2.service.CustomOAuth2UserService;
 import io.security.oauth2.springsecurityoauth2.service.CustomOidcUserService;
+import io.security.oauth2.springsecurityoauth2.service.CustomUserDetailsService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class OAuth2ClientConfig {
 
-    @Autowired
-    private CustomOAuth2UserService customOAuth2UserService;
-    @Autowired
-    private CustomOidcUserService customOidcUserService;
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final CustomOidcUserService customOidcUserService;
+    private final CustomUserDetailsService customUserDetailsService;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -27,6 +35,7 @@ public class OAuth2ClientConfig {
     @Bean
     SecurityFilterChain oauth2SecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests((requests) -> requests
+//                .antMatchers("/loginProc").permitAll()
                 .antMatchers("/api/user")
                 .access("hasAnyRole('SCOPE_profile','SCOPE_profile_image', 'SCOPE_email')")
 //                .access("hasAuthority('SCOPE_profile')")
@@ -36,16 +45,15 @@ public class OAuth2ClientConfig {
                 .antMatchers("/")
                 .permitAll()
                 .anyRequest().authenticated());
+        http.formLogin().loginPage("/login").loginProcessingUrl("/loginProc").defaultSuccessUrl("/").permitAll();
         http.oauth2Login(oauth2 -> oauth2.userInfoEndpoint(
                 userInfoEndpointConfig -> userInfoEndpointConfig
                         .userService(customOAuth2UserService)
                         .oidcUserService(customOidcUserService)));
+        http.exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"));
         http.logout().logoutSuccessUrl("/");
+        http.userDetailsService(customUserDetailsService);
         return http.build();
    }
 
-    @Bean
-    public GrantedAuthoritiesMapper customAuthorityMapper(){
-        return new CustomAuthorityMapper();
-    }
 }

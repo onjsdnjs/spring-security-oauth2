@@ -1,29 +1,27 @@
-package io.security.oauth2.springsecurityoauth2.model.users.impl;
+package io.security.oauth2.springsecurityoauth2.model.users.social;
 
 import io.security.oauth2.springsecurityoauth2.model.Attributes;
-import io.security.oauth2.springsecurityoauth2.model.users.OAuth2ProviderUser;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
-public class GoogleUser extends OAuth2ProviderUser {
+public class KakaoOidcUser extends OAuth2ProviderUser {
 
-    public GoogleUser(Attributes attributes, OAuth2User oAuth2User, ClientRegistration clientRegistration) {
+    public KakaoOidcUser(Attributes attributes, OAuth2User oAuth2User, ClientRegistration clientRegistration) {
         super(attributes.getMainAttributes(), oAuth2User, clientRegistration);
     }
 
     @Override
     public String getId() {
-        return (String)getAttributes().get("sub");
+        return (String)getAttributes().get("id");
     }
 
     @Override
     public String getUsername() {
-        return (String)getAttributes().get("sub");
+        return (String)getAttributes().get("nickname");
     }
 
     @Override
     public String getPicture() {
-        return null;
+        return (String)getAttributes().get("profile_image_url");
     }
-
 }

@@ -22,20 +22,27 @@
 <div class="content">
     <div class="container">
         <div class="row align-items-center">
-            <div class="col-md-5">
+            <div class="col-md-5" sec:authorize="isAnonymous()">
                 <div class="social-login text-center">
-                    <div sec:authorize="isAnonymous()">
-                        <div><h2>회원 로그인</h2></div>
-                        </br></br>
-                        <a th:href="@{/login}" class="keycloak btn btn-block">Login</a>
-                    </div>
-                    <div sec:authorize="isAuthenticated()">
-                        <div><h2>안녕하세요 <span th:text="${user}"/> 님</h2></div>
-                        </br></br>
-                        <a th:href="@{/api/user}" class="keycloak btn btn-block">OAuth2 인증 정보</a>
-                        <a th:href="@{/api/oidc}" class="keycloak btn btn-block">OpenID Connect 인증 정보</a></br></br>
-                        <a th:href="@{/logout}" class="google btn btn-block">Logout</a>
-                    </div>
+                    <form th:action="@{/loginProc}" method="post">
+                        <label for="username">Username</label>:
+                        <input type="text" id="username" name="username" autofocus="autofocus" /> <br />
+                        <label for="password">Password</label>:
+                        <input type="password" id="password" name="password" /> <br />
+                        <input type="submit" value="Log in" />
+                    </form>
+                </div>
+                </br>
+                <div class="social-login text-center">
+                    <a th:href="@{/oauth2/authorization/google}" class="google btn btn-block">
+                        <span>Sign in with Google</span>
+                    </a>
+                    <a th:href="@{/oauth2/authorization/naver}" class="naver btn btn-block">
+                        <span>Sign in with Naver</span>
+                    </a>
+                    <a th:href="@{/oauth2/authorization/kakao}" class="keycloak btn btn-block">
+                        <span>Sign in with Kakao</span>
+                    </a>
                 </div>
             </div>
         </div>

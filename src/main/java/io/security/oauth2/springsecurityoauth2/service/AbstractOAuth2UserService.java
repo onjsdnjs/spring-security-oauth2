@@ -2,11 +2,8 @@ package io.security.oauth2.springsecurityoauth2.service;
 
 import io.security.oauth2.springsecurityoauth2.common.enums.OAuth2Config;
 import io.security.oauth2.springsecurityoauth2.common.util.OAuth2Utils;
-import io.security.oauth2.springsecurityoauth2.model.users.*;
-import io.security.oauth2.springsecurityoauth2.model.users.impl.GoogleUser;
-import io.security.oauth2.springsecurityoauth2.model.users.impl.KakaoOidcUser;
-import io.security.oauth2.springsecurityoauth2.model.users.impl.KakaoUser;
-import io.security.oauth2.springsecurityoauth2.model.users.impl.NaverUser;
+import io.security.oauth2.springsecurityoauth2.model.users.form.User;
+import io.security.oauth2.springsecurityoauth2.model.users.social.*;
 import io.security.oauth2.springsecurityoauth2.repository.UserRepository;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
