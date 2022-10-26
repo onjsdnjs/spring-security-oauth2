@@ -25,6 +25,6 @@ public class CustomOAuth2UserService extends AbstractOAuth2UserService implement
         // 회원가입하기
         super.register(providerUser, userRequest);
 
-        return new PrincipalUser(oAuth2User);
+        return new PrincipalUser(providerUser);
     }
 }

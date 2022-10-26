@@ -30,6 +30,6 @@ public class CustomOidcUserService extends AbstractOAuth2UserService implements 
         ProviderUser providerUser = super.providerUser(clientRegistration,oidcUser);
         super.register(providerUser, oidcUserRequest);
 
-        return new PrincipalUser(oidcUser);
+        return new PrincipalUser(providerUser);
     }
 }

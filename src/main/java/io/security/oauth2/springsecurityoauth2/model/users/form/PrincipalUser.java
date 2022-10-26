@@ -1,5 +1,6 @@
 package io.security.oauth2.springsecurityoauth2.model.users.form;
 
+import io.security.oauth2.springsecurityoauth2.model.users.social.ProviderUser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
@@ -12,45 +13,35 @@ import java.util.Map;
 
 public class PrincipalUser implements UserDetails, OidcUser, OAuth2User {
 
-    private User user;
-    private OAuth2User oAuth2User;
-    private OidcUser oidcUser;
+    private final ProviderUser providerUser;
 
-    public PrincipalUser(User user) {
-        this.user = user;
-    }
-
-    public PrincipalUser(OAuth2User oAuth2User) {
-        this.oAuth2User = oAuth2User;
-    }
-
-    public PrincipalUser(OidcUser oidcUser) {
-        this.oidcUser = oidcUser;
+    public PrincipalUser(ProviderUser providerUser) {
+        this.providerUser = providerUser;
     }
 
     @Override
     public String getName() {
-        return user.getUsername();
+        return providerUser.getUsername();
     }
 
     @Override
     public Map<String, Object> getAttributes() {
-        return oAuth2User.getAttributes();
+        return providerUser.getAttributes();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return user.getAuthorities();
+        return providerUser.getAuthorities();
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return providerUser.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return providerUser.getUsername();
     }
 
     @Override
@@ -75,16 +66,16 @@ public class PrincipalUser implements UserDetails, OidcUser, OAuth2User {
 
     @Override
     public Map<String, Object> getClaims() {
-        return oidcUser.getClaims();
+        return null;
     }
 
     @Override
     public OidcUserInfo getUserInfo() {
-        return oidcUser.getUserInfo();
+        return null;
     }
 
     @Override
     public OidcIdToken getIdToken() {
-        return oidcUser.getIdToken();
+        return null;
     }
 }

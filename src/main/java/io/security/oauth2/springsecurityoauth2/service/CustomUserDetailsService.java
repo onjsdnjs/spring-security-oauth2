@@ -1,10 +1,10 @@
 package io.security.oauth2.springsecurityoauth2.service;
 
+import io.security.oauth2.springsecurityoauth2.model.users.form.FormUser;
 import io.security.oauth2.springsecurityoauth2.model.users.form.PrincipalUser;
 import io.security.oauth2.springsecurityoauth2.model.users.form.User;
 import io.security.oauth2.springsecurityoauth2.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,7 +24,15 @@ public class CustomUserDetailsService extends AbstractOAuth2UserService implemen
             throw new UsernameNotFoundException("No User found");
         }
 
-        return new PrincipalUser(user);
+        FormUser formUser = FormUser.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .authorities(user.getAuthorities())
+                .email(user.getEmail())
+                .build();
+
+        return new PrincipalUser(formUser);
     }
 }
 
