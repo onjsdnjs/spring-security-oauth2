@@ -38,6 +38,7 @@ public class CustomUserDetailsService extends AbstractOAuth2UserService implemen
                 .password(user.getPassword())
                 .authorities(user.getAuthorities())
                 .email(user.getEmail())
+                .provider("none")
                 .build();
 
         // 본인인증 체크

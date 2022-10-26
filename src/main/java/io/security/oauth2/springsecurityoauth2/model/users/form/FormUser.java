@@ -19,6 +19,7 @@ public class FormUser implements ProviderUser {
     private String password;
     private String email;
     private boolean isCertificated;
+    private String provider;
     private List<? extends GrantedAuthority> authorities;
 
 
