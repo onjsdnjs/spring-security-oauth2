@@ -19,38 +19,39 @@ public class IndexController {
     @GetMapping("/")
     public String index(Model model, Authentication authentication, @AuthenticationPrincipal PrincipalUser principalUser) {
 
-        String userName = null;
-        if (authentication instanceof OAuth2AuthenticationToken) {
+        String userName = "";
+        if (authentication != null) {
+            if (authentication instanceof OAuth2AuthenticationToken) {
 
-            String registrationId = ((OAuth2AuthenticationToken)authentication).getAuthorizedClientRegistrationId();
-            OAuth2User oAuth2User = principalUser.getProviderUser().getOAuth2User();
+                String registrationId = ((OAuth2AuthenticationToken) authentication).getAuthorizedClientRegistrationId();
+                OAuth2User oAuth2User = principalUser.getProviderUser().getOAuth2User();
 
-            // Google, Facebook, Apple
-            Attributes attributes = OAuth2Utils.getMainAttributes(oAuth2User);
-            userName = (String) attributes.getMainAttributes().get("name");
+                // Google, Facebook, Apple
+                Attributes attributes = OAuth2Utils.getMainAttributes(oAuth2User);
+                userName = (String) attributes.getMainAttributes().get("name");
 
-            // Naver
-            if (registrationId.equals(OAuth2Config.SocialType.NAVER.getSocialName())) {
-                attributes = OAuth2Utils.getSubAttributes(oAuth2User,"response");
-                userName = (String) attributes.getSubAttributes().get("name");
+                // Naver
+                if (registrationId.equals(OAuth2Config.SocialType.NAVER.getSocialName())) {
+                    attributes = OAuth2Utils.getSubAttributes(oAuth2User, "response");
+                    userName = (String) attributes.getSubAttributes().get("name");
 
-            // Kakao
-            } else if (registrationId.equals(OAuth2Config.SocialType.KAKAO.getSocialName())) {
+                    // Kakao
+                } else if (registrationId.equals(OAuth2Config.SocialType.KAKAO.getSocialName())) {
 
-                // OpenID Connect
-                if(oAuth2User instanceof OidcUser){
-                    attributes = OAuth2Utils.getMainAttributes(oAuth2User);
-                    userName = (String) attributes.getMainAttributes().get("nickname");
+                    // OpenID Connect
+                    if (oAuth2User instanceof OidcUser) {
+                        attributes = OAuth2Utils.getMainAttributes(oAuth2User);
+                        userName = (String) attributes.getMainAttributes().get("nickname");
 
-                }else{
-                    attributes = OAuth2Utils.getOtherAttributes(principalUser,"kakao_account","profile");
-                    userName = (String) attributes.getOtherAttributes().get("nickname");
+                    } else {
+                        attributes = OAuth2Utils.getOtherAttributes(principalUser, "kakao_account", "profile");
+                        userName = (String) attributes.getOtherAttributes().get("nickname");
+                    }
                 }
+            } else {
+                userName = principalUser.getProviderUser().getUsername();
             }
-        }else{
-            userName = principalUser.getProviderUser().getUsername();
         }
-
         model.addAttribute("user", userName);
 
         return "index";
