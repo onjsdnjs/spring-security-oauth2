@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class CustomAuthorityMapper implements GrantedAuthoritiesMapper {
 
-    private String prefix = "ROLE_";
+    private final String PREFIX = "ROLE_";
 
     @Override
     public Set<GrantedAuthority> mapAuthorities(Collection<? extends GrantedAuthority> authorities) {
@@ -28,8 +28,8 @@ public class CustomAuthorityMapper implements GrantedAuthoritiesMapper {
             int index = name.lastIndexOf(".");
             name = "SCOPE_" + name.substring(index+1);
         }
-        if (this.prefix.length() > 0 && !name.startsWith(this.prefix)) {
-            name = this.prefix + name;
+        if (!name.startsWith(PREFIX)) {
+            name = PREFIX + name;
         }
         return new SimpleGrantedAuthority(name);
     }
