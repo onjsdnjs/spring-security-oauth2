@@ -24,11 +24,9 @@
         <div class="row align-items-center">
             <div class="col-md-5">
                 <div class="social-login text-center">
-                    <div sec:authorize="isAnonymous()">
                         <div><h2>본인 인증</h2></div>
                         </br></br>
                         <a th:href="@{/certificate}" class="keycloak btn btn-block">본인 인증을 시작합니다.</a>
-                    </div>
                 </div>
             </div>
         </div>
