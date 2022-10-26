@@ -1,6 +1,6 @@
 package io.security.oauth2.springsecurityoauth2.service;
 
-import io.security.oauth2.springsecurityoauth2.model.users.form.PrincipalUser;
+import io.security.oauth2.springsecurityoauth2.model.users.PrincipalUser;
 import io.security.oauth2.springsecurityoauth2.model.users.social.ProviderUser;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

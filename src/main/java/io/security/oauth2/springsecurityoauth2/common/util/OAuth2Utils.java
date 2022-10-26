@@ -1,16 +1,17 @@
 package io.security.oauth2.springsecurityoauth2.common.util;
 
 import io.security.oauth2.springsecurityoauth2.model.Attributes;
+import io.security.oauth2.springsecurityoauth2.model.users.PrincipalUser;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Map;
 
 public class OAuth2Utils {
 
-    public static Attributes getMainAttributes(OAuth2User oAuth2User) {
+    public static Attributes getMainAttributes(PrincipalUser principalUser) {
 
         return Attributes.builder()
-                .mainAttributes(oAuth2User.getAttributes())
+                .mainAttributes(principalUser.getAttributes())
                 .build();
     }
 
