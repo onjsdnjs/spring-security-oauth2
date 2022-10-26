@@ -3,8 +3,10 @@ package io.security.oauth2.springsecurityoauth2.service;
 import io.security.oauth2.springsecurityoauth2.model.users.form.FormUser;
 import io.security.oauth2.springsecurityoauth2.model.users.PrincipalUser;
 import io.security.oauth2.springsecurityoauth2.model.users.form.User;
+import io.security.oauth2.springsecurityoauth2.model.users.social.ProviderUser;
 import io.security.oauth2.springsecurityoauth2.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,10 +23,16 @@ public class CustomUserDetailsService extends AbstractOAuth2UserService implemen
         User user = userRepository.findByUsername(username);
 
         if(user == null){
-            throw new UsernameNotFoundException("No User found");
+            user = User.builder()
+                    .id("1")
+                    .username("onjsdnjs")
+                    .password("{noop}1234")
+                    .authorities(AuthorityUtils.createAuthorityList("ROLE_USER"))
+                    .email("onjsdnjs@gmail.com")
+                    .build();
         }
 
-        FormUser formUser = FormUser.builder()
+        ProviderUser providerUser = FormUser.builder()
                 .id(user.getId())
                 .username(user.getUsername())
                 .password(user.getPassword())
@@ -32,7 +40,7 @@ public class CustomUserDetailsService extends AbstractOAuth2UserService implemen
                 .email(user.getEmail())
                 .build();
 
-        return new PrincipalUser(formUser);
+        return new PrincipalUser(providerUser);
     }
 }
 

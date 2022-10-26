@@ -36,7 +36,7 @@ public class IndexController {
             // Kakao
             } else if (registrationId.equals(OAuth2Config.SocialType.KAKAO.getSocialName())) {
 
-                // OpenID Connect 로 인증받은 경우
+                // OpenID Connect
                 if(oAuth2User instanceof OidcUser){
                     attributes = OAuth2Utils.getMainAttributes(oAuth2User);
                     userName = (String) attributes.getMainAttributes().get("nickname");

@@ -4,6 +4,7 @@ import io.security.oauth2.springsecurityoauth2.model.users.social.ProviderUser;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.List;
 import java.util.Map;
@@ -57,6 +58,11 @@ public class FormUser implements ProviderUser {
 
     @Override
     public Map<String, Object> getAttributes() {
+        return null;
+    }
+
+    @Override
+    public OAuth2User getOAuth2User() {
         return null;
     }
 }
