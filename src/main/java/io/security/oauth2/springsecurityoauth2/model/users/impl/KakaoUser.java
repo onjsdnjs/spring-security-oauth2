@@ -1,6 +1,6 @@
 package io.security.oauth2.springsecurityoauth2.model.users.impl;
 
-import io.security.oauth2.springsecurityoauth2.model.attributes.Attributes;
+import io.security.oauth2.springsecurityoauth2.model.Attributes;
 import io.security.oauth2.springsecurityoauth2.model.users.OAuth2ProviderUser;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -12,8 +12,8 @@ public class KakaoUser extends OAuth2ProviderUser {
     private final Map<String,Object> subAttributes;
 
     public KakaoUser(Attributes attributes, OAuth2User oAuth2User, ClientRegistration clientRegistration) {
-        super(attributes.getAttributes(), oAuth2User, clientRegistration);
-        this.subAttributes = attributes.getSubAttributes();
+        super(attributes.getSubAttributes(), oAuth2User, clientRegistration);
+        this.subAttributes = attributes.getOtherAttributes();
     }
 
     @Override
