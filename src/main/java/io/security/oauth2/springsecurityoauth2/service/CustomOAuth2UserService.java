@@ -1,7 +1,9 @@
 package io.security.oauth2.springsecurityoauth2.service;
 
+import io.security.oauth2.springsecurityoauth2.certification.SelfCertification;
 import io.security.oauth2.springsecurityoauth2.model.users.PrincipalUser;
 import io.security.oauth2.springsecurityoauth2.model.users.social.ProviderUser;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -11,7 +13,10 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class CustomOAuth2UserService extends AbstractOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+
+    private final SelfCertification certification;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -22,8 +27,8 @@ public class CustomOAuth2UserService extends AbstractOAuth2UserService implement
 
         ProviderUser providerUser = super.providerUser(clientRegistration,oAuth2User);
 
-        // 회원가입하기
-        super.register(providerUser, userRequest);
+        // 본인인증 체크
+        selfCertificate(providerUser, userRequest);
 
         return new PrincipalUser(providerUser);
     }

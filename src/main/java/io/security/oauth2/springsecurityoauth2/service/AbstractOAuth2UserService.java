@@ -1,11 +1,13 @@
 package io.security.oauth2.springsecurityoauth2.service;
 
+import io.security.oauth2.springsecurityoauth2.certification.SelfCertification;
 import io.security.oauth2.springsecurityoauth2.common.enums.OAuth2Config;
 import io.security.oauth2.springsecurityoauth2.common.util.OAuth2Utils;
 import io.security.oauth2.springsecurityoauth2.model.users.User;
 import io.security.oauth2.springsecurityoauth2.model.users.social.*;
 import io.security.oauth2.springsecurityoauth2.repository.UserRepository;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -15,14 +17,23 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Getter
+@RequiredArgsConstructor
 public abstract class AbstractOAuth2UserService {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+    private final UserRepository userRepository;
+    private final SelfCertification certification;
 
-    @Autowired
-    private UserRepository userRepository;
+    public void selfCertificate(ProviderUser providerUser, OAuth2UserRequest userRequest){
 
+        boolean certificated = certification.isCertificated(providerUser);
+        if(certificated){
+            register(providerUser, userRequest);
+
+        }else{
+            certification.certificate(providerUser);
+        }
+    }
     public void register(ProviderUser providerUser, OAuth2UserRequest userRequest){
 
         User user = userRepository.findByUsername(providerUser.getUsername());
