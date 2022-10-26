@@ -22,40 +22,14 @@ public class IndexController {
         if (authentication != null) {
 
             String userName;
-
             if (authentication instanceof OAuth2AuthenticationToken) {
-
-                String registrationId = ((OAuth2AuthenticationToken) authentication).getAuthorizedClientRegistrationId();
-                OAuth2User oAuth2User = principalUser.getProviderUser().getOAuth2User();
-
-                // Google, Facebook, Apple
-                Attributes attributes = OAuth2Utils.getMainAttributes(oAuth2User);
-                userName = (String) attributes.getMainAttributes().get("name");
-
-                // Naver
-                if (registrationId.equals(OAuth2Config.SocialType.NAVER.getSocialName())) {
-                    attributes = OAuth2Utils.getSubAttributes(oAuth2User, "response");
-                    userName = (String) attributes.getSubAttributes().get("name");
-
-                    // Kakao
-                } else if (registrationId.equals(OAuth2Config.SocialType.KAKAO.getSocialName())) {
-
-                    // OpenID Connect
-                    if (oAuth2User instanceof OidcUser) {
-                        attributes = OAuth2Utils.getMainAttributes(oAuth2User);
-                        userName = (String) attributes.getMainAttributes().get("nickname");
-
-                    } else {
-                        attributes = OAuth2Utils.getOtherAttributes(principalUser, "kakao_account", "profile");
-                        userName = (String) attributes.getOtherAttributes().get("nickname");
-                    }
-                }
+                userName = OAuth2Utils.authenticatedUserName((OAuth2AuthenticationToken) authentication, principalUser);
             } else {
                 userName = principalUser.getProviderUser().getUsername();
             }
+
             model.addAttribute("user", userName);
         }
-
         return "index";
     }
 }
