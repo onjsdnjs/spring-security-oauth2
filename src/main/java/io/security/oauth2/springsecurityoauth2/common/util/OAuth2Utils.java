@@ -52,7 +52,7 @@ public class OAuth2Utils {
             attributes = OAuth2Utils.getSubAttributes(oAuth2User, "response");
             userName = (String) attributes.getSubAttributes().get("name");
 
-            // Kakao
+        // Kakao
         } else if (registrationId.equals(OAuth2Config.SocialType.KAKAO.getSocialName())) {
 
             // OpenID Connect
