@@ -40,6 +40,10 @@ public class CustomUserDetailsService extends AbstractOAuth2UserService implemen
                 .email(user.getEmail())
                 .build();
 
+        // 본인인증 체크
+        // 기본은 본인인증을 하지 않은 상태임
+        selfCertificate(providerUser);
+
         return new PrincipalUser(providerUser);
     }
 }

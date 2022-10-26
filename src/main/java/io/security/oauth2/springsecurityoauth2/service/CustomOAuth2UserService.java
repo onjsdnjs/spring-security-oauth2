@@ -25,6 +25,8 @@ public class CustomOAuth2UserService extends AbstractOAuth2UserService implement
         // 기본은 본인인증을 하지 않은 상태임
         selfCertificate(providerUser);
 
+        super.register(providerUser, userRequest);
+
         return new PrincipalUser(providerUser);
     }
 }

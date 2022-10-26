@@ -28,6 +28,10 @@ public class CustomOidcUserService extends AbstractOAuth2UserService implements 
         OidcUser oidcUser = oidcUserService.loadUser(oidcUserRequest);
 
         ProviderUser providerUser = super.providerUser(clientRegistration,oidcUser);
+        // 본인인증 체크
+        // 기본은 본인인증을 하지 않은 상태임
+        selfCertificate(providerUser);
+
         super.register(providerUser, oidcUserRequest);
 
         return new PrincipalUser(providerUser);
