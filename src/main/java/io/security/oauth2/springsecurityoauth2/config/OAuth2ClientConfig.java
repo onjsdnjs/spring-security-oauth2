@@ -1,21 +1,13 @@
 package io.security.oauth2.springsecurityoauth2.config;
 
-import io.security.oauth2.springsecurityoauth2.common.authority.CustomAuthorityMapper;
 import io.security.oauth2.springsecurityoauth2.service.CustomOAuth2UserService;
 import io.security.oauth2.springsecurityoauth2.service.CustomOidcUserService;
 import io.security.oauth2.springsecurityoauth2.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 
@@ -48,11 +40,11 @@ public class OAuth2ClientConfig {
         http.formLogin().loginPage("/login").loginProcessingUrl("/loginProc").defaultSuccessUrl("/").permitAll();
         http.oauth2Login(oauth2 -> oauth2.userInfoEndpoint(
                 userInfoEndpointConfig -> userInfoEndpointConfig
-                        .userService(customOAuth2UserService)
-                        .oidcUserService(customOidcUserService)));
+                        .userService(customOAuth2UserService)  // OAuth2 인증
+                        .oidcUserService(customOidcUserService)));  // OpenID Connect 인증
+        http.userDetailsService(customUserDetailsService);  // Form 인증
         http.exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"));
         http.logout().logoutSuccessUrl("/");
-        http.userDetailsService(customUserDetailsService);
         return http.build();
    }
 
