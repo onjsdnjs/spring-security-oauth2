@@ -17,6 +17,7 @@ public abstract class OAuth2ProviderUser implements ProviderUser {
     private Map<String, Object> attributes;
     private OAuth2User oAuth2User;
     private ClientRegistration clientRegistration;
+    private boolean isCertificated;
 
     public OAuth2ProviderUser(Map<String, Object> attributes, OAuth2User oAuth2User, ClientRegistration clientRegistration){
         this.attributes = attributes;
@@ -42,5 +43,15 @@ public abstract class OAuth2ProviderUser implements ProviderUser {
     @Override
     public List<? extends GrantedAuthority> getAuthorities() {
         return oAuth2User.getAuthorities().stream().map(authority -> new SimpleGrantedAuthority(authority.getAuthority())).collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean isCertificated() {
+        return isCertificated;
+    }
+
+    @Override
+    public void isCertificated(boolean isCertificated) {
+        this.isCertificated = isCertificated;
     }
 }

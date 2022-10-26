@@ -15,6 +15,8 @@ public class IndexController {
     @GetMapping("/")
     public String index(Model model, Authentication authentication, @AuthenticationPrincipal PrincipalUser principalUser) {
 
+        String view = "index";
+
         if (authentication != null) {
 
             String userName;
@@ -25,7 +27,8 @@ public class IndexController {
             }
 
             model.addAttribute("user", userName);
+            if(!principalUser.getProviderUser().isCertificated()) view = "selfcert";
         }
-        return "index";
+        return view;
     }
 }

@@ -17,21 +17,20 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Getter
-@RequiredArgsConstructor
 public abstract class AbstractOAuth2UserService {
 
-    private final UserService userService;
-    private final UserRepository userRepository;
-    private final SelfCertification certification;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private SelfCertification certification;
 
-    public void selfCertificate(ProviderUser providerUser, OAuth2UserRequest userRequest){
+    public void selfCertificate(ProviderUser providerUser){
 
         boolean certificated = certification.isCertificated(providerUser);
         if(certificated){
-            register(providerUser, userRequest);
-
-        }else{
-            certification.certificate(providerUser);
+            providerUser.isCertificated(true);
         }
     }
     public void register(ProviderUser providerUser, OAuth2UserRequest userRequest){
@@ -69,4 +68,6 @@ public abstract class AbstractOAuth2UserService {
 
         return null;
     }
+
+
 }

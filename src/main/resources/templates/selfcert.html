@@ -1,0 +1,43 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="static/css/owl.carousel.min.css">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="static/css/bootstrap.min.css">
+
+    <!-- Style -->
+    <link rel="stylesheet" href="static/css/style.css">
+
+    <title>Login</title>
+</head>
+<body>
+<div class="content">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-5">
+                <div class="social-login text-center">
+                    <div sec:authorize="isAnonymous()">
+                        <div><h2>본인 인증</h2></div>
+                        </br></br>
+                        <a th:href="@{/certificate}" class="keycloak btn btn-block">본인 인증을 시작합니다.</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="static/js/jquery-3.3.1.min.js"></script>
+<script src="static/js/popper.min.js"></script>
+<script src="static/js/bootstrap.min.js"></script>
+<script src="static/js/main.js"></script>
+</body>
+</html>
