@@ -13,16 +13,16 @@ public class OAuth2Utils {
                 .build();
     }
 
-    public static Attributes getSubAttributes(OAuth2User oAuth2User) {
-        Map<String, Object> subAttributes = (Map<String, Object>) oAuth2User.getAttributes().get("response");
+    public static Attributes getSubAttributes(OAuth2User oAuth2User, String mainAttributesKey) {
+        Map<String, Object> subAttributes = (Map<String, Object>) oAuth2User.getAttributes().get(mainAttributesKey);
         return Attributes.builder()
                 .subAttributes(subAttributes)
                 .build();
     }
 
-    public static Attributes getOtherAttributes(OAuth2User oAuth2User) {
-        Map<String, Object> subAttributes = (Map<String, Object>) oAuth2User.getAttributes().get("kakao_account");
-        Map<String, Object> otherAttributes = (Map<String, Object>)subAttributes.get("profile");
+    public static Attributes getOtherAttributes(OAuth2User oAuth2User, String mainAttributesKey, String subAttributesKey) {
+        Map<String, Object> subAttributes = (Map<String, Object>) oAuth2User.getAttributes().get(mainAttributesKey);
+        Map<String, Object> otherAttributes = (Map<String, Object>)subAttributes.get(subAttributesKey);
 
         return Attributes.builder()
                 .subAttributes(subAttributes)

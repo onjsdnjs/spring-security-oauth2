@@ -45,11 +45,11 @@ public abstract class AbstractOAuth2UserService {
 
         }
         else if(registrationId.equals(OAuth2Config.SocialType.NAVER.name())){
-            return new NaverUser(OAuth2Utils.getSubAttributes(oAuth2User), oAuth2User,clientRegistration);
+            return new NaverUser(OAuth2Utils.getSubAttributes(oAuth2User,"response"), oAuth2User,clientRegistration);
 
         }
         else if(registrationId.equals(OAuth2Config.SocialType.KAKAO.name())){
-            return new KakaoUser(OAuth2Utils.getOtherAttributes(oAuth2User), oAuth2User,clientRegistration);
+            return new KakaoUser(OAuth2Utils.getOtherAttributes(oAuth2User,"kakao_account","profile"), oAuth2User,clientRegistration);
         }
 
         return null;

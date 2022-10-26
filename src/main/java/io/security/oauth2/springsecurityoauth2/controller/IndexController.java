@@ -1,5 +1,8 @@
 package io.security.oauth2.springsecurityoauth2.controller;
 
+import io.security.oauth2.springsecurityoauth2.common.enums.OAuth2Config;
+import io.security.oauth2.springsecurityoauth2.common.util.OAuth2Utils;
+import io.security.oauth2.springsecurityoauth2.model.Attributes;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -15,23 +18,27 @@ import java.util.Map;
 public class IndexController {
 
     @GetMapping("/")
-    public String index(Model model, Authentication authentication,  @AuthenticationPrincipal OAuth2User oAuth2User){
-        OAuth2AuthenticationToken authenticationToken = (OAuth2AuthenticationToken)authentication;
-        if(authenticationToken != null){
-            Map<String, Object> attributes = oAuth2User.getAttributes();
-            String userName = (String)attributes.get("name");
-            if(authenticationToken.getAuthorizedClientRegistrationId().equals("naver")){
-                Map<String, Object> mainAttributes = (Map)attributes.get("response");
-                userName = (String)mainAttributes.get("name");
-            } else if(authenticationToken.getAuthorizedClientRegistrationId().equals("kakao")) {
-                Map<String, Object> mainAttributes = (Map<String, Object>) attributes.get("kakao_account");
-                Map<String, Object> subttributes = (Map)mainAttributes.get("profile");
-                userName = (String)subttributes.get("nickname");
+    public String index(Model model, OAuth2AuthenticationToken authentication, @AuthenticationPrincipal OAuth2User oAuth2User) {
+
+        if (authentication != null) {
+
+            String registrationId = authentication.getAuthorizedClientRegistrationId();
+
+            Attributes attributes = OAuth2Utils.getMainAttributes(oAuth2User);
+            String userName = (String) attributes.getMainAttributes().get("name");
+
+            if (registrationId.equals(OAuth2Config.SocialType.NAVER.name())) {
+                attributes = OAuth2Utils.getSubAttributes(oAuth2User,"response");
+                userName = (String) attributes.getSubAttributes().get("name");
+
+            } else if (registrationId.equals(OAuth2Config.SocialType.KAKAO.name())) {
+                attributes = OAuth2Utils.getOtherAttributes(oAuth2User,"kakao_account","profile");
+                userName = (String) attributes.getOtherAttributes().get("nickname");
 
             }
+
             model.addAttribute("user", userName);
         }
         return "index";
     }
-
 }
