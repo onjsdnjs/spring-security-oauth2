@@ -30,6 +30,7 @@
                         <a th:href="@{/login}" class="keycloak btn btn-block">Login</a>
                     </div>
                     <div sec:authorize="isAuthenticated()">
+                        <div><h2>서비스 제공자는 <span th:text="${provider}"/> 입니다</h2></div>
                         <div><h2>안녕하세요 <span th:text="${user}"/> 님</h2></div>
                         </br></br>
                         <a th:href="@{/api/user}" class="keycloak btn btn-block">OAuth2 인증 정보</a>
