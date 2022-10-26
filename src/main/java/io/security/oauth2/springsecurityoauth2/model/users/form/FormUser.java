@@ -45,7 +45,7 @@ public class FormUser implements ProviderUser {
 
     @Override
     public String getProvider() {
-        return null;
+        return provider;
     }
 
     @Override
