@@ -25,7 +25,8 @@
             <div class="col-md-5">
                 <div class="social-login text-center">
                         <div><h2>서비스 제공자는 <span th:text="${provider}"/> 입니다</h2></div>
-                        </br></br>
+                        <div><h2>안녕하세요 <span th:text="${user}"/> 님</h2></div>
+                        </br>
                         <a th:href="@{/certificate}" class="keycloak btn btn-block">본인 인증 시작</a>
                         <a th:href="@{/logout}" class="google btn btn-block">Logout</a>
                 </div>

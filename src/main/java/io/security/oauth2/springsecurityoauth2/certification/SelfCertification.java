@@ -14,10 +14,10 @@ public class SelfCertification {
     public void checkCertification(ProviderUser providerUser) {
         //ci 와 소셜아이디 매핑 테이블에서 조회
         User user = userRepository.findByUsername(providerUser.getId());
-        if(user != null) {
+//        if(user != null) {
             // ci 와 소셜아이디 매핑 테이블에 데이터가 존재하는 경우 해당 소셜 아이디로는 본인인증을 한 것으로 설정함
-            providerUser.isCertificated(true);
-        }
+            providerUser.isCertificated(providerUser.getProvider().equals("naver"));
+//        }
     }
 
     public void certificate(ProviderUser providerUser) {

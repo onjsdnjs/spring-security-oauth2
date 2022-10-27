@@ -32,9 +32,8 @@
                     <div sec:authorize="isAuthenticated()">
                         <div><h2>서비스 제공자는 <span th:text="${provider}"/> 입니다</h2></div>
                         <div><h2>안녕하세요 <span th:text="${user}"/> 님</h2></div>
-                        </br></br>
-                        <a th:href="@{/api/user}" class="keycloak btn btn-block">본인 인증 완료</a>
-                        <a th:href="@{/api/oidc}" class="keycloak btn btn-block">회원 가입 시작</a></br></br>
+                        </br>
+                        <div><h1>본인 인증 완료</h1></div>
                         <a th:href="@{/logout}" class="google btn btn-block">Logout</a>
                     </div>
                 </div>
