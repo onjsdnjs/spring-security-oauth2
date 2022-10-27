@@ -7,7 +7,6 @@ import io.security.oauth2.springsecurityoauth2.model.users.User;
 import io.security.oauth2.springsecurityoauth2.model.users.social.*;
 import io.security.oauth2.springsecurityoauth2.repository.UserRepository;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -27,11 +26,7 @@ public abstract class AbstractOAuth2UserService {
     private SelfCertification certification;
 
     public void selfCertificate(ProviderUser providerUser){
-
-        boolean certificated = certification.isCertificated(providerUser);
-        if(certificated){
-            providerUser.isCertificated(true);
-        }
+        certification.checkCertification(providerUser);
     }
     public void register(ProviderUser providerUser, OAuth2UserRequest userRequest){
 

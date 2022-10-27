@@ -12,6 +12,7 @@ public class User {
 
     private String registrationId;
     private String id;
+    private String ci;
     private String username;
     private String password;
     private String provider;

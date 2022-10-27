@@ -11,6 +11,13 @@ public class UserRepository {
 
     private Map<String,Object> users = new HashMap<String, Object>();
 
+    public User findByCi(String ci){
+        if(users.containsKey(ci)){
+            return (User)users.get(ci);
+        }
+        return null;
+    }
+
     public User findByUsername(String username){
         if(users.containsKey(username)){
             return (User)users.get(username);
