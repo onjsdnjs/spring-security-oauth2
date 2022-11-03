@@ -23,12 +23,13 @@ public class IndexController {
             if (authentication instanceof OAuth2AuthenticationToken) {
                 userName = OAuth2Utils.oAuth2UserName((OAuth2AuthenticationToken) authentication, principalUser);
             } else {
-                userName = principalUser.getProviderUser().getUsername();
+                userName = principalUser.providerUser().getUsername();
             }
 
             model.addAttribute("user", userName);
-            model.addAttribute("provider", principalUser.getProviderUser().getProvider());
-            if(!principalUser.getProviderUser().isCertificated()) view = "selfcert";
+//            model.addAttribute("provider", principalUser.providerUser().getProvider().toUpperCase());
+            model.addAttribute("provider", principalUser.providerUser().getProvider());
+            if(!principalUser.providerUser().isCertificated()) view = "selfcert";
         }
         return view;
     }

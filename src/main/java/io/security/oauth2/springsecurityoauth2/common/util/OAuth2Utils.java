@@ -41,7 +41,7 @@ public class OAuth2Utils {
 
         String userName;
         String registrationId = authentication.getAuthorizedClientRegistrationId();
-        OAuth2User oAuth2User = principalUser.getProviderUser().getOAuth2User();
+        OAuth2User oAuth2User = principalUser.providerUser().getOAuth2User();
 
         // Google, Facebook, Apple
         Attributes attributes = OAuth2Utils.getMainAttributes(oAuth2User);
@@ -61,8 +61,8 @@ public class OAuth2Utils {
                 userName = (String) attributes.getMainAttributes().get("nickname");
 
             } else {
-                attributes = OAuth2Utils.getOtherAttributes(principalUser, "kakao_account", "profile");
-                userName = (String) attributes.getOtherAttributes().get("nickname");
+                attributes = OAuth2Utils.getOtherAttributes(principalUser, "profile", null);
+                userName = (String) attributes.getSubAttributes().get("nickname");
             }
         }
         return userName;

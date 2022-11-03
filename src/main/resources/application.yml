@@ -27,7 +27,8 @@ spring:
                         client-authentication-method: POST
                         client-name: re100Kakao
                         redirect-uri: http://localhost:8081/login/oauth2/code/kakao
-                        scope: profile_nickname,profile_image,account_email
+                        scope: openid,profile_nickname,profile_image,account_email
+                #                        scope: profile_nickname,profile_image,account_email
 
                 provider:
 
@@ -38,12 +39,15 @@ spring:
                         user-name-attribute: response
 
                     kakao:
+                        # OpenID Connect 일 경우 jwkSet URI 를 가져와야 하기 때문에 필수항목
                         issuer-uri: https://kauth.kakao.com
                         authorization-uri: https://kauth.kakao.com/oauth/authorize
                         token-uri: https://kauth.kakao.com/oauth/token
                         user-info-uri: https://kapi.kakao.com/v2/user/me
-                        user-name-attribute: response
-    #                        https://kapi: kakao: com/v1/user/logout:
+                        user-name-attribute: id # OpenID Connect 로 인가서버와 통신하지 않을 경우
 
+                        # OpenID Connect 일 경우 nameAttributeKey 가 sub 이기 때문에 별도의 커스트 마이징이 필요
+                        # CustomOidcUserService 참조
+                        # user-name-attribute: sub
     mvc:
         static-path-pattern: /static/**
