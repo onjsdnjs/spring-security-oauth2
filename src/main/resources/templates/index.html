@@ -8,13 +8,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="static/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="/css/owl.carousel.min.css">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
 
     <!-- Style -->
-    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 
     <title>Login</title>
 </head>
@@ -30,7 +30,9 @@
                         <a th:href="@{/login}" class="keycloak btn btn-block">Login</a>
                     </div>
                     <div sec:authorize="isAuthenticated()">
-                        <div><h2>서비스 제공자는 <span th:text="${provider}"/> 입니다</h2></div>
+                        <div><img th:src="'/images/' + ${provider}+ '.png'"></div>
+                        </br>
+
                         <div><h2>안녕하세요 <span th:text="${user}"/> 님</h2></div>
                         </br>
                         <div><h1>본인 인증 완료</h1></div>
@@ -42,9 +44,9 @@
     </div>
 </div>
 
-<script src="static/js/jquery-3.3.1.min.js"></script>
-<script src="static/js/popper.min.js"></script>
-<script src="static/js/bootstrap.min.js"></script>
-<script src="static/js/main.js"></script>
+<script src="/js/jquery-3.3.1.min.js"></script>
+<script src="/js/popper.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
 </body>
 </html>

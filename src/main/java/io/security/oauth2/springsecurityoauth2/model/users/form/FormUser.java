@@ -1,6 +1,6 @@
 package io.security.oauth2.springsecurityoauth2.model.users.form;
 
-import io.security.oauth2.springsecurityoauth2.model.users.social.ProviderUser;
+import io.security.oauth2.springsecurityoauth2.model.users.ProviderUser;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;

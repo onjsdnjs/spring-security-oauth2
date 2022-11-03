@@ -1,7 +1,8 @@
 package io.security.oauth2.springsecurityoauth2.service;
 
+import io.security.oauth2.springsecurityoauth2.common.converter.ProviderUserRequest;
 import io.security.oauth2.springsecurityoauth2.model.users.PrincipalUser;
-import io.security.oauth2.springsecurityoauth2.model.users.social.ProviderUser;
+import io.security.oauth2.springsecurityoauth2.model.users.ProviderUser;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
@@ -27,9 +28,9 @@ public class CustomOidcUserService extends AbstractOAuth2UserService implements 
         OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService = new OidcUserService();
         OidcUser oidcUser = oidcUserService.loadUser(oidcUserRequest);
 
-        ProviderUser providerUser = super.providerUser(clientRegistration,oidcUser);
-        // 본인인증 체크
-        // 기본은 본인인증을 하지 않은 상태임
+        ProviderUserRequest providerUserRequest = new ProviderUserRequest(clientRegistration,oidcUser);
+        ProviderUser providerUser = providerUser(providerUserRequest);
+
         selfCertificate(providerUser);
 
         super.register(providerUser, oidcUserRequest);

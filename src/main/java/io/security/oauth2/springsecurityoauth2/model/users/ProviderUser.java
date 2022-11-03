@@ -1,4 +1,4 @@
-package io.security.oauth2.springsecurityoauth2.model.users.social;
+package io.security.oauth2.springsecurityoauth2.model.users;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;

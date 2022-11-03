@@ -1,7 +1,5 @@
 package io.security.oauth2.springsecurityoauth2.model.users;
 
-import io.security.oauth2.springsecurityoauth2.model.users.social.ProviderUser;
-import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
@@ -12,14 +10,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import java.util.Collection;
 import java.util.Map;
 
-@Getter
-public class PrincipalUser implements UserDetails, OidcUser, OAuth2User {
-
-    private final ProviderUser providerUser;
-
-    public PrincipalUser(ProviderUser providerUser) {
-        this.providerUser = providerUser;
-    }
+public record PrincipalUser(ProviderUser providerUser) implements UserDetails, OidcUser, OAuth2User {
 
     @Override
     public String getName() {

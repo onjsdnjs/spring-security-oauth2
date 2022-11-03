@@ -1,9 +1,9 @@
 package io.security.oauth2.springsecurityoauth2.service;
 
-import io.security.oauth2.springsecurityoauth2.model.users.form.FormUser;
+import io.security.oauth2.springsecurityoauth2.common.converter.ProviderUserRequest;
 import io.security.oauth2.springsecurityoauth2.model.users.PrincipalUser;
+import io.security.oauth2.springsecurityoauth2.model.users.ProviderUser;
 import io.security.oauth2.springsecurityoauth2.model.users.User;
-import io.security.oauth2.springsecurityoauth2.model.users.social.ProviderUser;
 import io.security.oauth2.springsecurityoauth2.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -32,17 +32,9 @@ public class CustomUserDetailsService extends AbstractOAuth2UserService implemen
                     .build();
         }
 
-        ProviderUser providerUser = FormUser.builder()
-                .id(user.getId())
-                .username(user.getUsername())
-                .password(user.getPassword())
-                .authorities(user.getAuthorities())
-                .email(user.getEmail())
-                .provider("none")
-                .build();
+        ProviderUserRequest providerUserRequest = new ProviderUserRequest(user);
+        ProviderUser providerUser = providerUser(providerUserRequest);
 
-        // 본인인증 체크
-        // 기본은 본인인증을 하지 않은 상태임
         selfCertificate(providerUser);
 
         return new PrincipalUser(providerUser);
