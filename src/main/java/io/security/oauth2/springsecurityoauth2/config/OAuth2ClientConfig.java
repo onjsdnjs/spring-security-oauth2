@@ -40,9 +40,9 @@ public class OAuth2ClientConfig {
         http.formLogin().loginPage("/login").loginProcessingUrl("/loginProc").defaultSuccessUrl("/").permitAll();
         http.oauth2Login(oauth2 -> oauth2.userInfoEndpoint(
                 userInfoEndpointConfig -> userInfoEndpointConfig
-                        .userService(customOAuth2UserService)  // OAuth2 ¿Œ¡ı
-                        .oidcUserService(customOidcUserService)));  // OpenID Connect ¿Œ¡ı
-        http.userDetailsService(customUserDetailsService);  // Form ¿Œ¡ı
+                        .userService(customOAuth2UserService)  // OAuth2
+                        .oidcUserService(customOidcUserService)));  // OpenID Connect ÔøΩÔøΩÔøΩÔøΩ
+        http.userDetailsService(customUserDetailsService);  // Form
         http.exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"));
         http.logout().logoutSuccessUrl("/");
         return http.build();
