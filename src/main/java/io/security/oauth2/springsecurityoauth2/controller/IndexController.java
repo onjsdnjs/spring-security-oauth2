@@ -27,7 +27,6 @@ public class IndexController {
             }
 
             model.addAttribute("user", userName);
-//            model.addAttribute("provider", principalUser.providerUser().getProvider().toUpperCase());
             model.addAttribute("provider", principalUser.providerUser().getProvider());
             if(!principalUser.providerUser().isCertificated()) view = "selfcert";
         }
