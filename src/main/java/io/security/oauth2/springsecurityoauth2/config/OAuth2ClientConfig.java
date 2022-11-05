@@ -41,7 +41,7 @@ public class OAuth2ClientConfig {
         http.oauth2Login(oauth2 -> oauth2.userInfoEndpoint(
                 userInfoEndpointConfig -> userInfoEndpointConfig
                         .userService(customOAuth2UserService)  // OAuth2
-                        .oidcUserService(customOidcUserService)));  // OpenID Connect ����
+                        .oidcUserService(customOidcUserService)));  // OpenID Connect
         http.userDetailsService(customUserDetailsService);  // Form
         http.exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"));
         http.logout().logoutSuccessUrl("/");

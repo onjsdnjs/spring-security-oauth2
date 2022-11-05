@@ -5,7 +5,7 @@ plugins {
 }
 
 allprojects {
-    group = 'com.sungnam'
+    group = 'io.security.oauth2'
     version = '0.0.1-SNAPSHOT'
     sourceCompatibility = '17'
 
