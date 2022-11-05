@@ -25,8 +25,9 @@
             <div class="col-md-5">
                 <div class="social-login text-center">
                     <div sec:authorize="isAnonymous()">
+                        <div><h2>안녕하세요 환영합니다.</h2></div></br>
                         <div><h2>회원 로그인</h2></div>
-                        </br></br>
+                        </br>
                         <a th:href="@{/login}" class="keycloak btn btn-block">Login</a>
                     </div>
                     <div sec:authorize="isAuthenticated()">

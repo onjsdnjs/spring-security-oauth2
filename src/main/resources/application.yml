@@ -22,7 +22,7 @@ spring:
 
                     kakao:
                         client-id: f85b2099323eb29df38f7a0148c219b0
-                        client-secret:
+                        client-secret: TOHAzPPhCT6xaSBWOrsjocp4IdVHGJ7w
                         authorization-grant-type: authorization_code
                         client-authentication-method: POST
                         client-name: re100Kakao
