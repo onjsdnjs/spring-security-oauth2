@@ -1,8 +1,8 @@
 package io.security.oauth2.springsecurityoauth2.service;
 
 import io.security.oauth2.springsecurityoauth2.certification.SelfCertification;
-import io.security.oauth2.springsecurityoauth2.common.converter.ProviderUserConverter;
-import io.security.oauth2.springsecurityoauth2.common.converter.ProviderUserRequest;
+import io.security.oauth2.springsecurityoauth2.common.converters.ProviderUserConverter;
+import io.security.oauth2.springsecurityoauth2.common.converters.ProviderUserRequest;
 import io.security.oauth2.springsecurityoauth2.model.users.ProviderUser;
 import io.security.oauth2.springsecurityoauth2.model.users.User;
 import io.security.oauth2.springsecurityoauth2.repository.UserRepository;

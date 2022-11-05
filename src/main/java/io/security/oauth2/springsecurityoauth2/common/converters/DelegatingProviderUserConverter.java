@@ -1,4 +1,4 @@
-package io.security.oauth2.springsecurityoauth2.common.converter;
+package io.security.oauth2.springsecurityoauth2.common.converters;
 
 import io.security.oauth2.springsecurityoauth2.model.users.ProviderUser;
 import org.springframework.lang.Nullable;
