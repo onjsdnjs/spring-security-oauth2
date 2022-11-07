@@ -13,6 +13,7 @@ public class KakaoUser extends OAuth2ProviderUser {
     public KakaoUser(Attributes attributes, OAuth2User oAuth2User, ClientRegistration clientRegistration) {
         super(attributes.getSubAttributes(), oAuth2User, clientRegistration);
         this.subAttributes = attributes.getOtherAttributes();
+
     }
 
     @Override
