@@ -15,12 +15,14 @@ public class IndexController {
         String view = "index";
 
         // 강의 때와 코드가 조금 틀립니다 조만간 업데이트 하겠습니다.
-        String userName = principalUser.providerUser().getUsername();
+        if(principalUser != null) {
+            String userName = principalUser.providerUser().getUsername();
 
-        model.addAttribute("user", userName);
-        model.addAttribute("provider", principalUser.providerUser().getProvider());
+            model.addAttribute("user", userName);
+            model.addAttribute("provider", principalUser.providerUser().getProvider());
 
-        if (!principalUser.providerUser().isCertificated()) view = "selfcert";
+            if (!principalUser.providerUser().isCertificated()) view = "selfcert";
+        }
 
         return view;
 }

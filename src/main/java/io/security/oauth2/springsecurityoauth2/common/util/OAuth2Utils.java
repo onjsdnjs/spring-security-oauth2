@@ -36,35 +36,4 @@ public class OAuth2Utils {
                 .otherAttributes(otherAttributes)
                 .build();
     }
-
-    public static String oAuth2UserName(OAuth2AuthenticationToken authentication, PrincipalUser principalUser) {
-
-        String userName;
-        String registrationId = authentication.getAuthorizedClientRegistrationId();
-        OAuth2User oAuth2User = principalUser.providerUser().getOAuth2User();
-
-        // Google, Facebook, Apple
-        Attributes attributes = OAuth2Utils.getMainAttributes(oAuth2User);
-        userName = (String) attributes.getMainAttributes().get("name");
-
-        // Naver
-        if (registrationId.equals(OAuth2Config.SocialType.NAVER.getSocialName())) {
-            attributes = OAuth2Utils.getSubAttributes(oAuth2User, "response");
-            userName = (String) attributes.getSubAttributes().get("name");
-
-        // Kakao
-        } else if (registrationId.equals(OAuth2Config.SocialType.KAKAO.getSocialName())) {
-
-            // OpenID Connect
-            if (oAuth2User instanceof OidcUser) {
-                attributes = OAuth2Utils.getMainAttributes(oAuth2User);
-                userName = (String) attributes.getMainAttributes().get("nickname");
-
-            } else {
-                attributes = OAuth2Utils.getOtherAttributes(principalUser, "profile", null);
-                userName = (String) attributes.getSubAttributes().get("nickname");
-            }
-        }
-        return userName;
-    }
 }
