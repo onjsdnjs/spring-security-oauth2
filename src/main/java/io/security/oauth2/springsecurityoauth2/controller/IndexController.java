@@ -13,23 +13,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class IndexController {
 
     @GetMapping("/")
-    public String index(Model model, Authentication authentication, @AuthenticationPrincipal PrincipalUser principalUser) {
+    public String index(Model model, @AuthenticationPrincipal PrincipalUser principalUser) {
 
         String view = "index";
 
-        if (authentication != null) {
+        if (principalUser != null) {
 
-            String userName;
-            if (authentication instanceof OAuth2AuthenticationToken) {
-                userName = OAuth2Utils.oAuth2UserName((OAuth2AuthenticationToken) authentication, principalUser);
-            } else {
-                userName = principalUser.providerUser().getUsername();
-            }
+            String userName = principalUser.providerUser().getUsername();
 
             model.addAttribute("user", userName);
             model.addAttribute("provider", principalUser.providerUser().getProvider());
             if(!principalUser.providerUser().isCertificated()) view = "selfcert";
         }
+
         return view;
     }
 }
