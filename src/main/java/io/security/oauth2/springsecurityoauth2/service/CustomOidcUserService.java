@@ -17,6 +17,7 @@ public class CustomOidcUserService extends AbstractOAuth2UserService implements 
     @Override
     public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
 
+        // Open ID Connect 인 경우 User name Attribute Key 가 sub 이기 때문에 재정의함
         ClientRegistration clientRegistration = ClientRegistration
                                                 .withClientRegistration(userRequest.getClientRegistration())
                                                 .userNameAttributeName("sub")
